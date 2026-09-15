@@ -75,7 +75,7 @@
 
         if (user && isUuid(user.id)) {
           localStorage.setItem(USER_KEY, JSON.stringify(user));
-          window.location.href = 'app.html';
+          window.location.href = '/app';
           return;
         }
 
@@ -172,7 +172,7 @@
         if (resData.data.user) {
           localStorage.setItem(USER_KEY, JSON.stringify(resData.data.user));
         }
-        window.location.href = 'app.html';
+        window.location.href = '/app';
       } else {
         showError('login', resData.message || 'Sign in failed. Please verify your credentials.');
       }
@@ -226,7 +226,7 @@
         if (resData.data.user) {
           localStorage.setItem(USER_KEY, JSON.stringify(resData.data.user));
         }
-        window.location.href = 'app.html';
+        window.location.href = '/app';
       } else {
         showError('register', resData.message || 'Registration failed. Please try again.');
       }
@@ -381,13 +381,13 @@
     migrateLegacyAuth();
     const token = localStorage.getItem(TOKEN_KEY) || localStorage.getItem('sketsa_token');
     if (!token) {
-      window.location.href = 'index.html';
+      window.location.href = '/login';
       return;
     }
     const user = window.getUser();
     if (user && !isUuid(user.id)) {
       clearStoredAuth();
-      window.location.href = 'index.html';
+      window.location.href = '/login';
       return;
     }
     const headers = {
@@ -398,7 +398,7 @@
     const res = await fetch(url, { ...options, headers });
     if (res.status === 401) {
       clearStoredAuth();
-      window.location.href = 'index.html';
+      window.location.href = '/login';
       return;
     }
     return res.json();
@@ -420,7 +420,7 @@
 
   window.logout = function() {
     clearStoredAuth();
-    window.location.href = 'index.html';
+    window.location.href = '/login';
   };
 
   // Init on DOMContentLoaded

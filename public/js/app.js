@@ -284,7 +284,7 @@
     const user = window.getUser();
     if (!user) {
       clearEditorState();
-      window.location.href = 'index.html';
+      window.location.href = '/login';
       return;
     }
 

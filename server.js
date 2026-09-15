@@ -20,23 +20,32 @@ const publishedRoutes = require('./routes/published');
 app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/published', publishedRoutes);
-app.use(express.static(publicDir, { index: false }));
+// Clean URL redirects: permanently redirect .html to extensionless URLs
+app.get('/app.html', (req, res) => {
+  res.redirect(301, '/app');
+});
 
-app.get('/logo.png', (req, res) => {
-  res.sendFile(path.join(__dirname, 'logo.png'));
+app.get('/index.html', (req, res) => {
+  res.redirect(301, '/login');
+});
+
+app.get('/app', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'app.html'));
+});
+
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'app.html'));
 });
 
-app.get('/index.html', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+app.get('/logo.png', (req, res) => {
+  res.sendFile(path.join(__dirname, 'logo.png'));
 });
 
-app.get('/app.html', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'app.html'));
-});
+app.use(express.static(publicDir, { index: false }));
 
 app.get('*', (req, res) => {
   if (req.path.startsWith('/api/')) {
