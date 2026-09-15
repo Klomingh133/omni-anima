@@ -42,6 +42,12 @@
       </div>
     </div>
   </div>
+  <script>
+    if (!localStorage.getItem('omni_token') && !localStorage.getItem('sketsa_token')) {
+      var _loader = document.getElementById('appLoader');
+      if (_loader) _loader.style.display = 'none';
+    }
+  </script>
   <!-- Interactive Canvas Background (MotionSites / ReactBits) -->
   <div class="auth-canvas-bg" aria-hidden="true">
     <canvas id="authCanvas"></canvas>

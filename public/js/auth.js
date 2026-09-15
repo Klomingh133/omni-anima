@@ -7,15 +7,20 @@
   const USER_KEY = 'omni_user';
   const loaderStartedAt = Date.now();
 
-  window.hideAppLoader = function() {
+  window.hideAppLoader = function(immediate = false) {
     const loader = document.getElementById('appLoader');
     if (!loader || loader.dataset.hidden) return;
-    const wait = Math.max(0, 550 - (Date.now() - loaderStartedAt));
+    const wait = immediate ? 0 : Math.min(200, Math.max(0, 250 - (Date.now() - loaderStartedAt)));
     setTimeout(() => {
       loader.dataset.hidden = 'true';
       loader.classList.add('is-hidden');
     }, wait);
   };
+
+  // Absolute safety timeout: ensure loader NEVER hangs over 800ms
+  setTimeout(() => {
+    window.hideAppLoader?.(true);
+  }, 800);
 
   function clearStoredAuth() {
     localStorage.removeItem(TOKEN_KEY);
@@ -423,9 +428,7 @@
     window.location.href = '/login';
   };
 
-  // Init on DOMContentLoaded
-  document.addEventListener('DOMContentLoaded', () => {
-    // Only run on index.html (auth page)
+  function initAuthPage() {
     if (!document.getElementById('authCard')) return;
     
     checkAuth();
@@ -438,6 +441,14 @@
     
     if (loginForm) loginForm.addEventListener('submit', handleLogin);
     if (registerForm) registerForm.addEventListener('submit', handleRegister);
-    window.hideAppLoader();
-  });
+    
+    const token = localStorage.getItem(TOKEN_KEY) || getLegacyToken();
+    window.hideAppLoader(!token); // Hide immediately if unauthenticated
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAuthPage);
+  } else {
+    initAuthPage();
+  }
 })();

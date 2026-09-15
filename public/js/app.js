@@ -302,6 +302,9 @@
     setupNavigation();
     setupUploadHandler();
 
+    // Reveal UI immediately without blocking on network requests
+    window.hideAppLoader?.(true);
+
     // Asynchronously refresh user profile from server in background
     window.apiFetch('/api/auth/me').then(res => {
       if (res && res.success && res.data) {
@@ -332,14 +335,19 @@
             }
           }, 0);
         }
-        window.hideAppLoader?.();
+        window.hideAppLoader?.(true);
         return;
       }
     }
 
     await loadProjects();
-    window.hideAppLoader?.();
+    window.hideAppLoader?.(true);
   }
+
+  // Guaranteed safety timeout for the entire studio screen
+  setTimeout(() => {
+    window.hideAppLoader?.(true);
+  }, 500);
 
   /* ==========================================================================
      TAB NAVIGATION (My Studio vs Explore Community)
