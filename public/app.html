@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>OmniAnima — Cloud Animation Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Minimalist Studio Loader (Pure Infinity Loop) -->
+  <div class="app-loader" id="appLoader" role="status" aria-live="polite">
+    <div class="loader-backdrop-glow" aria-hidden="true"></div>
+    <div class="minimal-loader">
+      <div class="infinity-stage" aria-hidden="true">
+        <svg class="loader-svg" viewBox="0 0 160 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="loaderStrokeGrad" x1="20" y1="45" x2="140" y2="45" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#3978ff"/>
+              <stop offset="50%" stop-color="#f59e0b"/>
+              <stop offset="100%" stop-color="#3978ff"/>
+            </linearGradient>
+          </defs>
+          <!-- Background Symmetrical Guide Track -->
+          <path class="infinity-guide" d="M 80 45 C 64 24, 38 24, 38 45 C 38 66, 64 66, 80 45 C 96 24, 122 24, 122 45 C 122 66, 96 66, 80 45 Z"/>
+          <!-- Dynamic Animated Symmetrical Stroke -->
+          <path class="infinity-draw" d="M 80 45 C 64 24, 38 24, 38 45 C 38 66, 64 66, 80 45 C 96 24, 122 24, 122 45 C 122 66, 96 66, 80 45 Z"/>
+          <!-- Stylus Nib that accurately follows the curve -->
+          <g class="stylus-group">
+            <circle cx="0" cy="0" r="2.5" class="pen-nib-sparkle"/>
+            <path class="pen-tip" d="M 0 0 L -3.5 -2.5 L -4 -0.5 Z"/>
+            <path class="pen-body" d="M -3.5 -2.5 L -15 -10.5 L -17 -8 L -4 -0.5 Z"/>
+            <path class="pen-accent" d="M -9.5 -6.8 L -12.5 -8.8 L -14 -7 L -11 -5 Z"/>
+          </g>
+        </svg>
+      </div>
+      <div class="minimal-loader-caption">
+        <span>Preparing canvas</span>
+        <span class="dots-shimmer"><span>.</span><span>.</span><span>.</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Global Header Bar -->
+  <header class="app-navbar">
+    <div class="nav-left">
+      <div class="navbar-brand">
+        <div class="navbar-logo-frame">
+          <img class="brand-logo navbar-brand-logo" src="/logo.png" alt="OmniAnima">
+        </div>
+        <span class="brand-name">OmniAnima</span>
+      </div>
+      <!-- View Navigation Tabs -->
+      <nav class="nav-switcher" aria-label="Main Navigation">
+        <button class="nav-tab active" id="tabStudio" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>
+          <span>My Studio</span>
+        </button>
+        <button class="nav-tab" id="tabExplore" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+          <span>Explore Community</span>
+          <span class="explore-badge">Live</span>
+        </button>
+      </nav>
+    </div>
+
+    <div class="nav-right">
+      <button class="action-btn upload-nav-btn" id="uploadVideoBtn" type="button" title="Upload a video or JSON animation file to edit">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+        <span>Upload & Edit</span>
+      </button>
+      <input type="file" id="videoUploadInput" accept="video/webm, video/mp4, video/ogg, application/json" class="hidden">
+
+      <div class="profile-menu-container">
+        <button class="profile-trigger" id="profileTrigger" type="button" aria-haspopup="true" aria-expanded="false" title="User Profile">
+          <div class="avatar-sm" id="triggerAvatar"></div>
+          <span class="user-name-short" id="triggerName">User</span>
+          <svg class="profile-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+
+        <div class="profile-dropdown hidden" id="profileDropdown" role="menu">
+          <div class="dropdown-header">
+            <div class="avatar-large-wrap">
+              <div class="avatar-lg" id="dropdownAvatar"></div>
+              <button class="change-photo-btn" id="changePhotoBtn" type="button" title="Change profile picture">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                <span>Change photo</span>
+              </button>
+              <input type="file" id="avatarInput" accept="image/png, image/jpeg, image/webp" class="hidden">
+            </div>
+            <div class="user-info">
+              <div class="user-fullname" id="dropdownName">User</div>
+              <div class="user-email" id="dropdownEmail">user@example.com</div>
+            </div>
+          </div>
+          <div class="dropdown-body">
+            <div class="dropdown-status">
+              <span class="status-dot"></span>
+              <span>Account Connected</span>
+            </div>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-logout-btn" type="button" onclick="logout()">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+              <span>Sign Out</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Section 1: Dashboard (My Studio) -->
+  <section id="dashboard" class="screen dashboard">
+    <div class="dash-hero">
+      <div class="dash-hero-text">
+        <div class="dash-badge">
+          <span class="pulse-dot"></span>
+          <span>Cloud Animation Studio v2.0</span>
+        </div>
+        <h1 class="dash-title">Your animation workspace.</h1>
+        <p class="dash-sub">Create frame-by-frame animations with speed and precision. Cloud-synced in real time.</p>
+      </div>
+      <div class="dash-hero-actions">
+        <button class="primary btn-glow" id="newProject" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+          <span>New Project</span>
+        </button>
+      </div>
+    </div>
+
+    <section class="quick-start" aria-labelledby="quickStartTitle">
+      <div class="quick-start-copy">
+        <span class="quick-start-kicker">Quick Start</span>
+        <h2 id="quickStartTitle">Choose your animation rhythm</h2>
+      </div>
+      <div class="quick-start-actions">
+        <button class="quick-preset" type="button" onclick="startTemplate(12, 'Classic Animation')">
+          <div class="quick-fps-badge">
+            <span class="quick-fps mono">12</span>
+            <span class="quick-fps-unit">FPS</span>
+          </div>
+          <div class="quick-preset-info">
+            <strong>Classic Animation</strong>
+            <small>Expressive 12 FPS · Cartoon standard</small>
+          </div>
+          <svg class="preset-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+        <button class="quick-preset" type="button" onclick="startTemplate(24, 'Smooth Animation')">
+          <div class="quick-fps-badge highlight">
+            <span class="quick-fps mono">24</span>
+            <span class="quick-fps-unit">FPS</span>
+          </div>
+          <div class="quick-preset-info">
+            <strong>Smooth Motion</strong>
+            <small>Silky 24 FPS · Cinema standard</small>
+          </div>
+          <svg class="preset-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <div class="dashboard-content">
+      <div class="projects-section">
+        <div class="projects-toolbar">
+          <div class="section-title-wrap">
+            <h3 class="section-title">Your Projects</h3>
+            <span class="projects-count-badge mono" id="projectCountBadge">0</span>
+          </div>
+          <div class="projects-search-wrap">
+            <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            <input type="text" id="projectSearch" placeholder="Search your animations..." aria-label="Search animations">
+          </div>
+        </div>
+        <div id="projectGrid" class="project-grid"></div>
+      </div>
+
+      <div class="sidebar-section">
+        <h3 class="section-title">Your Statistics</h3>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon-wrap">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="m9 8 6 4-6 4Z"/></svg>
+            </div>
+            <div>
+              <span class="stat-num mono" id="statProjects">0</span>
+              <span class="stat-label">Total Projects</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon-wrap accent">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="8" y="8" width="12" height="12" rx="1"/></svg>
+            </div>
+            <div>
+              <span class="stat-num mono" id="statFrames">0</span>
+              <span class="stat-label">Total Frames</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tips-card">
+          <div class="tips-header">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+            <h4>Keyboard Shortcuts</h4>
+          </div>
+          <ul class="shortcuts-list">
+            <li><span>Play / Pause</span><kbd>Space</kbd></li>
+            <li><span>New Frame</span><kbd>N</kbd></li>
+            <li><span>Pencil / Brush</span><kbd>B</kbd></li>
+            <li><span>Eraser</span><kbd>E</kbd></li>
+            <li><span>Select & Move</span><kbd>V</kbd></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2: Explore Community (Public Animations Feed) -->
+  <section id="explore" class="screen explore-screen hidden">
+    <div class="explore-hero">
+      <div class="explore-hero-text">
+        <div class="dash-badge">
+          <svg viewBox="0 0 24 24" aria-hidden="true" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <span>Community Showcase</span>
+        </div>
+        <h1 class="dash-title">Explore Public Animations</h1>
+        <p class="dash-sub">Watch videos created by animators worldwide. Download video clips or remix & edit them directly in your Studio.</p>
+      </div>
+      <div class="explore-actions">
+        <div class="explore-search-wrap">
+          <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="text" id="exploreSearch" placeholder="Search by animation title or creator..." aria-label="Search animations">
+        </div>
+      </div>
+    </div>
+
+    <div class="explore-content">
+      <div class="explore-toolbar">
+        <div class="section-title-wrap">
+          <h3 class="section-title">Published Creations</h3>
+          <span class="projects-count-badge mono" id="exploreCountBadge">0</span>
+        </div>
+      </div>
+      <div id="exploreGrid" class="explore-grid"></div>
+    </div>
+  </section>
+
+  <!-- Section 3: Animation Editor -->
+  <section id="editor" class="screen editor hidden">
+    <header class="editor-top">
+      <button class="back" id="backBtn" type="button" title="Back to Dashboard" aria-label="Back to Dashboard">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5m6-6-6 6 6 6"/></svg>
+        <span class="back-text">Studio</span>
+      </button>
+      <span class="doc-title" id="docTitle">New Animation</span>
+      <div class="save-indicator" id="saveIndicator">Saved</div>
+      <span class="top-spacer"></span>
+      <button class="top-icon" id="undoBtn" type="button" title="Undo (Ctrl+Z)" aria-label="Undo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg></button>
+      <button class="top-icon" id="redoBtn" type="button" title="Redo (Ctrl+Y)" aria-label="Redo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 7v6h-6"/><path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3l3 2.7"/></svg></button>
+      <button class="top-icon" id="inspectorBtn" type="button" title="Settings Panel" aria-label="Settings Panel"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M15 3v18"/></svg></button>
+      <button class="play" id="playBtn" type="button" title="Play (Space)" aria-label="Play"><svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"/></svg><span>Play</span></button>
+    </header>
+
+    <main class="editor-main">
+      <aside class="toolbar" id="toolbar">
+        <button class="tool active" data-tool="pencil" title="Pencil (B)" type="button"><svg class="tool-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m14 4 6 6M3 21l3.5-1L18 8l-5-5L1.5 14.5 3 21Z"/><path d="m11 5 5 5"/></svg><small>Pencil</small></button>
+        <button class="tool" data-tool="brush" title="Brush" type="button"><svg class="tool-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 15c-2.5 0-4 1.8-4 4 0 1.1.9 2 2 2h4c2.2 0 4-1.8 4-4V9l4-4 3 3-4 4h-3"/><path d="m13 9 3 3"/></svg><small>Brush</small></button>
+        <button class="tool" data-tool="eraser" title="Eraser (E)" type="button"><svg class="tool-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 20-4-4a2 2 0 0 1 0-3l8-8a2 2 0 0 1 3 0l5 5a2 2 0 0 1 0 3l-7 7H7Z"/><path d="m7 20h14"/></svg><small>Eraser</small></button>
+        <button class="tool" data-tool="fill" title="Paint Bucket" type="button"><svg class="tool-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m13 3 8 8-7 7-8-8 7-7Z"/><path d="m10 6 8 8"/><path d="M4 20h13"/></svg><small>Fill</small></button>
+        <button class="tool" data-tool="eyedropper" title="Color Picker (I)" type="button"><svg class="tool-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m14 4 6 6"/><path d="m12 6 6 6L8 22H3v-5L12 6Z"/><path d="m5 20 3-3"/></svg><small>Picker</small></button>
+        <div class="tool-sep"></div>
+        <button class="tool" data-tool="line" title="Straight Line" type="button"><svg class="tool-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5"/></svg><small>Line</small></button>
+        <button class="tool" data-tool="rect" title="Rectangle" type="button"><svg class="tool-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="1"/></svg><small>Rect</small></button>
+        <button class="tool" data-tool="ellipse" title="Ellipse / Circle" type="button"><svg class="tool-icon" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="12" rx="8" ry="6"/></svg><small>Oval</small></button>
+        <button class="tool" data-tool="text" title="Text (T)" type="button"><svg class="tool-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14M12 5v14M8 19h8"/></svg><small>Text</small></button>
+        <div class="tool-sep"></div>
+        <button class="tool" data-tool="select" title="Select & Move (V)" type="button"><svg class="tool-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 3 14 9-6 1 3 7-3 1-3-7-5 4V3Z"/></svg><small>Select</small></button>
+        <div class="tool-sep"></div>
+        <button class="tool" data-tool="clear" title="Clear Canvas (Del)" type="button"><svg class="tool-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3m-9 0 1 13h10l1-13M10 11v5m4-5v5"/></svg><small>Clear</small></button>
+        <div class="tool-sep"></div>
+        <button class="tool" id="mirrorHBtn" title="Mirror Horizontal" type="button"><svg class="tool-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M18 7l4 5-4 5V7ZM6 7l-4 5 4 5V7Z"/></svg><small>Flip H</small></button>
+        <button class="tool" id="mirrorVBtn" title="Mirror Vertical" type="button"><svg class="tool-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h18M7 6l5-4 5 4H7ZM7 18l5 4 5-4H7Z"/></svg><small>Flip V</small></button>
+      </aside>
+
+      <section class="stage" id="stageArea">
+        <div class="canvas-wrap">
+          <canvas id="onionCanvas" width="960" height="540"></canvas>
+          <canvas id="drawCanvas" width="960" height="540"></canvas>
+          <canvas id="displayCanvas" width="960" height="540"></canvas>
+        </div>
+        <div class="zoom-controls">
+          <button class="small-btn" id="zoomOut" type="button" title="Zoom out (-)" aria-label="Zoom out"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button>
+          <span id="zoomValue">100%</span>
+          <button class="small-btn" id="zoomIn" type="button" title="Zoom in (+)" aria-label="Zoom in"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
+          <button class="small-btn" id="zoomReset" type="button" title="Reset zoom (0)" aria-label="Reset zoom"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m12 8v4l3 2"/></svg></button>
+        </div>
+        <div class="stage-label">Space: Play · N: New frame · B: Pencil · V: Select · T: Text</div>
+      </section>
+
+      <aside class="inspector" id="inspector">
+        <div class="inspector-header">
+          <div class="inspector-title-wrap">
+            <svg class="inspector-header-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M15 3v18"/></svg>
+            <h3>Settings</h3>
+          </div>
+          <button class="inspector-close" id="inspectorClose" type="button" aria-label="Close settings" title="Close settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+        </div>
+
+        <details class="setting-group" open>
+          <summary>
+            <span class="summary-label">
+              <svg class="group-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 9 9 9 9 0 0 1-9 9"/></svg>
+              <span>Color Palette</span>
+            </span>
+            <svg class="summary-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="setting-body">
+            <div class="wheel" id="wheel"><canvas id="colorWheelCanvas" width="180" height="180" aria-label="Color wheel picker"></canvas><i class="wheel-dot" id="wheelDot"></i></div>
+            <div class="color-picker-row">
+              <div class="color-preview-box">
+                <input type="color" id="colorInput" value="#17202a" aria-label="Choose color">
+              </div>
+              <span class="color-hex-label" id="colorHexLabel">#17202A</span>
+            </div>
+            <div class="swatches" id="swatches"></div>
+          </div>
+        </details>
+
+        <details class="setting-group" open>
+          <summary>
+            <span class="summary-label">
+              <svg class="group-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m14 4 6 6M3 21l3.5-1L18 8l-5-5L1.5 14.5 3 21Z"/></svg>
+              <span>Brush & Stroke</span>
+            </span>
+            <svg class="summary-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="setting-body">
+            <div class="row">
+              <div class="row-header">
+                <label for="sizeRange">Stroke Size</label>
+                <span class="value mono" id="sizeValue">8 px</span>
+              </div>
+              <input class="range" id="sizeRange" type="range" min="1" max="70" value="8" aria-label="Brush size">
+            </div>
+            <div class="row">
+              <div class="row-header">
+                <label for="brushOpacity">Brush Opacity</label>
+                <span class="value mono" id="opacityValue">100%</span>
+              </div>
+              <input class="range" id="brushOpacity" type="range" min="10" max="100" value="100" aria-label="Brush opacity">
+            </div>
+          </div>
+        </details>
+
+        <details class="setting-group" open>
+          <summary>
+            <span class="summary-label">
+              <svg class="group-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke-dasharray="3 3"/><circle cx="12" cy="12" r="5"/></svg>
+              <span>Onion Skin</span>
+            </span>
+            <svg class="summary-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="setting-body">
+            <div class="toggle-card">
+              <label class="toggle" for="onionEnabled">
+                <input type="checkbox" id="onionEnabled" checked>
+                <span class="toggle-switch"></span>
+                <span class="toggle-text">Enable Onion Skin</span>
+              </label>
+            </div>
+            
+            <div class="frames-reference-grid">
+              <label class="sub-toggle" for="showPrev">
+                <input type="checkbox" id="showPrev" checked>
+                <span class="sub-toggle-check"></span>
+                <span>Previous Frame</span>
+              </label>
+              <label class="sub-toggle" for="showNext">
+                <input type="checkbox" id="showNext">
+                <span class="sub-toggle-check"></span>
+                <span>Next Frame</span>
+              </label>
+            </div>
+
+            <div class="row">
+              <div class="row-header">
+                <label for="onionOpacity">Ghost Opacity</label>
+                <span class="value mono" id="onionValue">35%</span>
+              </div>
+              <input class="range" id="onionOpacity" type="range" min="10" max="80" value="35" aria-label="Onion ghost opacity">
+            </div>
+            
+            <div class="row">
+              <div class="row-header">
+                <label for="bgTolerance">Background Tolerance</label>
+                <span class="value mono" id="bgValue">18</span>
+              </div>
+              <input class="range" id="bgTolerance" type="range" min="0" max="90" value="18" aria-label="Background tolerance">
+            </div>
+            
+            <div class="bg-remover-card">
+              <label class="toggle compact-toggle" for="removeBg">
+                <input type="checkbox" id="removeBg" checked>
+                <span class="toggle-switch"></span>
+                <span class="toggle-text">Auto-Remove Active BG (Transparent)</span>
+              </label>
+            </div>
+          </div>
+        </details>
+
+        <details class="setting-group">
+          <summary>
+            <span class="summary-label">
+              <svg class="group-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+              <span>Files & Project</span>
+            </span>
+            <svg class="summary-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="setting-body compact-actions">
+            <button class="small-btn export-btn" id="exportBtn" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+              <span>Export JSON</span>
+            </button>
+            <button class="small-btn export-btn export-highlight" id="exportGifBtn" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <span>Export GIF</span>
+            </button>
+            <button class="small-btn import-btn" id="importBtn" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+              <span>Import JSON</span>
+            </button>
+          </div>
+          <input id="importFile" type="file" accept="application/json" hidden>
+        </details>
+      </aside>
+    </main>
+
+    <footer class="timeline">
+      <div class="timeline-actions">
+        <button id="addFrame" class="btn-add-frame" type="button" title="Add New Blank Frame at End (N)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg> <span>Frame</span></button>
+        <button id="duplicateFrame" type="button" title="Duplicate Current Frame"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> <span>Copy</span></button>
+        <button id="deleteFrame" class="btn-delete" type="button" title="Delete Frame (Delete)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg> <span>Delete</span></button>
+      </div>
+      <div class="frames" id="frames"></div>
+      <div class="fps-badge" title="Frame Rate (FPS)">
+        <span class="fps-label">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>FPS</span>
+        </span>
+        <div class="fps-select-wrap">
+          <select id="fps" aria-label="Select Frame Rate">
+            <option value="6">6</option>
+            <option value="8">8</option>
+            <option value="12" selected>12</option>
+            <option value="16">16</option>
+            <option value="24">24</option>
+            <option value="30">30</option>
+          </select>
+          <svg class="fps-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </div>
+      </div>
+    </footer>
+  </section>
+
+  <!-- Dialog / Modal Root Container -->
+  <div id="dialogRoot" class="dialog-root hidden" aria-live="polite"></div>
+  <div class="toast" id="toast"></div>
+
+  <!-- Scripts -->
+  <script src="js/auth.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.min.js"></script>
+  <script src="js/tools.js"></script>
+  <script src="js/videoEngine.js"></script>
+  <script src="js/autosave.js"></script>
+  <script src="js/editor.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

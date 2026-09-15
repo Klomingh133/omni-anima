@@ -1,0 +1,21 @@
+﻿{
+  "mcpServers": {
+    "shadcn": {
+      "command": "npx",
+      "args": [
+        "shadcn@latest",
+        "mcp"
+      ]
+    },
+    "reactbits": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@reactbits/mcp"
+      ]
+    },
+    "supabase-remote": {
+      "serverUrl": "https://xgdzyqfalbibzelpdpvr.supabase.co/functions/v1/mcp"
+    }
+  }
+}
