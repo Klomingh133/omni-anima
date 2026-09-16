@@ -218,10 +218,7 @@
             </div>
 
             <div class="field-group">
-              <div class="dialog-label">
-                <span>Initial Frames</span>
-                <span class="helper-badge" id="frameDurationHelper">~0.67s @ 12 FPS</span>
-              </div>
+              <label class="dialog-label">Initial Frames</label>
               
               <div class="frame-selector-box">
                 <div class="frame-presets-row" id="framePresetsRow">
@@ -272,7 +269,6 @@
       `;
 
       const nameInput = root.querySelector('#projNameInput');
-      const helper = root.querySelector('#frameDurationHelper');
       const presetsRow = root.querySelector('#framePresetsRow');
       const stepInput = root.querySelector('#stepValInput');
       const stepDec = root.querySelector('#stepDec');
@@ -284,8 +280,6 @@
       const updateUI = (count) => {
         selectedFrames = Math.max(1, Math.min(60, Math.round(count) || 8));
         stepInput.value = selectedFrames;
-        const durationSec = (selectedFrames / 12).toFixed(2);
-        helper.textContent = `~${durationSec}s @ 12 FPS`;
 
         presetsRow.querySelectorAll('.frame-chip').forEach(chip => {
           const chipVal = parseInt(chip.dataset.frames, 10);

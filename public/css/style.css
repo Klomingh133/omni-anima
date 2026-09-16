@@ -4609,6 +4609,7 @@ html, body {
 
 .dialog-input-wrap {
   position: relative;
+  width: 100%;
   display: flex;
   align-items: center;
 }
@@ -4616,10 +4617,21 @@ html, body {
 .dialog-input-icon {
   position: absolute;
   left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
   width: 18px;
   height: 18px;
   color: #94a3b8;
   pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  transition: color 0.18s ease;
+}
+
+.dialog-input-wrap:focus-within .dialog-input-icon {
+  color: #4f46e5;
 }
 
 .dialog-card input[type="text"],
