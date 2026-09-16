@@ -65,6 +65,7 @@
     if (!token) return;
 
     fetch(API_BASE + '/me', {
+      credentials: 'omit',
       headers: { 'Authorization': 'Bearer ' + token }
     })
       .then(async (r) => {
@@ -166,6 +167,7 @@
 
       const res = await fetch(API_BASE + '/login', {
         method: 'POST',
+        credentials: 'omit',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ login, password })
       });
@@ -220,6 +222,7 @@
 
       const res = await fetch(API_BASE + '/register', {
         method: 'POST',
+        credentials: 'omit',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, email, password })
       });
@@ -395,15 +398,35 @@
       window.location.href = '/login';
       return { success: false, message: 'Invalid session profile.' };
     }
+
+    // Safety check: a valid JWT token is 100-350 chars. If token > 1500 chars, it's corrupt and causes HTTP 494
+    let safeToken = token;
+    if (safeToken && safeToken.length > 1500) {
+      console.warn('Bloated token detected, purging to prevent header overflow (HTTP 494).');
+      clearStoredAuth();
+      safeToken = null;
+      if (!options.public) {
+        window.location.href = '/login';
+        return { success: false, message: 'Corrupted session cleared. Please log in again.' };
+      }
+    }
+
     const headers = {
       'Content-Type': 'application/json',
-      ...(token ? { 'Authorization': 'Bearer ' + token } : {}),
+      ...(safeToken && !options.public ? { 'Authorization': 'Bearer ' + safeToken } : {}),
       ...(options.headers || {})
+    };
+
+    // By default, omit cookies to prevent bloated cookies (.vercel.app) from triggering HTTP 494
+    const fetchOptions = {
+      credentials: options.credentials || 'omit',
+      ...options,
+      headers
     };
 
     let res;
     try {
-      res = await fetch(url, { ...options, headers });
+      res = await fetch(url, fetchOptions);
     } catch (networkErr) {
       console.warn('Network error during apiFetch:', networkErr);
       return { success: false, message: 'Network connection error. Please check your internet connection.' };
