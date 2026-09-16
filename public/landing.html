@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OmniAnima — Studio Animasi Frame-by-Frame Cloud</title>
-  <meta name="description" content="Studio animasi 2D frame-by-frame web-native profesional. Render tanpa lag, multi-layer onion skinning, ekspor WebM 60 FPS, dan remix kreasi komunitas dalam satu klik." />
+  <title>OmniAnima — Professional 2D Web Animation Studio</title>
+  <meta name="description" content="High-performance frame-by-frame 2D animation in your browser. Zero input lag, multi-layer onion skinning, cloud autosave, and universal video export." />
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,7 +13,7 @@
 
   <style>
     /* ==========================================================================
-       BRIGHT / CERAH DESIGN SYSTEM (Matches Dashboard, Login, and Studio)
+       BRIGHT STUDIO DESIGN SYSTEM
        ========================================================================== */
     :root {
       --lp-bg: #f8fafc;
@@ -135,20 +135,10 @@
       object-fit: contain;
     }
 
-    .lp-nav-version {
-      font-size: 0.7rem;
-      font-weight: 700;
-      background: var(--lp-primary-surface);
-      color: var(--lp-primary);
-      padding: 2px 8px;
-      border-radius: 9999px;
-      border: 1px solid var(--lp-primary-border);
-    }
-
     .lp-nav-links {
       display: flex;
       align-items: center;
-      gap: 28px;
+      gap: 32px;
       list-style: none;
     }
 
@@ -215,37 +205,13 @@
     }
 
     /* ==========================================================================
-       HERO SECTION (Bright & High Contrast)
+       HERO SECTION (Pure Solid Typography)
        ========================================================================== */
     .lp-hero {
-      padding: 60px 0 40px;
+      padding: 70px 0 40px;
       text-align: center;
     }
 
-    .lp-hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: #ffffff;
-      border: 1px solid var(--lp-border);
-      padding: 6px 16px;
-      border-radius: 9999px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: var(--lp-primary);
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
-      margin-bottom: 24px;
-    }
-
-    .lp-hero-badge-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--lp-emerald);
-      box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
-    }
-
-    /* Solid typography - Absolutely NO gradient text */
     .lp-hero-title {
       font-size: clamp(2.3rem, 5vw, 4rem);
       font-weight: 900;
@@ -264,7 +230,7 @@
     .lp-hero-subtitle {
       font-size: clamp(1rem, 1.8vw, 1.2rem);
       color: var(--lp-muted);
-      max-width: 700px;
+      max-width: 720px;
       margin: 0 auto 34px;
       line-height: 1.6;
       font-weight: 500;
@@ -286,7 +252,7 @@
     }
 
     /* ==========================================================================
-       INTERACTIVE LIVE MINI-CANVAS SANDBOX (Bright Studio Look)
+       INTERACTIVE LIVE DOODLE CANVAS SANDBOX (Clean Drawing Canvas)
        ========================================================================== */
     .lp-playground {
       max-width: 980px;
@@ -327,7 +293,7 @@
     .lp-controls-group {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       flex-wrap: wrap;
     }
 
@@ -342,8 +308,8 @@
     }
 
     .lp-color-btn {
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       border-radius: 50%;
       border: 2px solid transparent;
       cursor: pointer;
@@ -367,6 +333,7 @@
       border: 1px solid var(--lp-border);
       cursor: crosshair;
       box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.02);
+      touch-action: none;
     }
 
     #landingCanvas {
@@ -395,7 +362,7 @@
     }
 
     /* ==========================================================================
-       METRICS RIBBON (Bright Card Surface)
+       METRICS RIBBON (Bright Card Bar)
        ========================================================================== */
     .lp-metrics-section {
       padding: 50px 0;
@@ -432,7 +399,7 @@
     }
 
     /* ==========================================================================
-       BENTO GRID (Clean White Cards)
+       BENTO GRID (Clean White Surfaces)
        ========================================================================== */
     .lp-section-header {
       text-align: center;
@@ -538,109 +505,14 @@
       background: var(--lp-surface-alt);
       color: var(--lp-ink-secondary);
       border: 1px solid var(--lp-border);
-      padding: 4px 12px;
+      padding: 5px 12px;
       border-radius: 9999px;
-      font-size: 0.78rem;
-      font-weight: 600;
-    }
-
-    /* ==========================================================================
-       SHOWCASE SECTION (Bright Cards)
-       ========================================================================== */
-    .lp-showcase-section {
-      padding: 30px 0 90px;
-    }
-
-    .lp-showcase-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 24px;
-    }
-
-    .lp-showcase-card {
-      background: #ffffff;
-      border: 1px solid var(--lp-border);
-      border-radius: 18px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
-      transition: all 0.22s ease;
-    }
-
-    .lp-showcase-card:hover {
-      border-color: var(--lp-border-hover);
-      transform: translateY(-3px);
-      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
-    }
-
-    .lp-showcase-video {
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      background: #0f172a;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .lp-showcase-video video {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      display: block;
-    }
-
-    .lp-showcase-body {
-      padding: 18px 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .lp-showcase-meta {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
       font-size: 0.8rem;
-      color: var(--lp-muted);
-    }
-
-    .lp-author-badge {
-      display: flex;
-      align-items: center;
-      gap: 8px;
       font-weight: 600;
-      color: var(--lp-ink);
-    }
-
-    .lp-author-avatar {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: var(--lp-primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.65rem;
-      color: #ffffff;
-    }
-
-    .lp-showcase-title {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--lp-ink);
-    }
-
-    .lp-showcase-foot {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 6px;
-      padding-top: 10px;
-      border-top: 1px solid var(--lp-border);
     }
 
     /* ==========================================================================
-       KEYBOARD SHORTCUTS MECHANICAL STATION (Light Keycaps)
+       KEYBOARD SHORTCUTS MECHANICAL STATION
        ========================================================================== */
     .lp-shortcuts-section {
       padding: 30px 0 90px;
@@ -685,7 +557,7 @@
     }
 
     /* ==========================================================================
-       BOTTOM CTA BANNER (Bright Indigo / Purple Accent)
+       BOTTOM CTA BANNER
        ========================================================================== */
     .lp-cta-card {
       background: linear-gradient(135deg, #eef2ff 0%, #ede9fe 100%);
@@ -713,7 +585,7 @@
     }
 
     /* ==========================================================================
-       GLOBAL FOOTER (Clean White)
+       GLOBAL FOOTER
        ========================================================================== */
     .lp-footer {
       border-top: 1px solid var(--lp-border);
@@ -734,26 +606,13 @@
     .lp-footer-left {
       display: flex;
       align-items: center;
-      gap: 14px;
-    }
-
-    .lp-status-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: var(--lp-emerald);
-      background: #ecfdf5;
-      padding: 3px 10px;
-      border-radius: 9999px;
-      border: 1px solid #a7f3d0;
+      gap: 12px;
     }
 
     .lp-footer-links {
       display: flex;
       align-items: center;
-      gap: 22px;
+      gap: 24px;
     }
 
     .lp-footer-links a:hover {
@@ -802,31 +661,28 @@
 <body>
 
   <!-- ==========================================================================
-       STICKY LIGHT NAVBAR
+       STICKY LIGHT NAVBAR (No version text)
        ========================================================================== -->
   <div class="lp-nav-wrapper">
-    <nav class="lp-navbar" aria-label="Navigasi Utama">
+    <nav class="lp-navbar" aria-label="Main Navigation">
       <a href="/" class="lp-nav-brand">
         <img class="lp-brand-logo" src="/logo.png" alt="OmniAnima">
         <span>OmniAnima</span>
-        <span class="lp-nav-version">v2.0</span>
       </a>
 
       <ul class="lp-nav-links">
         <li><a href="#playground" class="lp-nav-link">Playground</a></li>
-        <li><a href="#features" class="lp-nav-link">Fitur Studio</a></li>
-        <li><a href="#showcase" class="lp-nav-link">Showcase</a></li>
+        <li><a href="#features" class="lp-nav-link">Features</a></li>
         <li><a href="#shortcuts" class="lp-nav-link">Shortcuts</a></li>
       </ul>
 
       <div class="lp-nav-actions">
-        <!-- Intelligent Auth Button: routes to /app if logged in, /login if not -->
         <button type="button" class="lp-btn-secondary" id="navAuthBtn">
-          <span>Masuk</span>
+          <span>Sign In</span>
         </button>
 
         <button type="button" class="lp-btn-primary" id="navStudioBtn">
-          <span>Buka Studio</span>
+          <span>Open Studio</span>
           <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <line x1="5" y1="12" x2="19" y2="12"></line>
             <polyline points="12 5 19 12 12 19"></polyline>
@@ -837,27 +693,22 @@
   </div>
 
   <!-- ==========================================================================
-       HERO SECTION (Bright, Crisp Solid Typography)
+       HERO SECTION (Pure Solid Typography, No Promotional Badge)
        ========================================================================== -->
   <header class="lp-hero">
     <div class="container">
-      <div class="lp-hero-badge">
-        <span class="lp-hero-badge-dot"></span>
-        <span>Engine Animasi Vektor &amp; Raster 60 FPS • Gratis &amp; Bebas Iklan</span>
-      </div>
-
       <h1 class="lp-hero-title">
-        Wujudkan Imajinasi Frame demi Frame.<br>
-        <span class="lp-title-highlight">Nol Latensi. Kreativitas Tanpa Batas.</span>
+        Bring Hand-Drawn Animations to Life.<br>
+        <span class="lp-title-highlight">Zero Latency. Infinite Creativity.</span>
       </h1>
 
       <p class="lp-hero-subtitle">
-        Studio animasi 2D web-native berkecepatan tinggi. Gambar dengan presisi sub-milidetik, kontrol multi-layer onion skinning, autosave awan instan, dan remix karya komunitas langsung di browser Anda.
+        A high-performance 2D web animation studio. Sketch with sub-millisecond precision, preview multi-layer onion skinning, save automatically to the cloud, and animate directly in your browser.
       </p>
 
       <div class="lp-hero-actions">
         <button type="button" class="lp-btn-primary lp-cta-large" id="heroCtaBtn">
-          <span id="heroCtaText">Mulai Menggambar Sekarang</span>
+          <span id="heroCtaText">Start Drawing Now</span>
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <line x1="5" y1="12" x2="19" y2="12"></line>
             <polyline points="12 5 19 12 12 19"></polyline>
@@ -870,24 +721,24 @@
             <path d="M2 2l7.586 7.586"></path>
             <circle cx="11" cy="11" r="2"></circle>
           </svg>
-          <span>Coba Mini Canvas di Bawah</span>
+          <span>Try Canvas Below</span>
         </a>
       </div>
 
       <!-- ==========================================================================
-           INTERACTIVE MINI-CANVAS SANDBOX (Bright White Surface)
+           INTERACTIVE DOODLE CANVAS SANDBOX (Pure Drawing Canvas, No Animation)
            ========================================================================== -->
       <section id="playground" class="lp-playground" aria-label="Interactive Canvas Sandbox">
         <div class="lp-playground-bar">
           <div class="lp-playground-status">
             <span class="lp-status-dot"></span>
-            <span>Interactive Live Sandbox • Coret langsung di kanvas ini!</span>
+            <span>Interactive Sandbox • Sketch directly on the canvas</span>
           </div>
 
           <div class="lp-controls-group">
             <!-- Palette Swatches -->
             <div class="lp-palette" id="canvasPalette">
-              <button type="button" class="lp-color-btn active" style="background:#0f172a;" data-color="#0f172a" title="Hitam Tinta"></button>
+              <button type="button" class="lp-color-btn active" style="background:#0f172a;" data-color="#0f172a" title="Ink Black"></button>
               <button type="button" class="lp-color-btn" style="background:#4f46e5;" data-color="#4f46e5" title="Indigo"></button>
               <button type="button" class="lp-color-btn" style="background:#10b981;" data-color="#10b981" title="Emerald"></button>
               <button type="button" class="lp-color-btn" style="background:#f59e0b;" data-color="#f59e0b" title="Amber"></button>
@@ -895,22 +746,18 @@
               <button type="button" class="lp-color-btn" style="background:#2563eb;" data-color="#2563eb" title="Ocean Blue"></button>
             </div>
 
-            <button type="button" class="lp-btn-secondary" id="miniPlayBtn" style="padding: 6px 14px; font-size: 0.8rem;">
-              <span id="playIcon">⏸</span>
-              <span id="playText">Animasi Aktif</span>
-            </button>
-            <button type="button" class="lp-btn-secondary" id="miniClearBtn" style="padding: 6px 14px; font-size: 0.8rem;" title="Hapus Gambar Sendiri">
-              <span>🗑 Bersihkan</span>
+            <button type="button" class="lp-btn-secondary" id="miniClearBtn" style="padding: 6px 14px; font-size: 0.8rem;" title="Clear canvas">
+              <span>🗑 Clear</span>
             </button>
             <button type="button" class="lp-btn-primary auth-smart-trigger" style="padding: 6px 14px; font-size: 0.8rem;">
-              <span>Buka Studio Penuh ↗</span>
+              <span>Launch Studio ↗</span>
             </button>
           </div>
         </div>
 
         <div class="lp-stage-wrap">
           <canvas id="landingCanvas" width="960" height="540"></canvas>
-          <div class="lp-canvas-hint" id="canvasHint">Tekan &amp; geser mouse / sentuh layar untuk menggambar coretan Anda</div>
+          <div class="lp-canvas-hint" id="canvasHint">Click and drag to sketch freely</div>
         </div>
       </section>
     </div>
@@ -924,32 +771,32 @@
       <div class="lp-metrics-grid">
         <div>
           <div class="lp-metric-value">0<span>ms</span></div>
-          <div class="lp-metric-label">Input Latency Canvas ($O(1)$)</div>
+          <div class="lp-metric-label">Input Latency (Instant Direct)</div>
         </div>
         <div>
           <div class="lp-metric-value">60<span>FPS</span></div>
-          <div class="lp-metric-label">High-Def WebM Video Compilation</div>
+          <div class="lp-metric-label">Smooth Video Playback</div>
         </div>
         <div>
           <div class="lp-metric-value">8+<span>Frames</span></div>
-          <div class="lp-metric-label">Default Timeline Presets (4—60)</div>
+          <div class="lp-metric-label">Default Timeline Setup</div>
         </div>
         <div>
           <div class="lp-metric-value">100<span>%</span></div>
-          <div class="lp-metric-label">Cloud Autosaved &amp; Zero Install</div>
+          <div class="lp-metric-label">Cloud Autosaved in Browser</div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- ==========================================================================
-       BENTO GRID FEATURES (Clean White Surfaces)
+       BENTO GRID FEATURES (Clean White Surfaces, Fixed Labels)
        ========================================================================== -->
-  <section id="features" class="container" aria-label="Fitur Studio">
+  <section id="features" class="container" aria-label="Features">
     <div class="lp-section-header">
-      <div class="lp-section-eyebrow">ARSITEKTUR STUDIO CANGGIH</div>
-      <h2 class="lp-section-title">Dirancang untuk Animator Modern</h2>
-      <p class="lp-section-desc">Semua perkakas esensial yang Anda butuhkan untuk menghasilkan animasi halus berstandar industri langsung di browser Anda.</p>
+      <div class="lp-section-eyebrow">STUDIO ARCHITECTURE</div>
+      <h2 class="lp-section-title">Engineered for Modern Animators</h2>
+      <p class="lp-section-desc">All the essential tools you need to create fluid, frame-by-frame animations right in your web browser.</p>
     </div>
 
     <div class="lp-bento-grid">
@@ -964,17 +811,17 @@
               <circle cx="11" cy="11" r="2"></circle>
             </svg>
           </div>
-          <h3 class="lp-card-title">Engine Goresan Vektor &amp; Raster Ultra-Responsif</h3>
+          <h3 class="lp-card-title">Ultra-Responsive Vector &amp; Raster Brushes</h3>
           <p class="lp-card-text">
-            Sensitivitas tekanan dinamis, cat kaleng banjir instan, penggaris geometris (garis, kotak, lingkaran), dan alat seleksi transform yang berjalan mulus dengan akselerasi GPU tanpa jeda.
+            Dynamic pressure sensitivity, instant flood fill, geometric shapes (lines, rectangles, ellipses), and transform selection tools that run smoothly with GPU acceleration.
           </p>
         </div>
         <div class="lp-pill-row">
-          <span class="lp-pill-badge">✎ Kuas Tekanan</span>
-          <span class="lp-pill-badge">▰ Flood Fill $O(N)$</span>
-          <span class="lp-pill-badge">□ Primitif Presisi</span>
-          <span class="lp-pill-badge">⌫ Hapus Sub-Piksel</span>
-          <span class="lp-pill-badge">⊹ Seleksi &amp; Geser</span>
+          <span class="lp-pill-badge">Pressure Brush</span>
+          <span class="lp-pill-badge">Smart Flood Fill</span>
+          <span class="lp-pill-badge">Precision Primitives</span>
+          <span class="lp-pill-badge">Sub-Pixel Eraser</span>
+          <span class="lp-pill-badge">Select &amp; Move</span>
         </div>
       </div>
 
@@ -993,11 +840,11 @@
           </div>
           <h3 class="lp-card-title">Multi-Layer Onion Skinning</h3>
           <p class="lp-card-text">
-            Lihat frame sebelum dan sesudah secara transparan dengan kontrol opasitas bebas dan chroma-key otomatis untuk menghapus latar belakang.
+            Preview previous and upcoming frames transparently with custom opacity controls and automatic background detection.
           </p>
         </div>
         <div class="lp-pill-row">
-          <span class="lp-pill-badge" style="color:var(--lp-primary);background:var(--lp-primary-surface);">Ghosting Frame Sebelum &amp; Sesudah</span>
+          <span class="lp-pill-badge" style="color:var(--lp-primary);background:var(--lp-primary-surface);">Previous &amp; Next Frame Ghosting</span>
         </div>
       </div>
 
@@ -1009,13 +856,13 @@
               <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
             </svg>
           </div>
-          <h3 class="lp-card-title">Ekosistem Remix Komunitas</h3>
+          <h3 class="lp-card-title">Community Remix Ecosystem</h3>
           <p class="lp-card-text">
-            Tonton karya kreator lain di Explore Community, duplikasi frame mereka dengan tombol "Remix in Studio", dan kembangkan karya orisinal baru.
+            Explore animations created by fellow artists, duplicate their frames with a single click, and expand upon their work.
           </p>
         </div>
         <div class="lp-pill-row">
-          <span class="lp-pill-badge" style="color:var(--lp-emerald);background:#ecfdf5;">1-Click Fork &amp; Frame Breakdown</span>
+          <span class="lp-pill-badge" style="color:var(--lp-emerald);background:#ecfdf5;">1-Click Fork &amp; Timeline Breakdown</span>
         </div>
       </div>
 
@@ -1027,13 +874,13 @@
               <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
             </svg>
           </div>
-          <h3 class="lp-card-title">Autosave Awan Kebal Tabrakan</h3>
+          <h3 class="lp-card-title">Collision-Proof Cloud Autosave</h3>
           <p class="lp-card-text">
-            Sinkronisasi debounced otomatis menjamin tidak ada goresan yang hilang. Dukungan memory cache membuat Anda tetap bisa berkarya tanpa cemas.
+            Automatic debounced synchronization ensures no strokes are lost. Offline in-memory caching keeps you animating without worry.
           </p>
         </div>
         <div class="lp-pill-row">
-          <span class="lp-pill-badge" style="color:var(--lp-blue);background:#eff6ff;">Debounced Sync &amp; Nol Frame Hilang</span>
+          <span class="lp-pill-badge" style="color:var(--lp-blue);background:#eff6ff;">Debounced Sync &amp; Zero Frame Loss</span>
         </div>
       </div>
 
@@ -1047,9 +894,9 @@
               <line x1="12" y1="15" x2="12" y2="3"></line>
             </svg>
           </div>
-          <h3 class="lp-card-title">Ekspor Universal Siap Pakai</h3>
+          <h3 class="lp-card-title">Universal Media Export</h3>
           <p class="lp-card-text">
-            Kompilasi animasi Anda langsung menjadi video WebM berkecepatan tinggi, file animasi GIF ringan untuk sosial media, atau cadangan data JSON.
+            Compile your animations into high-definition WebM loops, lightweight animated GIFs for social media, or JSON project archives.
           </p>
         </div>
         <div class="lp-pill-row">
@@ -1060,65 +907,43 @@
   </section>
 
   <!-- ==========================================================================
-       COMMUNITY SHOWCASE PREVIEW
-       ========================================================================== -->
-  <section id="showcase" class="lp-showcase-section" aria-label="Karya Komunitas">
-    <div class="container">
-      <div class="lp-section-header">
-        <div class="lp-section-eyebrow">KARYA KOMUNITAS OMNIANIMA</div>
-        <h2 class="lp-section-title">Inspirasi Gerak Nyata dari Para Kreator</h2>
-        <p class="lp-section-desc">Lihat animasi loop yang telah dipublikasikan oleh kreator kami. Buka di studio untuk mempelajari teknik dan memodifikasi frame mereka.</p>
-      </div>
-
-      <div class="lp-showcase-grid" id="showcaseFeed">
-        <!-- Dynamic cards inserted here by JS -->
-        <div class="lp-showcase-card">
-          <div class="lp-showcase-video" style="display:flex;align-items:center;justify-content:center;background:#f1f5f9;color:#64748b;">
-            <span>Memuat kreasi komunitas...</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==========================================================================
        KEYBOARD SHORTCUTS MECHANICAL STATION
        ========================================================================== -->
-  <section id="shortcuts" class="lp-shortcuts-section" aria-label="Pintasan Keyboard">
+  <section id="shortcuts" class="lp-shortcuts-section" aria-label="Shortcuts">
     <div class="container">
       <div class="lp-section-header">
-        <div class="lp-section-eyebrow">ALUR KERJA CEPAT</div>
-        <h2 class="lp-section-title">Pintasan Keyboard Esensial</h2>
-        <p class="lp-section-desc">Kuasai tombol pintasan studio untuk menggambar dan menavigasi timeline tanpa perlu melepaskan tangan dari stylus Anda.</p>
+        <div class="lp-section-eyebrow">LIGHTNING-FAST WORKFLOW</div>
+        <h2 class="lp-section-title">Essential Keyboard Shortcuts</h2>
+        <p class="lp-section-desc">Master essential studio shortcuts to sketch and navigate your timeline effortlessly without taking your hands off your stylus.</p>
       </div>
 
       <div class="lp-shortcuts-grid">
         <div class="lp-shortcut-item">
-          <span class="lp-shortcut-label">Play / Pause Animasi</span>
-          <kbd class="lp-keycap">Spasi</kbd>
+          <span class="lp-shortcut-label">Play / Pause Animation</span>
+          <kbd class="lp-keycap">Space</kbd>
         </div>
         <div class="lp-shortcut-item">
-          <span class="lp-shortcut-label">Pilih Pensil / Kuas</span>
+          <span class="lp-shortcut-label">Select Brush / Pencil</span>
           <kbd class="lp-keycap">B</kbd>
         </div>
         <div class="lp-shortcut-item">
-          <span class="lp-shortcut-label">Penghapus Cepat</span>
+          <span class="lp-shortcut-label">Quick Eraser</span>
           <kbd class="lp-keycap">E</kbd>
         </div>
         <div class="lp-shortcut-item">
-          <span class="lp-shortcut-label">Cat Kaleng (Fill)</span>
+          <span class="lp-shortcut-label">Paint Bucket (Fill)</span>
           <kbd class="lp-keycap">G</kbd>
         </div>
         <div class="lp-shortcut-item">
-          <span class="lp-shortcut-label">Tambah Frame Baru</span>
+          <span class="lp-shortcut-label">Add New Frame</span>
           <kbd class="lp-keycap">N</kbd>
         </div>
         <div class="lp-shortcut-item">
-          <span class="lp-shortcut-label">Duplikasi Frame Aktif</span>
+          <span class="lp-shortcut-label">Duplicate Active Frame</span>
           <kbd class="lp-keycap">D</kbd>
         </div>
         <div class="lp-shortcut-item">
-          <span class="lp-shortcut-label">Undo Perubahan</span>
+          <span class="lp-shortcut-label">Undo Changes</span>
           <kbd class="lp-keycap">Ctrl + Z</kbd>
         </div>
         <div class="lp-shortcut-item">
@@ -1130,20 +955,20 @@
   </section>
 
   <!-- ==========================================================================
-       CALL TO ACTION BANNER (Bright Card)
+       CALL TO ACTION BANNER
        ========================================================================== -->
-  <section class="container" aria-label="Mulai Sekarang">
+  <section class="container" aria-label="Get Started">
     <div class="lp-cta-card">
-      <h2 class="lp-cta-title">Siap Membuat Mahakarya Animasi Pertama Anda?</h2>
-      <p class="lp-cta-sub">Mulai menggambar secara instan tanpa perlu install software, tanpa kartu kredit. Kompatibel di desktop, tablet, dan smartphone.</p>
+      <h2 class="lp-cta-title">Ready to Create Your Next Animation?</h2>
+      <p class="lp-cta-sub">Start drawing instantly with zero installation and no credit card required. Works smoothly across desktop, tablet, and mobile.</p>
       <button type="button" class="lp-btn-primary lp-cta-large auth-smart-trigger" style="font-size:1.1rem;padding:16px 40px;">
-        <span>Buka OmniAnima Studio Sekarang →</span>
+        <span>Launch OmniAnima Studio Now →</span>
       </button>
     </div>
   </section>
 
   <!-- ==========================================================================
-       GLOBAL FOOTER (Clean White)
+       GLOBAL FOOTER (Clean & Minimalist, No Status Badge)
        ========================================================================== -->
   <footer class="lp-footer">
     <div class="container lp-footer-inner">
@@ -1152,17 +977,13 @@
           <img class="lp-brand-logo" src="/logo.png" alt="OmniAnima" style="width:24px;height:24px;">
           <span>OmniAnima</span>
         </div>
-        <div class="lp-status-badge">
-          <span style="width:6px;height:6px;border-radius:50%;background:var(--lp-emerald);"></span>
-          <span>Sistem Normal • Supabase Cloud Aktif</span>
-        </div>
       </div>
 
       <div class="lp-footer-links">
         <a href="javascript:void(0)" class="auth-smart-trigger">Studio Editor</a>
-        <a href="/login">Masuk / Daftar</a>
-        <a href="#features">Fitur</a>
-        <a href="#showcase">Explore</a>
+        <a href="/login">Sign In / Register</a>
+        <a href="#features">Features</a>
+        <a href="#playground">Playground</a>
       </div>
 
       <div>
@@ -1172,22 +993,18 @@
   </footer>
 
   <!-- ==========================================================================
-       INTERACTIVE SANDBOX & SMART AUTH ROUTING SCRIPT
+       PLAIN DOODLE CANVAS & SMART AUTH ROUTING SCRIPT
        ========================================================================== -->
   <script>
     (function() {
       'use strict';
 
       // 1. SMART AUTH ROUTING
-      // Checks whether user is logged in
       function isUserLoggedIn() {
         const token = localStorage.getItem('omni_token') || localStorage.getItem('sketsa_token');
         return Boolean(token && token.trim().length > 0);
       }
 
-      // Action when clicking Sign In / Masuk:
-      // If already logged in -> jump straight to /app (Dashboard)
-      // If not logged in -> redirect to /login
       function handleSignInAction() {
         if (isUserLoggedIn()) {
           window.location.href = '/app';
@@ -1196,7 +1013,6 @@
         }
       }
 
-      // Initialize auth button states on page load (DO NOT auto-redirect!)
       const navAuthBtn = document.getElementById('navAuthBtn');
       const navStudioBtn = document.getElementById('navStudioBtn');
       const heroCtaBtn = document.getElementById('heroCtaBtn');
@@ -1204,43 +1020,48 @@
 
       if (isUserLoggedIn()) {
         if (navAuthBtn) {
-          navAuthBtn.innerHTML = '<span>Dashboard Studio</span>';
-          navAuthBtn.title = 'Buka Dashboard Studio Animasi Anda';
+          navAuthBtn.innerHTML = '<span>Studio Dashboard</span>';
+          navAuthBtn.title = 'Open your studio dashboard';
         }
         if (heroCtaText) {
-          heroCtaText.textContent = 'Buka Studio Anda';
+          heroCtaText.textContent = 'Go to Your Studio';
         }
       }
 
-      // Attach click events
-      if (navAuthBtn) {
-        navAuthBtn.addEventListener('click', handleSignInAction);
-      }
-      if (navStudioBtn) {
-        navStudioBtn.addEventListener('click', handleSignInAction);
-      }
-      if (heroCtaBtn) {
-        heroCtaBtn.addEventListener('click', handleSignInAction);
-      }
+      if (navAuthBtn) navAuthBtn.addEventListener('click', handleSignInAction);
+      if (navStudioBtn) navStudioBtn.addEventListener('click', handleSignInAction);
+      if (heroCtaBtn) heroCtaBtn.addEventListener('click', handleSignInAction);
 
-      // Attach to any element with .auth-smart-trigger class
       document.querySelectorAll('.auth-smart-trigger').forEach(el => {
         el.addEventListener('click', handleSignInAction);
       });
 
-      // 2. INTERACTIVE MINI-CANVAS SANDBOX (Bright, White Canvas)
+      // 2. PLAIN DRAWING CANVAS (No animation loop, purely for sketching)
       const canvas = document.getElementById('landingCanvas');
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
       const W = canvas.width;
       const H = canvas.height;
 
-      let currentColor = '#0f172a'; // Default ink color
+      let currentColor = '#0f172a';
       let isDrawing = false;
-      let userStrokes = [];
-      let currentStroke = null;
-      let isPlaying = true;
-      let tick = 0;
+      let lastPoint = null;
+
+      // Draw initial white background with guide dots
+      function initCanvas() {
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, W, H);
+
+        // Subtle dot grid guide
+        ctx.fillStyle = '#f1f5f9';
+        for (let x = 30; x < W; x += 36) {
+          for (let y = 30; y < H; y += 36) {
+            ctx.fillRect(x, y, 2.5, 2.5);
+          }
+        }
+      }
+
+      initCanvas();
 
       // Color selection
       const palette = document.getElementById('canvasPalette');
@@ -1258,19 +1079,9 @@
       const clearBtn = document.getElementById('miniClearBtn');
       if (clearBtn) {
         clearBtn.addEventListener('click', () => {
-          userStrokes = [];
-        });
-      }
-
-      // Play/Pause button
-      const playBtn = document.getElementById('miniPlayBtn');
-      const playIcon = document.getElementById('playIcon');
-      const playText = document.getElementById('playText');
-      if (playBtn) {
-        playBtn.addEventListener('click', () => {
-          isPlaying = !isPlaying;
-          playIcon.textContent = isPlaying ? '⏸' : '▶';
-          playText.textContent = isPlaying ? 'Animasi Aktif' : 'Animasi Dijeda';
+          initCanvas();
+          const hint = document.getElementById('canvasHint');
+          if (hint) hint.style.opacity = '1';
         });
       }
 
@@ -1282,236 +1093,47 @@
         };
       }
 
-      canvas.addEventListener('pointerdown', (e) => {
+      function startStroke(e) {
         isDrawing = true;
         canvas.setPointerCapture(e.pointerId);
         const p = getPos(e);
-        currentStroke = { color: currentColor, size: 6, points: [p] };
-        userStrokes.push(currentStroke);
+        lastPoint = p;
+
+        ctx.strokeStyle = currentColor;
+        ctx.fillStyle = currentColor;
+        ctx.lineWidth = 5;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+
         const hint = document.getElementById('canvasHint');
         if (hint) hint.style.opacity = '0';
-      });
+      }
 
-      canvas.addEventListener('pointermove', (e) => {
-        if (!isDrawing || !currentStroke) return;
+      function drawStroke(e) {
+        if (!isDrawing || !lastPoint) return;
         const p = getPos(e);
-        currentStroke.points.push(p);
-      });
 
-      const stopDrawing = () => {
-        isDrawing = false;
-        currentStroke = null;
-      };
-
-      canvas.addEventListener('pointerup', stopDrawing);
-      canvas.addEventListener('pointercancel', stopDrawing);
-
-      // Render loop (Bright canvas, animated mascot loop, user strokes)
-      function render() {
-        // Bright white canvas background
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, W, H);
-
-        // Subtle animation studio guide grid
-        ctx.fillStyle = '#f1f5f9';
-        for (let x = 30; x < W; x += 40) {
-          for (let y = 30; y < H; y += 40) {
-            ctx.fillRect(x, y, 2.5, 2.5);
-          }
-        }
-
-        if (isPlaying) {
-          tick++;
-        }
-
-        // Animated bouncing mascot (8-frame sinusoidal loop)
-        const frame = Math.floor((tick / 4) % 8);
-        const bounceY = Math.sin((frame / 8) * Math.PI * 2) * 26;
-        const squash = Math.cos((frame / 8) * Math.PI * 2) * 5;
-        const cx = W * 0.5;
-        const cy = H * 0.48 + bounceY;
-
-        // Draw shadow on white canvas
         ctx.beginPath();
-        ctx.ellipse(cx, H * 0.75, 52 - squash * 1.5, 11, 0, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(15, 23, 42, 0.08)';
-        ctx.fill();
-
-        // Draw mascot body (Cute vibrant indigo & violet character)
-        ctx.save();
-        ctx.translate(cx, cy);
-
-        // Character body (Solid indigo)
-        ctx.fillStyle = '#4f46e5';
-        ctx.beginPath();
-        ctx.ellipse(0, 0, 38 + squash, 38 - squash, 0, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Character face plate
-        ctx.fillStyle = '#ffffff';
-        ctx.beginPath();
-        ctx.ellipse(0, 2, 28 + squash * 0.8, 26 - squash * 0.8, 0, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Expressive eyes
-        ctx.fillStyle = '#0f172a';
-        const blink = (frame === 4 || frame === 5);
-        if (blink) {
-          ctx.fillRect(-12, -2, 8, 2.5);
-          ctx.fillRect(4, -2, 8, 2.5);
-        } else {
-          ctx.beginPath();
-          ctx.arc(-8, -1, 3.5, 0, Math.PI * 2);
-          ctx.arc(8, -1, 3.5, 0, Math.PI * 2);
-          ctx.fill();
-
-          // Eye sparkles
-          ctx.fillStyle = '#ffffff';
-          ctx.beginPath();
-          ctx.arc(-9, -2, 1.2, 0, Math.PI * 2);
-          ctx.arc(7, -2, 1.2, 0, Math.PI * 2);
-          ctx.fill();
-        }
-
-        // Cute smile
-        ctx.beginPath();
-        ctx.arc(0, 6, 7, 0.1 * Math.PI, 0.9 * Math.PI);
-        ctx.lineWidth = 2.5;
-        ctx.strokeStyle = '#0f172a';
+        ctx.moveTo(lastPoint.x, lastPoint.y);
+        ctx.lineTo(p.x, p.y);
         ctx.stroke();
 
-        ctx.restore();
-
-        // Draw user custom strokes
-        userStrokes.forEach(stroke => {
-          if (!stroke.points.length) return;
-          ctx.beginPath();
-          ctx.strokeStyle = stroke.color;
-          ctx.lineWidth = stroke.size;
-          ctx.lineCap = 'round';
-          ctx.lineJoin = 'round';
-          ctx.moveTo(stroke.points[0].x, stroke.points[0].y);
-          for (let i = 1; i < stroke.points.length; i++) {
-            ctx.lineTo(stroke.points[i].x, stroke.points[i].y);
-          }
-          ctx.stroke();
-        });
-
-        // Loop counter indicator in top-left
-        ctx.fillStyle = '#64748b';
-        ctx.font = '600 12px "Work Sans", sans-serif';
-        ctx.fillText(`Timeline Beat: Frame ${frame + 1}/8 (60 FPS)`, 20, 28);
-
-        requestAnimationFrame(render);
+        lastPoint = p;
       }
 
-      render();
-
-      // 3. COMMUNITY SHOWCASE LOADER
-      async function loadShowcase() {
-        const feed = document.getElementById('showcaseFeed');
-        if (!feed) return;
-
-        try {
-          const res = await fetch('/api/published');
-          const data = await res.json();
-          if (data && data.success && Array.isArray(data.data) && data.data.length > 0) {
-            feed.innerHTML = '';
-            data.data.slice(0, 6).forEach(item => {
-              const card = document.createElement('article');
-              card.className = 'lp-showcase-card';
-              const safeTitle = escapeHtml(item.title || 'Untitled Loop');
-              const safeUser = escapeHtml(item.author || item.user_id || 'Creator');
-              const frames = item.frame_count || 8;
-              const date = new Date(item.created_at || Date.now()).toLocaleDateString('id-ID');
-
-              card.innerHTML = `
-                <div class="lp-showcase-video">
-                  <video src="${item.video_url}" autoplay loop muted playsinline preload="metadata"></video>
-                </div>
-                <div class="lp-showcase-body">
-                  <div class="lp-showcase-meta">
-                    <div class="lp-author-badge">
-                      <div class="lp-author-avatar">✦</div>
-                      <span>${safeUser}</span>
-                    </div>
-                    <span>${frames} frames</span>
-                  </div>
-                  <div class="lp-showcase-title">${safeTitle}</div>
-                  <div class="lp-showcase-foot">
-                    <span style="font-size:0.75rem;color:var(--lp-muted);">${date}</span>
-                    <button type="button" class="lp-btn-primary auth-smart-trigger" style="padding:5px 14px;font-size:0.75rem;">
-                      <span>Remix in Studio</span>
-                    </button>
-                  </div>
-                </div>
-              `;
-              feed.appendChild(card);
-            });
-
-            // Re-attach click events to dynamically rendered remix buttons
-            feed.querySelectorAll('.auth-smart-trigger').forEach(btn => {
-              btn.addEventListener('click', handleSignInAction);
-            });
-          } else {
-            renderFallbackShowcase(feed);
-          }
-        } catch (e) {
-          renderFallbackShowcase(feed);
-        }
+      function endStroke() {
+        isDrawing = false;
+        lastPoint = null;
       }
 
-      function renderFallbackShowcase(feed) {
-        feed.innerHTML = `
-          <div class="lp-showcase-card">
-            <div class="lp-showcase-video" style="display:flex;align-items:center;justify-content:center;background:#eef2ff;color:#4f46e5;font-weight:700;">
-              <span>✦ Bouncing Ball (12 Frames)</span>
-            </div>
-            <div class="lp-showcase-body">
-              <div class="lp-showcase-meta">
-                <div class="lp-author-badge"><div class="lp-author-avatar">✦</div><span>OmniAnima Team</span></div>
-                <span>12 frames</span>
-              </div>
-              <div class="lp-showcase-title">Classic Bouncing Sphere with Squash &amp; Stretch</div>
-              <div class="lp-showcase-foot">
-                <span style="font-size:0.75rem;color:var(--lp-muted);">Template</span>
-                <button type="button" class="lp-btn-primary auth-smart-trigger" style="padding:5px 14px;font-size:0.75rem;">
-                  <span>Remix in Studio</span>
-                </button>
-              </div>
-            </div>
-          </div>
-          <div class="lp-showcase-card">
-            <div class="lp-showcase-video" style="display:flex;align-items:center;justify-content:center;background:#ecfdf5;color:#059669;font-weight:700;">
-              <span>✦ Character Blink (8 Frames)</span>
-            </div>
-            <div class="lp-showcase-body">
-              <div class="lp-showcase-meta">
-                <div class="lp-author-badge"><div class="lp-author-avatar">✦</div><span>Community Animator</span></div>
-                <span>8 frames</span>
-              </div>
-              <div class="lp-showcase-title">Expressive Eye Blink &amp; Head Turn Loop</div>
-              <div class="lp-showcase-foot">
-                <span style="font-size:0.75rem;color:var(--lp-muted);">Featured</span>
-                <button type="button" class="lp-btn-primary auth-smart-trigger" style="padding:5px 14px;font-size:0.75rem;">
-                  <span>Remix in Studio</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        `;
-        feed.querySelectorAll('.auth-smart-trigger').forEach(btn => {
-          btn.addEventListener('click', handleSignInAction);
-        });
-      }
-
-      function escapeHtml(str) {
-        const div = document.createElement('div');
-        div.textContent = str;
-        return div.innerHTML;
-      }
-
-      loadShowcase();
+      canvas.addEventListener('pointerdown', startStroke);
+      canvas.addEventListener('pointermove', drawStroke);
+      canvas.addEventListener('pointerup', endStroke);
+      canvas.addEventListener('pointercancel', endStroke);
     })();
   </script>
 </body>
