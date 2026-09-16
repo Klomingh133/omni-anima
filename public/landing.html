@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Work+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <script src="js/loader.js"></script>
 
   <style>
     /* ==========================================================================
@@ -659,6 +660,38 @@
   </style>
 </head>
 <body>
+  <!-- Top Indeterminate Progress Bar -->
+  <div class="top-progress-bar" id="topProgressBar" aria-hidden="true"></div>
+
+  <!-- Minimalist Studio Loader (Pure Infinity Loop) -->
+  <div class="app-loader is-hidden" id="appLoader" role="status" aria-live="polite">
+    <div class="loader-backdrop-glow" aria-hidden="true"></div>
+    <div class="minimal-loader">
+      <div class="infinity-stage" aria-hidden="true">
+        <svg class="loader-svg" viewBox="0 0 160 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="loaderStrokeGrad" x1="20" y1="45" x2="140" y2="45" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#3978ff"/>
+              <stop offset="50%" stop-color="#f59e0b"/>
+              <stop offset="100%" stop-color="#3978ff"/>
+            </linearGradient>
+          </defs>
+          <path class="infinity-guide" d="M 80 45 C 64 24, 38 24, 38 45 C 38 66, 64 66, 80 45 C 96 24, 122 24, 122 45 C 122 66, 96 66, 80 45 Z"/>
+          <path class="infinity-draw" d="M 80 45 C 64 24, 38 24, 38 45 C 38 66, 64 66, 80 45 C 96 24, 122 24, 122 45 C 122 66, 96 66, 80 45 Z"/>
+          <g class="stylus-group">
+            <circle cx="0" cy="0" r="2.5" class="pen-nib-sparkle"/>
+            <path class="pen-tip" d="M 0 0 L -3.5 -2.5 L -4 -0.5 Z"/>
+            <path class="pen-body" d="M -3.5 -2.5 L -15 -10.5 L -17 -8 L -4 -0.5 Z"/>
+            <path class="pen-accent" d="M -9.5 -6.8 L -12.5 -8.8 L -14 -7 L -11 -5 Z"/>
+          </g>
+        </svg>
+      </div>
+      <div class="minimal-loader-caption">
+        <span id="loaderCaptionText">Opening Studio Workspace</span>
+        <span class="dots-shimmer"><span>.</span><span>.</span><span>.</span></span>
+      </div>
+    </div>
+  </div>
 
   <!-- ==========================================================================
        STICKY LIGHT NAVBAR (No version text)
@@ -1007,9 +1040,17 @@
 
       function handleSignInAction() {
         if (isUserLoggedIn()) {
-          window.location.href = '/app';
+          if (typeof window.navigateWithLoader === 'function') {
+            window.navigateWithLoader('/app', 'Opening Studio Workspace');
+          } else {
+            window.location.href = '/app';
+          }
         } else {
-          window.location.href = '/login';
+          if (typeof window.navigateWithLoader === 'function') {
+            window.navigateWithLoader('/login', 'Connecting to OmniAnima');
+          } else {
+            window.location.href = '/login';
+          }
         }
       }
 
@@ -1034,6 +1075,17 @@
 
       document.querySelectorAll('.auth-smart-trigger').forEach(el => {
         el.addEventListener('click', handleSignInAction);
+      });
+
+      document.querySelectorAll('a[href="/login"]').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (typeof window.navigateWithLoader === 'function') {
+            window.navigateWithLoader('/login', 'Connecting to OmniAnima');
+          } else {
+            window.location.href = '/login';
+          }
+        });
       });
 
       // 2. PLAIN DRAWING CANVAS (No animation loop, purely for sketching)

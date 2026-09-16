@@ -8,8 +8,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <script src="js/loader.js"></script>
 </head>
 <body>
+  <!-- Top Indeterminate Progress Bar -->
+  <div class="top-progress-bar" id="topProgressBar" aria-hidden="true"></div>
+
   <!-- Minimalist Studio Loader (Pure Infinity Loop) -->
   <div class="app-loader" id="appLoader" role="status" aria-live="polite">
     <div class="loader-backdrop-glow" aria-hidden="true"></div>
@@ -37,7 +41,7 @@
         </svg>
       </div>
       <div class="minimal-loader-caption">
-        <span>Preparing canvas</span>
+        <span id="loaderCaptionText">Connecting to OmniAnima</span>
         <span class="dots-shimmer"><span>.</span><span>.</span><span>.</span></span>
       </div>
     </div>

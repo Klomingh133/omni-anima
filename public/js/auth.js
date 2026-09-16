@@ -7,20 +7,14 @@
   const USER_KEY = 'omni_user';
   const loaderStartedAt = Date.now();
 
-  window.hideAppLoader = function(immediate = false) {
-    const loader = document.getElementById('appLoader');
-    if (!loader || loader.dataset.hidden) return;
-    const wait = immediate ? 0 : Math.min(200, Math.max(0, 250 - (Date.now() - loaderStartedAt)));
-    setTimeout(() => {
+  if (typeof window.hideAppLoader !== 'function') {
+    window.hideAppLoader = function(immediate = false) {
+      const loader = document.getElementById('appLoader');
+      if (!loader || loader.dataset.hidden) return;
       loader.dataset.hidden = 'true';
       loader.classList.add('is-hidden');
-    }, wait);
-  };
-
-  // Absolute safety timeout: ensure loader NEVER hangs over 800ms
-  setTimeout(() => {
-    window.hideAppLoader?.(true);
-  }, 800);
+    };
+  }
 
   function clearStoredAuth() {
     localStorage.removeItem(TOKEN_KEY);
@@ -84,7 +78,11 @@
 
         if (user && isUuid(user.id)) {
           localStorage.setItem(USER_KEY, JSON.stringify(user));
-          window.location.href = '/app';
+          if (typeof window.navigateWithLoader === 'function') {
+            window.navigateWithLoader('/app', 'Entering Studio Workspace');
+          } else {
+            window.location.href = '/app';
+          }
           return;
         }
 
@@ -182,7 +180,11 @@
         if (resData.data.user) {
           localStorage.setItem(USER_KEY, JSON.stringify(resData.data.user));
         }
-        window.location.href = '/app';
+        if (typeof window.navigateWithLoader === 'function') {
+          window.navigateWithLoader('/app', 'Launching Studio Workspace');
+        } else {
+          window.location.href = '/app';
+        }
       } else {
         showError('login', resData.message || 'Sign in failed. Please verify your credentials.');
       }
@@ -237,7 +239,11 @@
         if (resData.data.user) {
           localStorage.setItem(USER_KEY, JSON.stringify(resData.data.user));
         }
-        window.location.href = '/app';
+        if (typeof window.navigateWithLoader === 'function') {
+          window.navigateWithLoader('/app', 'Setting up your Studio');
+        } else {
+          window.location.href = '/app';
+        }
       } else {
         showError('register', resData.message || 'Registration failed. Please try again.');
       }
@@ -474,7 +480,11 @@
 
   window.logout = function() {
     clearStoredAuth();
-    window.location.href = '/login';
+    if (typeof window.navigateWithLoader === 'function') {
+      window.navigateWithLoader('/login', 'Signing out');
+    } else {
+      window.location.href = '/login';
+    }
   };
 
   function initAuthPage() {

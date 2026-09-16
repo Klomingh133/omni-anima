@@ -472,9 +472,6 @@
     setupNavigation();
     setupUploadHandler();
 
-    // Reveal UI immediately without blocking on network requests
-    window.hideAppLoader?.(true);
-
     // Asynchronously refresh user profile from server in background
     window.apiFetch('/api/auth/me').then(res => {
       if (res && res.success && res.data) {
@@ -490,6 +487,7 @@
     // Restore editor session if active
     const savedState = getEditorState();
     if (savedState && savedState.mode === 'editor' && savedState.projectId) {
+      window.showAppLoader?.('Restoring canvas session...', 450);
       const data = await window.apiFetch(API + '/' + savedState.projectId);
       if (data && data.success) {
         document.querySelector('.app-navbar')?.classList.add('hidden');
@@ -505,19 +503,14 @@
             }
           }, 0);
         }
-        window.hideAppLoader?.(true);
+        window.hideAppLoader?.();
         return;
       }
     }
 
     await loadProjects();
-    window.hideAppLoader?.(true);
+    window.hideAppLoader?.();
   }
-
-  // Guaranteed safety timeout for the entire studio screen
-  setTimeout(() => {
-    window.hideAppLoader?.(true);
-  }, 500);
 
   /* ==========================================================================
      TAB NAVIGATION (My Studio vs Explore Community)
@@ -539,13 +532,15 @@
         tabExplore?.classList.remove('active');
         dashboardSec?.classList.remove('hidden');
         exploreSec?.classList.add('hidden');
-        loadProjects();
+        window.showAppLoader?.('Loading Studio projects...', 300);
+        loadProjects().finally(() => window.hideAppLoader?.());
       } else if (tab === 'explore') {
         tabExplore?.classList.add('active');
         tabStudio?.classList.remove('active');
         exploreSec?.classList.remove('hidden');
         dashboardSec?.classList.add('hidden');
-        loadPublishedFeed();
+        window.showAppLoader?.('Loading community animations...', 300);
+        loadPublishedFeed().finally(() => window.hideAppLoader?.());
       }
     }
 
@@ -732,63 +727,83 @@
     });
     if (!config) return;
 
-    const res = await window.apiFetch(API, {
-      method: 'POST',
-      body: JSON.stringify({
-        name: config.name,
-        frameCount: config.frameCount
-      })
-    });
-    if (res && res.success) {
-      toast(`Project created with ${config.frameCount} frames!`);
-      openProject(res.data.id);
-    } else {
-      toast(res?.message || 'Failed to create project.');
+    window.showAppLoader?.('Creating animation project...', 400);
+    try {
+      const res = await window.apiFetch(API, {
+        method: 'POST',
+        body: JSON.stringify({
+          name: config.name,
+          frameCount: config.frameCount
+        })
+      });
+      if (res && res.success) {
+        toast(`Project created with ${config.frameCount} frames!`);
+        await openProject(res.data.id);
+      } else {
+        toast(res?.message || 'Failed to create project.');
+        window.hideAppLoader?.(true);
+      }
+    } catch (err) {
+      window.hideAppLoader?.(true);
     }
   }
 
   window.startTemplate = async function(fps, name) {
-    const res = await window.apiFetch(API, {
-      method: 'POST',
-      body: JSON.stringify({ name, fps })
-    });
-    if (res && res.success) {
-      toast(`${name} template loaded (${fps} FPS)`);
-      openProject(res.data.id);
-    } else {
-      toast('Failed to start template.');
+    window.showAppLoader?.('Loading animation template...', 400);
+    try {
+      const res = await window.apiFetch(API, {
+        method: 'POST',
+        body: JSON.stringify({ name, fps })
+      });
+      if (res && res.success) {
+        toast(`${name} template loaded (${fps} FPS)`);
+        await openProject(res.data.id);
+      } else {
+        toast('Failed to start template.');
+        window.hideAppLoader?.(true);
+      }
+    } catch (err) {
+      window.hideAppLoader?.(true);
     }
   };
 
   async function openProject(id) {
-    const data = await window.apiFetch(API + '/' + id);
-    if (!data || !data.success) {
-      toast(data ? data.message : 'Failed to open project.');
-      return;
-    }
+    window.showAppLoader?.('Loading project frames...', 400);
+    try {
+      const data = await window.apiFetch(API + '/' + id);
+      if (!data || !data.success) {
+        toast(data ? data.message : 'Failed to open project.');
+        window.hideAppLoader?.(true);
+        return;
+      }
 
-    const currentUser = window.getUser();
-    if (currentUser && data.data.user_id && String(data.data.user_id) !== String(currentUser.id)) {
-      toast('This project does not belong to your account.');
-      await loadProjects();
-      return;
-    }
+      const currentUser = window.getUser();
+      if (currentUser && data.data.user_id && String(data.data.user_id) !== String(currentUser.id)) {
+        toast('This project does not belong to your account.');
+        await loadProjects();
+        window.hideAppLoader?.(true);
+        return;
+      }
 
-    saveEditorState('editor', id, 0);
+      saveEditorState('editor', id, 0);
 
-    if (window.EditorModule) {
-      document.querySelector('.app-navbar')?.classList.add('hidden');
-      document.getElementById('dashboard').classList.add('hidden');
-      document.getElementById('explore').classList.add('hidden');
-      document.getElementById('editor').classList.remove('hidden');
-      window.EditorModule.open(data.data);
-    } else {
-      console.error('EditorModule is not loaded');
-      toast('Editor failed to load.');
+      if (window.EditorModule) {
+        document.querySelector('.app-navbar')?.classList.add('hidden');
+        document.getElementById('dashboard').classList.add('hidden');
+        document.getElementById('explore').classList.add('hidden');
+        document.getElementById('editor').classList.remove('hidden');
+        window.EditorModule.open(data.data);
+      } else {
+        console.error('EditorModule is not loaded');
+        toast('Editor failed to load.');
+      }
+    } finally {
+      window.hideAppLoader?.();
     }
   }
 
   window.closeToDashboard = async function() {
+    window.showAppLoader?.('Returning to Studio Dashboard...', 300);
     clearEditorState();
     document.querySelector('.app-navbar')?.classList.remove('hidden');
     document.getElementById('editor').classList.add('hidden');
@@ -798,6 +813,7 @@
       document.getElementById('dashboard').classList.remove('hidden');
       await loadProjects();
     }
+    window.hideAppLoader?.();
   };
 
   window.persistEditorState = function(projectId, frameIndex = 0) {
