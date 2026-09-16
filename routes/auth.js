@@ -57,7 +57,8 @@ router.post('/register', authLimiter, async (req, res) => {
     }
 
     const user = { id: data.id, username: data.username, email: data.email, avatar_url: data.avatar_url };
-    const token = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: '7d' });
+    const tokenPayload = { id: data.id, username: data.username, email: data.email };
+    const token = jwt.sign(tokenPayload, process.env.JWT_SECRET, { expiresIn: '7d' });
 
     res.status(201).json({
       success: true,
@@ -96,7 +97,8 @@ router.post('/login', authLimiter, async (req, res) => {
     }
 
     const user = { id: userRecord.id, username: userRecord.username, email: userRecord.email, avatar_url: userRecord.avatar_url };
-    const token = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: '7d' });
+    const tokenPayload = { id: userRecord.id, username: userRecord.username, email: userRecord.email };
+    const token = jwt.sign(tokenPayload, process.env.JWT_SECRET, { expiresIn: '7d' });
 
     res.json({
       success: true,

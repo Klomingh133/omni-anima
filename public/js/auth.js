@@ -31,7 +31,10 @@
   }
 
   function isUuid(value) {
-    return typeof value === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
+    if (!value) return false;
+    if (typeof value === 'number') return true;
+    if (typeof value === 'string') return value.trim().length > 0;
+    return false;
   }
 
   function getLegacyToken() {
@@ -399,16 +402,12 @@
       return { success: false, message: 'Invalid session profile.' };
     }
 
-    // Safety check: a valid JWT token is 100-350 chars. If token > 1500 chars, it's corrupt and causes HTTP 494
+    // Safety check: a valid JWT token is 100-350 chars. If token > 4000 chars, it's corrupt and causes HTTP 494
     let safeToken = token;
-    if (safeToken && safeToken.length > 1500) {
-      console.warn('Bloated token detected, purging to prevent header overflow (HTTP 494).');
+    if (safeToken && safeToken.length > 4000) {
+      console.warn('Excessive token length detected, purging corrupted session.');
       clearStoredAuth();
       safeToken = null;
-      if (!options.public) {
-        window.location.href = '/login';
-        return { success: false, message: 'Corrupted session cleared. Please log in again.' };
-      }
     }
 
     const headers = {
