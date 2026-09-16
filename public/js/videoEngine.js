@@ -41,18 +41,22 @@ window.VideoEngine = (function() {
     canvas.height = H;
     const ctx = canvas.getContext('2d');
 
-    // Preload all frame images
-    const images = [];
-    for (let i = 0; i < frames.length; i++) {
-      const src = frames[i]?.image_data || frames[i];
-      try {
-        const img = await loadImage(src);
-        images.push(img);
-      } catch (e) {
-        console.warn('Failed to load frame image for rendering:', i, e);
-      }
-      if (onProgress) onProgress((i + 1) / (frames.length * 2));
-    }
+    // Preload all frame images concurrently
+    let loadedCount = 0;
+    const images = (await Promise.all(
+      frames.map(async (frame, i) => {
+        const src = frame?.image_data || frame;
+        try {
+          const img = await loadImage(src);
+          loadedCount++;
+          if (onProgress) onProgress(loadedCount / (frames.length * 2));
+          return img;
+        } catch (e) {
+          console.warn('Failed to load frame image for rendering:', i, e);
+          return null;
+        }
+      })
+    )).filter(Boolean);
 
     if (!images.length) {
       throw new Error('Failed to load frame images.');

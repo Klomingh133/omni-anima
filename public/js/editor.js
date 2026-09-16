@@ -233,6 +233,8 @@ window.EditorModule = (function() {
 
     document.removeEventListener('keydown', handleKeyDown);
     document.addEventListener('keydown', handleKeyDown);
+    window.removeEventListener('resize', updateCachedRect);
+    window.addEventListener('resize', updateCachedRect);
   }
 
   function updateCursor() {
@@ -323,15 +325,35 @@ window.EditorModule = (function() {
     return f?.image_data || f;
   }
 
-  function save() {
+  let saveTimer = null;
+  let isCurrentDirty = false;
+
+  function commitCurrentFrame() {
+    if (!drawCanvas || !project || !project.frames) return;
     const dataUrl = drawCanvas.toDataURL('image/png');
     if (project.frames[current]) {
       if (typeof project.frames[current] === 'object') project.frames[current].image_data = dataUrl;
       else project.frames[current] = dataUrl;
     }
-    project.fps = +$('#fps').value || 12;
+    project.fps = +$('#fps')?.value || 12;
     if (window.persistEditorState) window.persistEditorState(project.id, current);
     if (window.AutoSave) window.AutoSave.markDirty(current, dataUrl);
+
+    // Update active frame thumbnail image directly without wiping DOM
+    const activeThumb = $(`#frames .frame[data-index="${current}"] img`);
+    if (activeThumb) activeThumb.src = dataUrl;
+
+    isCurrentDirty = false;
+  }
+
+  function save(immediate = false) {
+    isCurrentDirty = true;
+    clearTimeout(saveTimer);
+    if (immediate) {
+      commitCurrentFrame();
+    } else {
+      saveTimer = setTimeout(commitCurrentFrame, 350);
+    }
   }
 
   function pushUndo() {
@@ -446,7 +468,7 @@ window.EditorModule = (function() {
       return;
     }
 
-    // Chroma key (background removal)
+    // Chroma key (background removal) with squared distance optimization
     const s = ctx.getImageData(0, 0, W, H);
     const out = dctx.createImageData(W, H);
     
@@ -454,18 +476,31 @@ window.EditorModule = (function() {
     const bg = hexToRgb(bgColorVal);
     const tolInput = $('#bgTolerance');
     const tol = tolInput ? +tolInput.value : 18;
+    const tolSq = tol * tol;
+    const tolEdge = tol + 28;
+    const tolEdgeSq = tolEdge * tolEdge;
 
-    for (let i = 0; i < s.data.length; i += 4) {
-      out.data[i] = s.data[i];
-      out.data[i + 1] = s.data[i + 1];
-      out.data[i + 2] = s.data[i + 2];
-      out.data[i + 3] = s.data[i + 3];
+    const sData = s.data;
+    const outData = out.data;
+    const len = sData.length;
+    const bgR = bg.r, bgG = bg.g, bgB = bg.b;
 
-      const alpha = s.data[i + 3];
-      if (alpha) {
-        const dist = Math.hypot(s.data[i] - bg.r, s.data[i + 1] - bg.g, s.data[i + 2] - bg.b);
-        if (dist <= tol) out.data[i + 3] = 0;
-        else if (dist < tol + 28) out.data[i + 3] = Math.round(alpha * (dist - tol) / 28);
+    // Fast copy entire buffer first via 32-bit typed array view
+    new Uint32Array(outData.buffer).set(new Uint32Array(sData.buffer));
+
+    for (let i = 0; i < len; i += 4) {
+      const alpha = sData[i + 3];
+      if (alpha > 0) {
+        const dr = sData[i] - bgR;
+        const dg = sData[i + 1] - bgG;
+        const db = sData[i + 2] - bgB;
+        const distSq = dr * dr + dg * dg + db * db;
+        if (distSq <= tolSq) {
+          outData[i + 3] = 0;
+        } else if (distSq < tolEdgeSq) {
+          const dist = Math.sqrt(distSq);
+          outData[i + 3] = Math.round(alpha * (dist - tol) / 28);
+        }
       }
     }
 
@@ -475,11 +510,16 @@ window.EditorModule = (function() {
     dctx.drawImage(tmpCanvas, 0, 0);
   }
 
+  let cachedRect = null;
+  function updateCachedRect() {
+    if (drawCanvas) cachedRect = drawCanvas.getBoundingClientRect();
+  }
+
   function point(e) {
-    const r = drawCanvas.getBoundingClientRect();
+    if (!cachedRect) updateCachedRect();
     return {
-      x: (e.clientX - r.left) * W / r.width,
-      y: (e.clientY - r.top) * H / r.height
+      x: (e.clientX - cachedRect.left) * W / cachedRect.width,
+      y: (e.clientY - cachedRect.top) * H / cachedRect.height
     };
   }
 
@@ -494,6 +534,7 @@ window.EditorModule = (function() {
 
   function beginDraw(e) {
     if (playTimer) return;
+    updateCachedRect();
     const p = point(e);
 
     if (toolName === 'eyedropper') {
@@ -506,14 +547,14 @@ window.EditorModule = (function() {
       pushUndo();
       activeTool.begin(p, e, color);
       scheduleRender();
-      save();
+      save(true);
       return;
     }
     if (toolName === 'clear') {
       pushUndo();
       ctx.clearRect(0, 0, W, H);
       scheduleRender();
-      save();
+      save(true);
       setTool('pencil');
       return;
     }
@@ -524,7 +565,7 @@ window.EditorModule = (function() {
     if (toolName === 'text') {
       activeTool.begin(p, e, () => {
         scheduleRender();
-        save();
+        save(true);
       });
       return;
     }
@@ -534,7 +575,7 @@ window.EditorModule = (function() {
 
   function moveDraw(e) {
     if (!activeTool?.drawing) return;
-    applyStrokeStyle();
+    // applyStrokeStyle is already set on beginDraw and settings changes; avoid per-move redundant calls
     activeTool.move(point(e), e);
     scheduleRender();
   }
@@ -545,7 +586,20 @@ window.EditorModule = (function() {
     ctx.globalAlpha = 1;
     ctx.globalCompositeOperation = 'source-over';
     scheduleRender();
-    save();
+    // Use debounced save on stroke completion for instantaneous user response without UI freeze
+    save(false);
+  }
+
+  function updateActiveFrameHighlight(index) {
+    const box = $('#frames');
+    if (!box) return;
+    const prev = box.querySelector('.frame.active');
+    if (prev) prev.classList.remove('active');
+    const curr = box.querySelector(`.frame[data-index="${index}"]`);
+    if (curr) {
+      curr.classList.add('active');
+      curr.scrollIntoView({ behavior: 'auto', block: 'nearest', inline: 'center' });
+    }
   }
 
   function renderFrames() {
@@ -555,11 +609,12 @@ window.EditorModule = (function() {
     project.frames.forEach((frame, i) => {
       const btn = document.createElement('button');
       btn.className = 'frame' + (i === current ? ' active' : '');
+      btn.dataset.index = String(i);
       const src = frame.image_data || frame;
       btn.innerHTML = `<img src="${src}" alt="Frame ${i + 1}"><span class="mono">${i + 1}</span>`;
       btn.onclick = () => {
         if (activeTool?.drawing) return;
-        save();
+        save(true);
         loadFrame(i);
       };
       btn.draggable = true;
@@ -681,7 +736,7 @@ window.EditorModule = (function() {
 
   async function play() {
     if (playTimer) { stopPlayback(); return; }
-    save();
+    save(true);
     playIndex = 0;
     const pb = $('#playBtn');
     if (pb) {
@@ -703,7 +758,7 @@ window.EditorModule = (function() {
       dctx.clearRect(0, 0, W, H);
       dctx.drawImage(frame, 0, 0, W, H);
       current = playIndex;
-      renderFrames();
+      updateActiveFrameHighlight(playIndex);
       playIndex = (playIndex + 1) % imgs.length;
     }, 1000 / (project.fps || 12));
   }

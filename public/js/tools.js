@@ -22,13 +22,18 @@ window.Tools = (function() {
       ctx.stroke();
     }
     move(p) {
-      if (!this.drawing) return;
+      if (!this.drawing || !this.lastPoint) return;
       const dx = p.x - this.lastPoint.x;
       const dy = p.y - this.lastPoint.y;
-      if (Math.hypot(dx, dy) < 0.75) return;
-      this.lastPoint = p;
+      // 0.75 * 0.75 = 0.5625 (avoid Math.hypot square root)
+      if (dx * dx + dy * dy < 0.5625) return;
+      
+      // Critical O(1) fix: stroke only the incremental segment instead of re-stroking the entire accumulated path
+      this.ctx.beginPath();
+      this.ctx.moveTo(this.lastPoint.x, this.lastPoint.y);
       this.ctx.lineTo(p.x, p.y);
       this.ctx.stroke();
+      this.lastPoint = p;
     }
     end() {
       this.drawing = false;
@@ -65,11 +70,19 @@ window.Tools = (function() {
     begin(p) {
       this.drawing = true;
       this.start = p;
-      this.snapshot = this.ctx.getImageData(0, 0, W, H);
+      if (!this.previewCanvas) {
+        this.previewCanvas = document.createElement('canvas');
+        this.previewCanvas.width = W;
+        this.previewCanvas.height = H;
+        this.previewCtx = this.previewCanvas.getContext('2d');
+      }
+      this.previewCtx.clearRect(0, 0, W, H);
+      this.previewCtx.drawImage(this.ctx.canvas, 0, 0);
     }
     move(p) {
-      if (!this.drawing) return;
-      this.ctx.putImageData(this.snapshot, 0, 0);
+      if (!this.drawing || !this.previewCanvas) return;
+      this.ctx.clearRect(0, 0, W, H);
+      this.ctx.drawImage(this.previewCanvas, 0, 0);
       this.ctx.beginPath();
       this.ctx.moveTo(this.start.x, this.start.y);
       this.ctx.lineTo(p.x, p.y);
@@ -82,11 +95,19 @@ window.Tools = (function() {
     begin(p) {
       this.drawing = true;
       this.start = p;
-      this.snapshot = this.ctx.getImageData(0, 0, W, H);
+      if (!this.previewCanvas) {
+        this.previewCanvas = document.createElement('canvas');
+        this.previewCanvas.width = W;
+        this.previewCanvas.height = H;
+        this.previewCtx = this.previewCanvas.getContext('2d');
+      }
+      this.previewCtx.clearRect(0, 0, W, H);
+      this.previewCtx.drawImage(this.ctx.canvas, 0, 0);
     }
     move(p) {
-      if (!this.drawing) return;
-      this.ctx.putImageData(this.snapshot, 0, 0);
+      if (!this.drawing || !this.previewCanvas) return;
+      this.ctx.clearRect(0, 0, W, H);
+      this.ctx.drawImage(this.previewCanvas, 0, 0);
       this.ctx.beginPath();
       this.ctx.rect(this.start.x, this.start.y, p.x - this.start.x, p.y - this.start.y);
       this.ctx.stroke();
@@ -98,11 +119,19 @@ window.Tools = (function() {
     begin(p) {
       this.drawing = true;
       this.start = p;
-      this.snapshot = this.ctx.getImageData(0, 0, W, H);
+      if (!this.previewCanvas) {
+        this.previewCanvas = document.createElement('canvas');
+        this.previewCanvas.width = W;
+        this.previewCanvas.height = H;
+        this.previewCtx = this.previewCanvas.getContext('2d');
+      }
+      this.previewCtx.clearRect(0, 0, W, H);
+      this.previewCtx.drawImage(this.ctx.canvas, 0, 0);
     }
     move(p) {
-      if (!this.drawing) return;
-      this.ctx.putImageData(this.snapshot, 0, 0);
+      if (!this.drawing || !this.previewCanvas) return;
+      this.ctx.clearRect(0, 0, W, H);
+      this.ctx.drawImage(this.previewCanvas, 0, 0);
       const w = p.x - this.start.x, h = p.y - this.start.y;
       this.ctx.beginPath();
       this.ctx.ellipse(
@@ -117,28 +146,38 @@ window.Tools = (function() {
   class FillTool extends BaseTool {
     get cursor() { return 'crosshair'; }
     begin(p, e, color) {
-      // Flood fill implementation
+      // Flood fill implementation using flat index stack for high performance
       const x = Math.floor(p.x), y = Math.floor(p.y);
+      if (x < 0 || x >= W || y < 0 || y >= H) return;
       const d = this.ctx.getImageData(0, 0, W, H);
+      const data = d.data;
       const at = (y * W + x) * 4;
-      const tr = [d.data[at], d.data[at+1], d.data[at+2], d.data[at+3]];
+      const tr0 = data[at], tr1 = data[at + 1], tr2 = data[at + 2], tr3 = data[at + 3];
       const rgb = hexToRgb(color);
-      if (tr[0]===rgb[0] && tr[1]===rgb[1] && tr[2]===rgb[2] && tr[3]===255) return;
+      if (tr0 === rgb[0] && tr1 === rgb[1] && tr2 === rgb[2] && tr3 === 255) return;
       
-      const same = (i) => Math.abs(d.data[i]-tr[0]) + Math.abs(d.data[i+1]-tr[1]) + 
-                          Math.abs(d.data[i+2]-tr[2]) + Math.abs(d.data[i+3]-tr[3]) < 30;
-      const stack = [[x, y]];
+      const same = (i) => Math.abs(data[i] - tr0) + Math.abs(data[i + 1] - tr1) + 
+                          Math.abs(data[i + 2] - tr2) + Math.abs(data[i + 3] - tr3) < 30;
+      
+      const stack = [y * W + x];
       const seen = new Uint8Array(W * H);
-      while (stack.length) {
-        const [px, py] = stack.pop();
-        if (px<0||py<0||px>=W||py>=H) continue;
-        const k = py*W+px;
-        if (seen[k]) continue;
-        seen[k] = 1;
+      seen[y * W + x] = 1;
+
+      while (stack.length > 0) {
+        const k = stack.pop();
+        const px = k % W;
+        const py = (k / W) | 0;
         const i = k * 4;
         if (!same(i)) continue;
-        d.data[i]=rgb[0]; d.data[i+1]=rgb[1]; d.data[i+2]=rgb[2]; d.data[i+3]=255;
-        stack.push([px+1,py],[px-1,py],[px,py+1],[px,py-1]);
+        data[i] = rgb[0];
+        data[i + 1] = rgb[1];
+        data[i + 2] = rgb[2];
+        data[i + 3] = 255;
+
+        if (px + 1 < W && !seen[k + 1]) { seen[k + 1] = 1; stack.push(k + 1); }
+        if (px - 1 >= 0 && !seen[k - 1]) { seen[k - 1] = 1; stack.push(k - 1); }
+        if (py + 1 < H && !seen[k + W]) { seen[k + W] = 1; stack.push(k + W); }
+        if (py - 1 >= 0 && !seen[k - W]) { seen[k - W] = 1; stack.push(k - W); }
       }
       this.ctx.putImageData(d, 0, 0);
     }

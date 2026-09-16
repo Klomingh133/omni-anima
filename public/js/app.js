@@ -641,6 +641,24 @@
      ========================================================================== */
 
   async function handlePublishProject(project) {
+    // Pre-check if current user has reached the 5-video publish limit
+    try {
+      const feedCheck = await window.apiFetch(PUBLISHED_API, { public: true });
+      if (feedCheck && feedCheck.success && Array.isArray(feedCheck.data)) {
+        const userPublishedCount = feedCheck.data.filter(item => item.user_id === currentUser.id).length;
+        if (userPublishedCount >= 5) {
+          await window.showAlertDialog?.({
+            title: 'Upload Limit Reached (5/5)',
+            message: 'You have already published 5 animations to Explore Community (maximum limit: 5). Please delete an existing community video before publishing another.',
+            confirmText: 'Understood'
+          });
+          return;
+        }
+      }
+    } catch (e) {
+      // Continue to dialog if check fails
+    }
+
     const details = await showPublishDialog(project.name, '');
     if (!details) return;
 
@@ -719,7 +737,7 @@
       if (exploreSearchQuery) {
         url += `?q=${encodeURIComponent(exploreSearchQuery)}`;
       }
-      const res = await window.apiFetch(url);
+      const res = await window.apiFetch(url, { public: true });
       if (!res || !res.success) throw new Error(res?.message || 'Failed to load community animations.');
 
       publishedFeed = res.data || [];
@@ -733,11 +751,14 @@
             <div class="empty-icon">⚠️</div>
             <b>Could not load community animations</b>
             <p>${escapeHtml(err.message || 'Please check your connection and try again.')}</p>
+            <button class="primary small-btn" style="margin-top: 14px;" onclick="window.loadPublishedFeed && window.loadPublishedFeed()">Try Again</button>
           </div>
         `;
       }
     }
   }
+
+  window.loadPublishedFeed = loadPublishedFeed;
 
   function renderPublishedGrid() {
     const grid = document.getElementById('exploreGrid');

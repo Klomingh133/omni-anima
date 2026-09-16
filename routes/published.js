@@ -11,7 +11,7 @@ const router = express.Router();
  */
 router.get('/', async (req, res) => {
   try {
-    const { q, limit = 50, offset = 0 } = req.query;
+    const { q, limit = 24, offset = 0 } = req.query;
 
     let query = supabase
       .from('published_animations')
@@ -92,6 +92,19 @@ router.post('/', authenticateToken, async (req, res) => {
 
     if (!video_data || typeof video_data !== 'string' || !video_data.startsWith('data:video')) {
       return res.status(400).json({ success: false, message: 'Valid video data is required.' });
+    }
+
+    // Enforce 5-video limit per user across all accounts
+    const { data: userUploads, error: countErr } = await supabase
+      .from('published_animations')
+      .select('id')
+      .eq('user_id', userId);
+
+    if (userUploads && userUploads.length >= 5) {
+      return res.status(403).json({
+        success: false,
+        message: 'Upload limit reached! You can publish a maximum of 5 videos to the community. Please delete an existing video before publishing a new one.'
+      });
     }
 
     // Get author details

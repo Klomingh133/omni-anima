@@ -385,28 +385,55 @@
   window.apiFetch = async function(url, options = {}) {
     migrateLegacyAuth();
     const token = localStorage.getItem(TOKEN_KEY) || localStorage.getItem('sketsa_token');
-    if (!token) {
+    if (!token && !options.public) {
       window.location.href = '/login';
-      return;
+      return { success: false, message: 'Not authenticated.' };
     }
     const user = window.getUser();
     if (user && !isUuid(user.id)) {
       clearStoredAuth();
       window.location.href = '/login';
-      return;
+      return { success: false, message: 'Invalid session profile.' };
     }
     const headers = {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + token,
+      ...(token ? { 'Authorization': 'Bearer ' + token } : {}),
       ...(options.headers || {})
     };
-    const res = await fetch(url, { ...options, headers });
+
+    let res;
+    try {
+      res = await fetch(url, { ...options, headers });
+    } catch (networkErr) {
+      console.warn('Network error during apiFetch:', networkErr);
+      return { success: false, message: 'Network connection error. Please check your internet connection.' };
+    }
+
     if (res.status === 401) {
       clearStoredAuth();
       window.location.href = '/login';
-      return;
+      return { success: false, message: 'Session expired. Please log in again.' };
     }
-    return res.json();
+
+    const contentType = res.headers.get('content-type') || '';
+    if (contentType.includes('application/json')) {
+      try {
+        return await res.json();
+      } catch (parseErr) {
+        console.warn('Malformed JSON response from server:', parseErr);
+        return { success: false, message: 'Server returned an invalid JSON response.' };
+      }
+    }
+
+    // Response is not JSON (e.g. HTML error page from Vercel / server gateway)
+    const text = await res.text().catch(() => '');
+    console.warn(`Non-JSON response from ${url} (${res.status}):`, text.slice(0, 150));
+    return {
+      success: false,
+      message: res.status >= 500
+        ? 'Server is temporarily unavailable. Please try again in a moment.'
+        : `Request failed with status ${res.status}.`
+    };
   };
 
   window.getUser = function() {
