@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OmniAnima — Studio Animasi Frame-by-Frame Pro</title>
+  <meta name="description" content="Studio animasi 2D frame-by-frame web-native profesional. Render tanpa lag, multi-layer onion skinning, ekspor WebM 60 FPS, dan remix kreasi komunitas dalam satu klik." />
+  
+  <!-- Open Graph / Meta -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="OmniAnima — Professional 2D Animation Studio" />
+  <meta property="og:description" content="Craft frame-by-frame animations with zero lag, cloud autosave, and instantaneous video compilation." />
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       DESIGN SYSTEM TOKENS (Linear / Framer / MotionSites inspired)
+       ========================================================================== */
+    :root {
+      --bg: #07090e;
+      --bg-surface: #0e131f;
+      --bg-surface-elevated: #161e31;
+      --bg-glass: rgba(14, 19, 31, 0.72);
+      --border-hairline: rgba(255, 255, 255, 0.08);
+      --border-accent: rgba(99, 102, 241, 0.35);
+      
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+
+      --indigo: #6366f1;
+      --indigo-glow: rgba(99, 102, 241, 0.4);
+      --violet: #8b5cf6;
+      --cyan: #06b6d4;
+      --amber: #f59e0b;
+      --emerald: #10b981;
+
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 22px;
+      --radius-full: 9999px;
+
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-display: 'Plus Jakarta Sans', 'Inter', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--bg);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      overflow-x: hidden;
+      line-height: 1.6;
+      background: 
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.18), transparent),
+        radial-gradient(ellipse 60% 40% at 90% 40%, rgba(139, 92, 246, 0.12), transparent),
+        radial-gradient(ellipse 60% 40% at 10% 70%, rgba(6, 182, 212, 0.08), transparent),
+        var(--bg);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ==========================================================================
+       TOP NAVIGATION BAR
+       ========================================================================== */
+    .nav-wrapper {
+      position: sticky;
+      top: 18px;
+      z-index: 100;
+      padding: 0 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .navbar {
+      width: 100%;
+      max-width: 1100px;
+      height: 60px;
+      background: var(--bg-glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      transition: border-color 0.2s;
+    }
+
+    .navbar:hover {
+      border-color: rgba(255, 255, 255, 0.14);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-logo-badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      color: #ffffff;
+      box-shadow: 0 0 16px rgba(99, 102, 241, 0.5);
+    }
+
+    .nav-version {
+      font-size: 0.68rem;
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-muted);
+      padding: 2px 7px;
+      border-radius: var(--radius-full);
+      margin-left: 2px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-link {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: color 0.15s ease;
+    }
+
+    .nav-link:hover {
+      color: #ffffff;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid transparent;
+      padding: 8px 16px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      border-radius: var(--radius-full);
+      transition: all 0.15s ease;
+    }
+
+    .btn-ghost:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 8px 20px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      border-radius: var(--radius-full);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 18px rgba(99, 102, 241, 0.4);
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px rgba(99, 102, 241, 0.55);
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0) scale(0.98);
+    }
+
+    /* ==========================================================================
+       HERO SECTION
+       ========================================================================== */
+    .hero {
+      padding: 70px 0 50px;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero-badge-wrap {
+      display: inline-flex;
+      margin-bottom: 24px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      padding: 6px 16px;
+      border-radius: var(--radius-full);
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #c7d2fe;
+      box-shadow: 0 0 24px rgba(99, 102, 241, 0.2);
+    }
+
+    .hero-badge-pulse {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #38bdf8;
+      box-shadow: 0 0 8px #38bdf8;
+      animation: pulseGlow 2s infinite;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -0.035em;
+      max-width: 960px;
+      margin: 0 auto 20px;
+      color: #ffffff;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #a5b4fc 0%, #818cf8 35%, #c084fc 70%, #f472b6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1rem, 1.8vw, 1.25rem);
+      color: var(--text-muted);
+      max-width: 680px;
+      margin: 0 auto 34px;
+      font-weight: 400;
+      line-height: 1.6;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 54px;
+    }
+
+    .hero-cta-main {
+      padding: 14px 34px;
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    .hero-cta-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-hairline);
+      color: var(--text-main);
+      padding: 14px 28px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      border-radius: var(--radius-full);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.18s ease;
+    }
+
+    .hero-cta-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-1px);
+    }
+
+    /* ==========================================================================
+       INTERACTIVE LIVE MINI-CANVAS PLAYGROUND (ReactBits / MotionSites Style)
+       ========================================================================== */
+    .playground-container {
+      max-width: 980px;
+      margin: 0 auto;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: 
+        0 24px 70px rgba(0, 0, 0, 0.6),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .playground-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 20%;
+      right: 20%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.8), transparent);
+    }
+
+    .playground-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .playground-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .playground-status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--emerald);
+      box-shadow: 0 0 10px var(--emerald);
+    }
+
+    .playground-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .color-picker-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 4px 8px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border-hairline);
+    }
+
+    .color-dot {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .color-dot.active {
+      transform: scale(1.2);
+      border-color: #ffffff;
+      box-shadow: 0 0 8px currentColor;
+    }
+
+    .mini-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-hairline);
+      color: var(--text-main);
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+
+    .mini-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .mini-btn.active {
+      background: var(--indigo);
+      border-color: var(--indigo);
+      color: #ffffff;
+    }
+
+    .canvas-stage-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      max-height: 480px;
+      background: #000000;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.9);
+      cursor: crosshair;
+    }
+
+    #landingCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .canvas-hint {
+      position: absolute;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(14, 19, 31, 0.85);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border-hairline);
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    /* ==========================================================================
+       METRICS RIBBON
+       ========================================================================== */
+    .metrics-ribbon {
+      padding: 60px 0;
+      border-top: 1px solid var(--border-hairline);
+      border-bottom: 1px solid var(--border-hairline);
+      margin: 60px 0 80px;
+      background: rgba(14, 19, 31, 0.4);
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      text-align: center;
+    }
+
+    .metric-value {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 3.5vw, 2.8rem);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      color: #ffffff;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .metric-value span {
+      color: var(--indigo);
+    }
+
+    .metric-label {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* ==========================================================================
+       BENTO GRID FEATURES
+       ========================================================================== */
+    .section-head {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .section-eyebrow {
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--indigo);
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 3.5vw, 2.7rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #ffffff;
+      margin-bottom: 14px;
+    }
+
+    .section-desc {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 100px;
+    }
+
+    .bento-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .bento-card:hover {
+      border-color: rgba(99, 102, 241, 0.4);
+      transform: translateY(-3px);
+      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5), 0 0 30px rgba(99, 102, 241, 0.1);
+    }
+
+    .bento-span-2 {
+      grid-column: span 2;
+    }
+
+    .bento-badge-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      color: var(--indigo);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 22px;
+    }
+
+    .bento-badge-icon svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .bento-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+      margin-bottom: 10px;
+    }
+
+    .bento-text {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .bento-illustration {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-top: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ==========================================================================
+       COMMUNITY SHOWCASE PREVIEW
+       ========================================================================== */
+    .showcase-section {
+      padding: 40px 0 100px;
+    }
+
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+    }
+
+    .showcase-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.25s ease;
+    }
+
+    .showcase-card:hover {
+      border-color: rgba(99, 102, 241, 0.4);
+      transform: translateY(-3px);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
+    }
+
+    .showcase-video-wrap {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .showcase-video-wrap video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .showcase-info {
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .showcase-meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+
+    .showcase-author {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .showcase-avatar {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--indigo);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      color: #fff;
+    }
+
+    .showcase-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .showcase-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 6px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* ==========================================================================
+       KEYBOARD SHORTCUTS MECHANICAL STATION
+       ========================================================================== */
+    .shortcuts-section {
+      padding: 40px 0 100px;
+    }
+
+    .shortcuts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+      max-width: 1040px;
+      margin: 0 auto;
+    }
+
+    .shortcut-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: border-color 0.15s;
+    }
+
+    .shortcut-card:hover {
+      border-color: rgba(255, 255, 255, 0.18);
+    }
+
+    .shortcut-action {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .kbd-pill {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-bottom-width: 3px;
+      border-radius: 6px;
+      color: #f1f5f9;
+      font-family: monospace;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    }
+
+    /* ==========================================================================
+       BOTTOM CTA BANNER
+       ========================================================================== */
+    .cta-banner {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.1) 100%);
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      border-radius: var(--radius-lg);
+      padding: 60px 32px;
+      text-align: center;
+      margin-bottom: 100px;
+      box-shadow: 0 20px 60px rgba(99, 102, 241, 0.15);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 900;
+      color: #ffffff;
+      letter-spacing: -0.03em;
+      margin-bottom: 14px;
+    }
+
+    .cta-sub {
+      font-size: 1.1rem;
+      color: #c7d2fe;
+      max-width: 580px;
+      margin: 0 auto 30px;
+    }
+
+    /* ==========================================================================
+       GLOBAL FOOTER
+       ========================================================================== */
+    .footer {
+      border-top: 1px solid var(--border-hairline);
+      padding: 40px 0 50px;
+      background: rgba(7, 9, 14, 0.8);
+      font-size: 0.85rem;
+      color: var(--text-dim);
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .footer-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      color: var(--emerald);
+      background: rgba(16, 185, 129, 0.08);
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .footer-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .footer-links a:hover {
+      color: #ffffff;
+    }
+
+    /* ==========================================================================
+       RESPONSIVE DESIGN
+       ========================================================================== */
+    @media (max-width: 900px) {
+      .nav-links {
+        display: none;
+      }
+      .bento-grid {
+        grid-template-columns: 1fr;
+      }
+      .bento-span-2 {
+        grid-column: span 1;
+      }
+      .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .hero {
+        padding: 40px 0 30px;
+      }
+      .metrics-grid {
+        grid-template-columns: 1fr;
+      }
+      .footer-inner {
+        flex-direction: column;
+        text-align: center;
+      }
+      .playground-header {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .playground-controls {
+        justify-content: space-between;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================================================
+       STICKY GLASSMORPHIC NAVBAR
+       ========================================================================== -->
+  <div class="nav-wrapper">
+    <nav class="navbar" aria-label="Main Navigation">
+      <a href="/" class="nav-brand">
+        <div class="nav-logo-badge">✦</div>
+        <span>OmniAnima</span>
+        <span class="nav-version">v2.0</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#playground" class="nav-link">Playground</a></li>
+        <li><a href="#features" class="nav-link">Fitur Studio</a></li>
+        <li><a href="#showcase" class="nav-link">Showcase</a></li>
+        <li><a href="#shortcuts" class="nav-link">Shortcuts</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="/login" class="btn-ghost">Masuk</a>
+        <a href="/app" class="btn-primary">
+          <span>Buka Studio</span>
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+      </div>
+    </nav>
+  </div>
+
+  <!-- ==========================================================================
+       HERO SECTION WITH ANIMATED ACCENTS
+       ========================================================================== */
+  -->
+  <header class="hero">
+    <div class="container">
+      <div class="hero-badge-wrap">
+        <div class="hero-badge">
+          <span class="hero-badge-pulse"></span>
+          <span>Engine Animasi Vektor &amp; Raster 60 FPS • Gratis &amp; Bebas Iklan</span>
+        </div>
+      </div>
+
+      <h1 class="hero-title">
+        Wujudkan Imajinasi Frame demi Frame.<br>
+        <span class="gradient-text">Nol Latensi. Kreativitas Tanpa Batas.</span>
+      </h1>
+
+      <p class="hero-subtitle">
+        Studio animasi 2D web-native berkecepatan tinggi. Gambar dengan presisi sub-milidetik, kontrol multi-layer onion skinning, autosave awan instan, dan remix karya komunitas langsung di browser.
+      </p>
+
+      <div class="hero-actions">
+        <a href="/app" class="btn-primary hero-cta-main">
+          <span>Mulai Menggambar Sekarang</span>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+        <a href="#playground" class="hero-cta-secondary">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
+            <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
+            <path d="M2 2l7.586 7.586"></path>
+            <circle cx="11" cy="11" r="2"></circle>
+          </svg>
+          <span>Coba Mini Canvas di Bawah</span>
+        </a>
+      </div>
+
+      <!-- ==========================================================================
+           INTERACTIVE MINI-CANVAS PLAYGROUND (ReactBits / MotionSites)
+           ========================================================================== -->
+      <section id="playground" class="playground-container" aria-label="Interactive Canvas Sandbox">
+        <div class="playground-header">
+          <div class="playground-status">
+            <span class="playground-status-dot"></span>
+            <span>Interactive Live Sandbox • Coret langsung di sini!</span>
+          </div>
+
+          <div class="playground-controls">
+            <!-- Palette -->
+            <div class="color-picker-group" id="canvasPalette">
+              <button type="button" class="color-dot active" style="background:#ffffff; color:#ffffff;" data-color="#ffffff" title="Putih"></button>
+              <button type="button" class="color-dot" style="background:#6366f1; color:#6366f1;" data-color="#6366f1" title="Indigo"></button>
+              <button type="button" class="color-dot" style="background:#10b981; color:#10b981;" data-color="#10b981" title="Emerald"></button>
+              <button type="button" class="color-dot" style="background:#f59e0b; color:#f59e0b;" data-color="#f59e0b" title="Amber"></button>
+              <button type="button" class="color-dot" style="background:#ec4899; color:#ec4899;" data-color="#ec4899" title="Pink"></button>
+            </div>
+
+            <!-- Mini Actions -->
+            <button type="button" class="mini-btn active" id="miniPlayBtn">
+              <span id="playIcon">⏸</span>
+              <span id="playText">Animasi Aktif</span>
+            </button>
+            <button type="button" class="mini-btn" id="miniClearBtn" title="Hapus Gambar Sendiri">
+              <span>🗑 Bersihkan</span>
+            </button>
+            <a href="/app" class="mini-btn" style="background:var(--indigo);color:#fff;border-color:var(--indigo);">
+              <span>Buka Studio Penuh ↗</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="canvas-stage-wrapper">
+          <canvas id="landingCanvas" width="960" height="540"></canvas>
+          <div class="canvas-hint" id="canvasHint">Tekan &amp; geser mouse / jari untuk menggambar loop Anda sendiri</div>
+        </div>
+      </section>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       KEY METRICS RIBBON
+       ========================================================================== -->
+  <section class="metrics-ribbon" aria-label="Performance Metrics">
+    <div class="container">
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-value">0<span>ms</span></div>
+          <div class="metric-label">Input Latency Canvas ($O(1)$)</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">60<span>FPS</span></div>
+          <div class="metric-label">High-Def WebM Video Compilation</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">8+<span>Frames</span></div>
+          <div class="metric-label">Default Timeline Presets (4—60)</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">100<span>%</span></div>
+          <div class="metric-label">Cloud Autosaved &amp; Zero Install</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       BENTO GRID FEATURES
+       ========================================================================== -->
+  <section id="features" class="container" aria-label="Studio Features">
+    <div class="section-head">
+      <div class="section-eyebrow">ARSITEKTUR STUDIO CANGGIH</div>
+      <h2 class="section-title">Dirancang untuk Animator Modern</h2>
+      <p class="section-desc">Semua perkakas esensial yang Anda butuhkan untuk menghasilkan animasi halus berstandar industri langsung di browser Anda.</p>
+    </div>
+
+    <div class="bento-grid">
+      <!-- Feature 1: Big Card -->
+      <div class="bento-card bento-span-2">
+        <div>
+          <div class="bento-badge-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
+              <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
+              <path d="M2 2l7.586 7.586"></path>
+              <circle cx="11" cy="11" r="2"></circle>
+            </svg>
+          </div>
+          <h3 class="bento-title">Engine Goresan Vektor &amp; Raster Ultra-Responsif</h3>
+          <p class="bento-text">
+            Sensitivitas tekanan dinamis, cat kaleng banjir instan, penggaris geometris (garis, kotak, lingkaran), dan alat seleksi transform yang berjalan mulus dengan akselerasi GPU tanpa jeda.
+          </p>
+        </div>
+        <div class="bento-illustration" style="gap: 16px; flex-wrap: wrap;">
+          <span class="mini-btn">✎ Kuas Tekanan</span>
+          <span class="mini-btn">▰ Flood Fill $O(N)$</span>
+          <span class="mini-btn">□ Primitif Presisi</span>
+          <span class="mini-btn">⌫ Hapus Sub-Piksel</span>
+          <span class="mini-btn">⊹ Seleksi &amp; Geser</span>
+        </div>
+      </div>
+
+      <!-- Feature 2 -->
+      <div class="bento-card">
+        <div>
+          <div class="bento-badge-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <circle cx="12" cy="12" r="4"></circle>
+              <line x1="4.93" y1="4.93" x2="9.17" y2="9.17"></line>
+              <line x1="14.83" y1="14.83" x2="19.07" y2="19.07"></line>
+              <line x1="14.83" y1="9.17" x2="19.07" y2="4.93"></line>
+              <line x1="4.93" y1="19.07" x2="9.17" y2="14.83"></line>
+            </svg>
+          </div>
+          <h3 class="bento-title">Multi-Layer Onion Skinning</h3>
+          <p class="bento-text">
+            Lihat frame sebelum dan sesudah secara transparan dengan kontrol opasitas bebas dan chroma-key otomatis untuk menghapus latar belakang.
+          </p>
+        </div>
+        <div class="bento-illustration">
+          <span style="font-size:0.8rem;color:var(--indigo);font-weight:600;">Ghosting Frame Sebelumnya &amp; Selanjutnya</span>
+        </div>
+      </div>
+
+      <!-- Feature 3 -->
+      <div class="bento-card">
+        <div>
+          <div class="bento-badge-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+          </div>
+          <h3 class="bento-title">Ekosistem Remix Komunitas</h3>
+          <p class="bento-text">
+            Tonton karya kreator lain di Explore Community, duplikasi frame mereka dengan tombol "Remix in Studio", dan kembangkan karya orisinal baru.
+          </p>
+        </div>
+        <div class="bento-illustration">
+          <span style="font-size:0.8rem;color:var(--emerald);font-weight:600;">1-Click Fork &amp; Timeline Breakdown</span>
+        </div>
+      </div>
+
+      <!-- Feature 4 -->
+      <div class="bento-card">
+        <div>
+          <div class="bento-badge-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
+            </svg>
+          </div>
+          <h3 class="bento-title">Autosave Awan Kebal Tabrakan</h3>
+          <p class="bento-text">
+            Sinkronisasi debounced otomatis menjamin tidak ada goresan yang hilang. Dukungan offline memory cache membuat Anda tetap bisa berkarya tanpa cemas.
+          </p>
+        </div>
+        <div class="bento-illustration">
+          <span style="font-size:0.8rem;color:var(--cyan);font-weight:600;">JWT Mini Token &amp; Zero Packet Loss</span>
+        </div>
+      </div>
+
+      <!-- Feature 5 -->
+      <div class="bento-card">
+        <div>
+          <div class="bento-badge-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+          </div>
+          <h3 class="bento-title">Ekspor Universal Siap Pakai</h3>
+          <p class="bento-text">
+            Kompilasi animasi Anda langsung menjadi video WebM berkecepatan tinggi, file animasi GIF ringan untuk sosial media, atau cadangan data JSON.
+          </p>
+        </div>
+        <div class="bento-illustration">
+          <span style="font-size:0.8rem;color:var(--amber);font-weight:600;">WebM 60 FPS • GIF • JSON Archive</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       LIVE COMMUNITY SHOWCASE PREVIEW
+       ========================================================================== -->
+  <section id="showcase" class="showcase-section" aria-label="Community Animations">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-eyebrow">KARYA KOMUNITAS OMNIANIMA</div>
+        <h2 class="section-title">Inspirasi Gerak Nyata dari Para Kreator</h2>
+        <p class="section-desc">Lihat animasi loop yang telah dipublikasikan oleh kreator kami. Buka di studio untuk mempelajari teknik dan memodifikasi frame mereka.</p>
+      </div>
+
+      <div class="showcase-grid" id="showcaseFeed">
+        <!-- Dynamic community cards will be rendered here by JS -->
+        <div class="showcase-card">
+          <div class="showcase-video-wrap" style="display:flex;align-items:center;justify-content:center;background:#0f172a;color:#64748b;">
+            <span>Memuat kreasi komunitas...</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       KEYBOARD SHORTCUTS MECHANICAL STATION
+       ========================================================================== -->
+  <section id="shortcuts" class="shortcuts-section" aria-label="Keyboard Shortcuts">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-eyebrow">ALUR KERJA SECEPAT PIKIRAN</div>
+        <h2 class="section-title">Pintasan Keyboard Esensial</h2>
+        <p class="section-desc">Kuasai tombol pintasan studio untuk menggambar dan menavigasi timeline tanpa perlu melepaskan tangan dari stylus Anda.</p>
+      </div>
+
+      <div class="shortcuts-grid">
+        <div class="shortcut-card">
+          <span class="shortcut-action">Play / Pause Animasi</span>
+          <kbd class="kbd-pill">Spasi</kbd>
+        </div>
+        <div class="shortcut-card">
+          <span class="shortcut-action">Pilih Pensil / Kuas</span>
+          <kbd class="kbd-pill">B</kbd>
+        </div>
+        <div class="shortcut-card">
+          <span class="shortcut-action">Penghapus Cepat</span>
+          <kbd class="kbd-pill">E</kbd>
+        </div>
+        <div class="shortcut-card">
+          <span class="shortcut-action">Cat Kaleng (Fill)</span>
+          <kbd class="kbd-pill">G</kbd>
+        </div>
+        <div class="shortcut-card">
+          <span class="shortcut-action">Tambah Frame Baru</span>
+          <kbd class="kbd-pill">N</kbd>
+        </div>
+        <div class="shortcut-card">
+          <span class="shortcut-action">Duplikasi Frame Aktif</span>
+          <kbd class="kbd-pill">D</kbd>
+        </div>
+        <div class="shortcut-card">
+          <span class="shortcut-action">Undo Perubahan</span>
+          <kbd class="kbd-pill">Ctrl + Z</kbd>
+        </div>
+        <div class="shortcut-card">
+          <span class="shortcut-action">Toggle Onion Skin</span>
+          <kbd class="kbd-pill">O</kbd>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       FINAL CALL TO ACTION BANNER
+       ========================================================================== -->
+  <section class="container" aria-label="Get Started">
+    <div class="cta-banner">
+      <h2 class="cta-title">Siap Membuat Mahakarya Animasi Pertama Anda?</h2>
+      <p class="cta-sub">Mulai menggambar secara instan tanpa perlu install software, tanpa kartu kredit. Kompatibel di desktop, tablet, dan smartphone.</p>
+      <a href="/app" class="btn-primary" style="padding: 16px 38px; font-size: 1.1rem; border-radius: var(--radius-full);">
+        <span>Buka OmniAnima Studio Sekarang →</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       GLOBAL FOOTER
+       ========================================================================== -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-left">
+        <div class="nav-brand" style="font-size: 1.05rem;">
+          <div class="nav-logo-badge" style="width:26px;height:26px;font-size:0.85rem;">✦</div>
+          <span>OmniAnima</span>
+        </div>
+        <div class="footer-status">
+          <span style="width:6px;height:6px;border-radius:50%;background:var(--emerald);"></span>
+          <span>Sistem Normal • Supabase Cloud Aktif</span>
+        </div>
+      </div>
+
+      <div class="footer-links">
+        <a href="/app">Studio Editor</a>
+        <a href="/login">Masuk / Daftar</a>
+        <a href="#features">Fitur</a>
+        <a href="#showcase">Explore</a>
+      </div>
+
+      <div>
+        <span>&copy; 2026 OmniAnima Studio. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       INTERACTIVE SANDBOX & COMMUNITY LOADER SCRIPT
+       ========================================================================== -->
+  <script>
+    (function() {
+      'use strict';
+
+      // 1. MINI-CANVAS PLAYGROUND LOGIC
+      const canvas = document.getElementById('landingCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const W = canvas.width;
+      const H = canvas.height;
+
+      let currentColor = '#ffffff';
+      let isDrawing = false;
+      let userStrokes = [];
+      let currentStroke = null;
+      let isPlaying = true;
+      let animFrameId = null;
+      let tick = 0;
+
+      // Color selection
+      const palette = document.getElementById('canvasPalette');
+      palette.addEventListener('click', (e) => {
+        const dot = e.target.closest('.color-dot');
+        if (!dot) return;
+        palette.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+        dot.classList.add('active');
+        currentColor = dot.dataset.color;
+      });
+
+      // Clear button
+      document.getElementById('miniClearBtn').addEventListener('click', () => {
+        userStrokes = [];
+      });
+
+      // Play/Pause button
+      const playBtn = document.getElementById('miniPlayBtn');
+      const playIcon = document.getElementById('playIcon');
+      const playText = document.getElementById('playText');
+      playBtn.addEventListener('click', () => {
+        isPlaying = !isPlaying;
+        playBtn.classList.toggle('active', isPlaying);
+        playIcon.textContent = isPlaying ? '⏸' : '▶';
+        playText.textContent = isPlaying ? 'Animasi Aktif' : 'Animasi Dijeda';
+      });
+
+      // Pointer drawing events
+      function getPos(e) {
+        const rect = canvas.getBoundingClientRect();
+        return {
+          x: (e.clientX - rect.left) * (W / rect.width),
+          y: (e.clientY - rect.top) * (H / rect.height)
+        };
+      }
+
+      canvas.addEventListener('pointerdown', (e) => {
+        isDrawing = true;
+        canvas.setPointerCapture(e.pointerId);
+        const p = getPos(e);
+        currentStroke = { color: currentColor, size: 6, points: [p] };
+        userStrokes.push(currentStroke);
+        document.getElementById('canvasHint').style.opacity = '0';
+      });
+
+      canvas.addEventListener('pointermove', (e) => {
+        if (!isDrawing || !currentStroke) return;
+        const p = getPos(e);
+        currentStroke.points.push(p);
+      });
+
+      const stopDrawing = () => {
+        isDrawing = false;
+        currentStroke = null;
+      };
+
+      canvas.addEventListener('pointerup', stopDrawing);
+      canvas.addEventListener('pointercancel', stopDrawing);
+
+      // Render loop (Draws background, an animated character loop, and user strokes)
+      function render() {
+        ctx.fillStyle = '#080c14';
+        ctx.fillRect(0, 0, W, H);
+
+        // Draw subtle grid dots
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
+        for (let x = 20; x < W; x += 40) {
+          for (let y = 20; y < H; y += 40) {
+            ctx.fillRect(x, y, 2, 2);
+          }
+        }
+
+        if (isPlaying) {
+          tick++;
+        }
+
+        // Animated bouncing mascot (8-frame sinusoidal loop)
+        const frame = Math.floor((tick / 4) % 8);
+        const bounceY = Math.sin((frame / 8) * Math.PI * 2) * 28;
+        const squash = Math.cos((frame / 8) * Math.PI * 2) * 6;
+        const cx = W * 0.5;
+        const cy = H * 0.48 + bounceY;
+
+        // Draw character shadow
+        ctx.beginPath();
+        ctx.ellipse(cx, H * 0.76, 50 - squash * 1.5, 12, 0, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(99, 102, 241, 0.2)';
+        ctx.fill();
+
+        // Draw mascot body (Glowing violet/indigo star orb)
+        ctx.save();
+        ctx.translate(cx, cy);
+        
+        // Glow effect
+        const grad = ctx.createRadialGradient(0, 0, 10, 0, 0, 50);
+        grad.addColorStop(0, '#818cf8');
+        grad.addColorStop(0.6, '#6366f1');
+        grad.addColorStop(1, 'rgba(99, 102, 241, 0)');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(0, 0, 55, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Core orb
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.ellipse(0, 0, 36 + squash, 36 - squash, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Cute animated eyes
+        ctx.fillStyle = '#0f172a';
+        const blink = (frame === 4 || frame === 5);
+        if (blink) {
+          ctx.fillRect(-14, -4, 8, 2);
+          ctx.fillRect(6, -4, 8, 2);
+        } else {
+          ctx.beginPath();
+          ctx.arc(-10, -3, 4, 0, Math.PI * 2);
+          ctx.arc(10, -3, 4, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // Cute smile
+        ctx.beginPath();
+        ctx.arc(0, 5, 8, 0.1 * Math.PI, 0.9 * Math.PI);
+        ctx.lineWidth = 2.5;
+        ctx.strokeStyle = '#0f172a';
+        ctx.stroke();
+
+        ctx.restore();
+
+        // Draw user custom strokes
+        userStrokes.forEach(stroke => {
+          if (!stroke.points.length) return;
+          ctx.beginPath();
+          ctx.strokeStyle = stroke.color;
+          ctx.lineWidth = stroke.size;
+          ctx.lineCap = 'round';
+          ctx.lineJoin = 'round';
+          ctx.moveTo(stroke.points[0].x, stroke.points[0].y);
+          for (let i = 1; i < stroke.points.length; i++) {
+            ctx.lineTo(stroke.points[i].x, stroke.points[i].y);
+          }
+          ctx.stroke();
+        });
+
+        // Loop counter indicator in top-left of canvas
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+        ctx.font = '12px Inter, sans-serif';
+        ctx.fillText(`Loop Beat: Frame ${frame + 1}/8 (60 FPS)`, 20, 30);
+
+        animFrameId = requestAnimationFrame(render);
+      }
+
+      render();
+
+      // 2. COMMUNITY SHOWCASE LOADER
+      async function loadShowcase() {
+        const feed = document.getElementById('showcaseFeed');
+        if (!feed) return;
+
+        try {
+          const res = await fetch('/api/published');
+          const data = await res.json();
+          if (data && data.success && Array.isArray(data.data) && data.data.length > 0) {
+            feed.innerHTML = '';
+            data.data.slice(0, 6).forEach(item => {
+              const card = document.createElement('article');
+              card.className = 'showcase-card';
+              const safeTitle = escapeHtml(item.title || 'Untitled Loop');
+              const safeUser = escapeHtml(item.author || item.user_id || 'Creator');
+              const frames = item.frame_count || 8;
+              const date = new Date(item.created_at || Date.now()).toLocaleDateString('id-ID');
+
+              card.innerHTML = `
+                <div class="showcase-video-wrap">
+                  <video src="${item.video_url}" autoplay loop muted playsinline preload="metadata"></video>
+                </div>
+                <div class="showcase-info">
+                  <div class="showcase-meta-row">
+                    <div class="showcase-author">
+                      <div class="showcase-avatar">✦</div>
+                      <span>${safeUser}</span>
+                    </div>
+                    <span>${frames} frames</span>
+                  </div>
+                  <div class="showcase-title">${safeTitle}</div>
+                  <div class="showcase-footer">
+                    <span style="font-size:0.75rem;color:var(--text-dim);">${date}</span>
+                    <a href="/app" class="btn-primary" style="padding:4px 12px;font-size:0.75rem;">
+                      <span>Remix in Studio</span>
+                    </a>
+                  </div>
+                </div>
+              `;
+              feed.appendChild(card);
+            });
+          } else {
+            // Fallback showcase items if community has no uploads yet
+            renderFallbackShowcase(feed);
+          }
+        } catch (e) {
+          renderFallbackShowcase(feed);
+        }
+      }
+
+      function renderFallbackShowcase(feed) {
+        feed.innerHTML = `
+          <div class="showcase-card">
+            <div class="showcase-video-wrap" style="display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1e1b4b,#0f172a);color:#a5b4fc;font-weight:700;">
+              <span>✦ Bouncing Ball (12 Frames)</span>
+            </div>
+            <div class="showcase-info">
+              <div class="showcase-meta-row">
+                <div class="showcase-author"><div class="showcase-avatar">✦</div><span>OmniAnima Team</span></div>
+                <span>12 frames</span>
+              </div>
+              <div class="showcase-title">Classic Bouncing Sphere with Squash &amp; Stretch</div>
+              <div class="showcase-footer">
+                <span style="font-size:0.75rem;color:var(--text-dim);">Template</span>
+                <a href="/app" class="btn-primary" style="padding:4px 12px;font-size:0.75rem;">Remix in Studio</a>
+              </div>
+            </div>
+          </div>
+          <div class="showcase-card">
+            <div class="showcase-video-wrap" style="display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#064e3b,#022c22);color:#6ee7b7;font-weight:700;">
+              <span>✦ Character Blink (8 Frames)</span>
+            </div>
+            <div class="showcase-info">
+              <div class="showcase-meta-row">
+                <div class="showcase-author"><div class="showcase-avatar">✦</div><span>Community Animator</span></div>
+                <span>8 frames</span>
+              </div>
+              <div class="showcase-title">Expressive Eye Blink &amp; Head Turn Loop</div>
+              <div class="showcase-footer">
+                <span style="font-size:0.75rem;color:var(--text-dim);">Featured</span>
+                <a href="/app" class="btn-primary" style="padding:4px 12px;font-size:0.75rem;">Remix in Studio</a>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      function escapeHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+      }
+
+      loadShowcase();
+    })();
+  </script>
+</body>
+</html>

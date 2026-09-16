@@ -138,6 +138,7 @@ router.post('/', async (req, res) => {
     const initialFrames = Array.isArray(req.body.frames) && req.body.frames.length > 0 ? req.body.frames : null;
     const thumbnail = req.body.thumbnail || (initialFrames ? (initialFrames[0]?.image_data || initialFrames[0]) : BLANK_FRAME);
     const projectId = crypto.randomUUID();
+    const frameCount = Math.max(1, Math.min(60, Number(req.body.frameCount || req.body.frame_count) || (initialFrames ? initialFrames.length : 8)));
 
     const { error: projectError } = await supabase
       .from('projects')
@@ -157,9 +158,16 @@ router.post('/', async (req, res) => {
         if (frameError) throw frameError;
       }
     } else {
+      // Initialize multiple blank frames according to requested frameCount
+      const frameRows = Array.from({ length: frameCount }, (_, idx) => ({
+        project_id: projectId,
+        frame_index: idx,
+        image_data: BLANK_FRAME
+      }));
+
       const { error: frameError } = await supabase
         .from('frames')
-        .insert([{ project_id: projectId, frame_index: 0, image_data: BLANK_FRAME }]);
+        .insert(frameRows);
 
       if (frameError) throw frameError;
     }

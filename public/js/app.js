@@ -68,12 +68,28 @@
       root.innerHTML = `
         <div class="dialog-backdrop" data-close="true"></div>
         <div class="dialog-card" role="dialog" aria-modal="true" aria-labelledby="dialogTitle">
-          <h3 id="dialogTitle">${escapeHtml(title)}</h3>
-          ${label ? `<label class="dialog-label" for="dialogInput">${escapeHtml(label)}</label>` : ''}
-          <input id="dialogInput" type="text" value="${escapeHtml(defaultValue)}" placeholder="${escapeHtml(placeholder)}" />
+          <div class="dialog-header">
+            <div class="dialog-icon-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+              </svg>
+            </div>
+            <div class="dialog-header-text">
+              <h3 id="dialogTitle">${escapeHtml(title)}</h3>
+            </div>
+          </div>
+          <div class="dialog-body-fields">
+            <div class="field-group">
+              ${label ? `<label class="dialog-label" for="dialogInput">${escapeHtml(label)}</label>` : ''}
+              <div class="dialog-input-wrap">
+                <input id="dialogInput" type="text" value="${escapeHtml(defaultValue)}" placeholder="${escapeHtml(placeholder)}" />
+              </div>
+            </div>
+          </div>
           <div class="dialog-actions">
             <button type="button" class="dialog-cancel">${escapeHtml(cancelText)}</button>
-            <button type="button" class="dialog-confirm">${escapeHtml(confirmText)}</button>
+            <button type="button" class="dialog-confirm btn-accent">${escapeHtml(confirmText)}</button>
           </div>
         </div>
       `;
@@ -146,6 +162,166 @@
           close(false);
         }
       }, { once: true });
+    });
+  };
+
+  /**
+   * Photo 2: Dedicated Modern "New Animation Project" Dialog
+   * Fully redesigned modal with interactive frame selector (default 8 frames, presets 4/8/12/16/24, stepper, duration helper)
+   */
+  window.showNewProjectDialog = function({ defaultName = 'New Animation' } = {}) {
+    return new Promise((resolve) => {
+      const root = document.getElementById('dialogRoot');
+      if (!root) { resolve(null); return; }
+
+      let selectedFrames = 8; // Default 8 frames as requested
+
+      const close = (result) => {
+        root.classList.add('hidden');
+        root.innerHTML = '';
+        resolve(result);
+      };
+
+      root.classList.remove('hidden');
+      root.innerHTML = `
+        <div class="dialog-backdrop" data-close="true"></div>
+        <div class="dialog-card" role="dialog" aria-modal="true" aria-labelledby="newProjTitle" style="max-width: 480px;">
+          <div class="dialog-header">
+            <div class="dialog-icon-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+                <line x1="7" y1="2" x2="7" y2="22"></line>
+                <line x1="17" y1="2" x2="17" y2="22"></line>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <line x1="2" y1="7" x2="7" y2="7"></line>
+                <line x1="2" y1="17" x2="7" y2="17"></line>
+                <line x1="17" y1="17" x2="22" y2="17"></line>
+                <line x1="17" y1="7" x2="22" y2="7"></line>
+              </svg>
+            </div>
+            <div class="dialog-header-text">
+              <h3 id="newProjTitle">New Animation Project</h3>
+              <p class="dialog-subtitle">Set project title and initial frame timeline.</p>
+            </div>
+          </div>
+
+          <div class="dialog-body-fields">
+            <div class="field-group">
+              <label class="dialog-label" for="projNameInput">Project Title</label>
+              <div class="dialog-input-wrap">
+                <svg class="dialog-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                </svg>
+                <input id="projNameInput" class="dialog-input-with-icon" type="text" value="${escapeHtml(defaultName)}" placeholder="e.g. Bouncing Ball, Character Walk..." maxlength="100" />
+              </div>
+            </div>
+
+            <div class="field-group">
+              <div class="dialog-label">
+                <span>Initial Frames</span>
+                <span class="helper-badge" id="frameDurationHelper">~0.67s @ 12 FPS</span>
+              </div>
+              
+              <div class="frame-selector-box">
+                <div class="frame-presets-row" id="framePresetsRow">
+                  <button type="button" class="frame-chip" data-frames="4">
+                    <span class="chip-num">4</span>
+                    <span class="chip-sub">Fast</span>
+                  </button>
+                  <button type="button" class="frame-chip active" data-frames="8">
+                    <span class="chip-num">8</span>
+                    <span class="chip-sub">Default</span>
+                  </button>
+                  <button type="button" class="frame-chip" data-frames="12">
+                    <span class="chip-num">12</span>
+                    <span class="chip-sub">1s Loop</span>
+                  </button>
+                  <button type="button" class="frame-chip" data-frames="16">
+                    <span class="chip-num">16</span>
+                    <span class="chip-sub">Fluid</span>
+                  </button>
+                  <button type="button" class="frame-chip" data-frames="24">
+                    <span class="chip-num">24</span>
+                    <span class="chip-sub">2s Film</span>
+                  </button>
+                </div>
+
+                <div class="frame-stepper-row">
+                  <span class="stepper-label">Custom Frame Count (1 - 60):</span>
+                  <div class="stepper-controls">
+                    <button type="button" class="stepper-btn" id="stepDec" title="Decrease frame count">−</button>
+                    <input type="number" id="stepValInput" class="stepper-val-input" min="1" max="60" value="8" />
+                    <button type="button" class="stepper-btn" id="stepInc" title="Increase frame count">+</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="dialog-actions">
+            <button type="button" class="dialog-cancel">Cancel</button>
+            <button type="button" class="dialog-confirm btn-accent" id="confirmNewProjBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 15px; height: 15px;">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+              </svg>
+              <span>Create Project</span>
+            </button>
+          </div>
+        </div>
+      `;
+
+      const nameInput = root.querySelector('#projNameInput');
+      const helper = root.querySelector('#frameDurationHelper');
+      const presetsRow = root.querySelector('#framePresetsRow');
+      const stepInput = root.querySelector('#stepValInput');
+      const stepDec = root.querySelector('#stepDec');
+      const stepInc = root.querySelector('#stepInc');
+      const cancelBtn = root.querySelector('.dialog-cancel');
+      const confirmBtn = root.querySelector('#confirmNewProjBtn');
+      const backdrop = root.querySelector('.dialog-backdrop');
+
+      const updateUI = (count) => {
+        selectedFrames = Math.max(1, Math.min(60, Math.round(count) || 8));
+        stepInput.value = selectedFrames;
+        const durationSec = (selectedFrames / 12).toFixed(2);
+        helper.textContent = `~${durationSec}s @ 12 FPS`;
+
+        presetsRow.querySelectorAll('.frame-chip').forEach(chip => {
+          const chipVal = parseInt(chip.dataset.frames, 10);
+          chip.classList.toggle('active', chipVal === selectedFrames);
+        });
+      };
+
+      presetsRow.addEventListener('click', (e) => {
+        const chip = e.target.closest('.frame-chip');
+        if (!chip) return;
+        const frames = parseInt(chip.dataset.frames, 10);
+        updateUI(frames);
+      });
+
+      stepDec.addEventListener('click', () => updateUI(selectedFrames - 1));
+      stepInc.addEventListener('click', () => updateUI(selectedFrames + 1));
+      stepInput.addEventListener('input', () => updateUI(parseInt(stepInput.value, 10)));
+
+      const submit = () => {
+        const name = nameInput.value.trim() || 'New Animation';
+        close({ name, frameCount: selectedFrames });
+      };
+
+      cancelBtn?.addEventListener('click', () => close(null));
+      confirmBtn?.addEventListener('click', submit);
+      backdrop?.addEventListener('click', (e) => {
+        if (e.target === backdrop) close(null);
+      });
+
+      nameInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') submit();
+        if (e.key === 'Escape') close(null);
+      });
+
+      nameInput.focus();
+      nameInput.select();
     });
   };
 
@@ -557,22 +733,20 @@
 
   async function newProject(defaultName = '') {
     if (typeof defaultName !== 'string') defaultName = '';
-    const name = await window.showInputDialog({
-      title: 'New Animation Project',
-      label: 'Project Title',
-      placeholder: 'Enter a name for your animation...',
-      defaultValue: defaultName || 'New Animation',
-      confirmText: 'Create Project',
-      cancelText: 'Cancel'
+    const config = await window.showNewProjectDialog({
+      defaultName: defaultName || 'New Animation'
     });
-    if (!name) return;
+    if (!config) return;
 
     const res = await window.apiFetch(API, {
       method: 'POST',
-      body: JSON.stringify({ name })
+      body: JSON.stringify({
+        name: config.name,
+        frameCount: config.frameCount
+      })
     });
     if (res && res.success) {
-      toast('Project created!');
+      toast(`Project created with ${config.frameCount} frames!`);
       openProject(res.data.id);
     } else {
       toast(res?.message || 'Failed to create project.');
