@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+
+@theme {
+  --color-primary: #1f00ff;
+  --color-primary-hover: #1700c2;
+  --color-accent-orange: #ff622b;
+  --color-accent-orange-hover: #e54f1f;
+  --color-neutral-canvas: #ffffff;
+  --color-neutral-card-bone: #f8f8f8;
+  --color-neutral-card-fog: #f2f2f2;
+  --color-neutral-mist: #ececec;
+  --color-neutral-gridline: #d3d3d3;
+  --color-neutral-ink: #212121;
+  --color-semantic-danger: #dc2626;
+  --color-semantic-success: #16a34a;
+
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-body: 'Archivo', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+:root {
+  --primary: #1f00ff;
+  --primary-hover: #1700c2;
+  --accent-orange: #ff622b;
+  --accent-orange-hover: #e54f1f;
+  --radius: 5px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-body);
+  color: #212121;
+  background-color: #ffffff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Blueprint Grid Background Pattern */
+.bg-blueprint-grid {
+  background-size: 32px 32px;
+  background-image: 
+    linear-gradient(to right, rgba(31, 0, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(31, 0, 255, 0.08) 1px, transparent 1px);
+}
+
+.bg-blueprint-grid-blue {
+  background-size: 32px 32px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.12) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+}
+
+/* Drafting hairline border standards */
+.border-blueprint {
+  border-width: 1px;
+  border-color: #1f00ff;
+}
+
+.border-blueprint-white {
+  border-width: 1px;
+  border-color: #ffffff;
+}
+
+.border-gridline {
+  border-width: 1px;
+  border-color: #d3d3d3;
+}
+
+/* Custom crisp scrollbar for studio timeline */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f2f2f2;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1f00ff;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #1700c2;
+}
+
+/* Strict zero blur hard shadow for active overlays if needed */
+.shadow-blueprint-hard {
+  box-shadow: 4px 4px 0px #1f00ff;
+}
