@@ -16,31 +16,31 @@ colors:
   semantic-success: "#16a34a"
 typography:
   display:
-    fontFamily: "'PP Right', 'Bebas Neue', 'Archivo Black', ui-sans-serif, sans-serif"
+    fontFamily: "'Bebas Neue', sans-serif"
     fontSize: "clamp(2.5rem, 7vw, 5.5rem)"
     fontWeight: 800
     lineHeight: 0.88
     letterSpacing: "0.02em"
   headline:
-    fontFamily: "'PP Right', 'Bebas Neue', 'Archivo Black', ui-sans-serif, sans-serif"
+    fontFamily: "'Bebas Neue', sans-serif"
     fontSize: "clamp(1.75rem, 4vw, 2.5rem)"
     fontWeight: 800
     lineHeight: 0.92
     letterSpacing: "0.02em"
   title:
-    fontFamily: "'Archivo', 'Inter', ui-sans-serif, sans-serif"
+    fontFamily: "'Archivo', system-ui, -apple-system, sans-serif"
     fontSize: "1.25rem"
     fontWeight: 600
     lineHeight: 1.2
     letterSpacing: "0.01em"
   body:
-    fontFamily: "'Archivo', 'Inter', ui-sans-serif, sans-serif"
+    fontFamily: "'Archivo', system-ui, -apple-system, sans-serif"
     fontSize: "1rem"
     fontWeight: 400
     lineHeight: 1.45
     letterSpacing: "0.01em"
   label:
-    fontFamily: "'Archivo', 'JetBrains Mono', monospace"
+    fontFamily: "'Archivo', system-ui, -apple-system, sans-serif"
     fontSize: "0.8125rem"
     fontWeight: 600
     lineHeight: 1.4
@@ -50,6 +50,8 @@ rounded:
   inputs: "5px"
   buttons: "5px"
   navtabs: "5px"
+  micro: "3px"
+  hairline: "2px"
 spacing:
   xs: "5px"
   sm: "10px"
