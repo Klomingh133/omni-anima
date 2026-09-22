@@ -588,7 +588,9 @@
     if (!projects.length) {
       grid.innerHTML = `
         <div class="empty-state">
-          <div class="empty-icon">🎨</div>
+          <div class="empty-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
           <b>No projects yet</b>
           <p>Create your first animation by clicking <strong>"New Project"</strong> or selecting a quick-start rhythm above.</p>
         </div>
@@ -599,7 +601,9 @@
     if (!filteredProjects.length) {
       grid.innerHTML = `
         <div class="empty-state">
-          <div class="empty-icon">🔍</div>
+          <div class="empty-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          </div>
           <b>No matching projects</b>
           <p>No animations found matching "<em>${escapeHtml(studioSearchQuery)}</em>".</p>
         </div>
@@ -619,7 +623,7 @@
 
       card.innerHTML = `
         <div class="thumb" role="button" tabindex="0" title="Open ${escapeHtml(p.name)} in Studio">
-          ${thumb ? `<img src="${thumb}" alt="${escapeHtml(p.name)}">` : '<span class="thumb-empty">✦ Blank Canvas</span>'}
+          ${thumb ? `<img src="${thumb}" alt="${escapeHtml(p.name)}">` : '<span class="thumb-empty">Blank Canvas</span>'}
           <div class="thumb-hover-overlay">
             <span class="open-badge">Open Studio →</span>
           </div>
@@ -895,7 +899,7 @@
       progressModal.update(1.0, 'Published successfully!');
       setTimeout(() => {
         progressModal.close();
-        toast('🎉 Animation published to Explore Community!');
+        toast('Animation published to Explore Community.');
         if (window.switchViewTab) {
           window.switchViewTab('explore');
         }
@@ -932,7 +936,9 @@
       if (grid) {
         grid.innerHTML = `
           <div class="empty-state">
-            <div class="empty-icon">⚠️</div>
+            <div class="empty-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
             <b>Could not load community animations</b>
             <p>${escapeHtml(err.message || 'Please check your connection and try again.')}</p>
             <button class="primary small-btn" style="margin-top: 14px;" onclick="window.loadPublishedFeed && window.loadPublishedFeed()">Try Again</button>
@@ -954,7 +960,9 @@
     if (!publishedFeed.length) {
       grid.innerHTML = `
         <div class="empty-state">
-          <div class="empty-icon">✨</div>
+          <div class="empty-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg>
+          </div>
           <b>No community animations found</b>
           <p>${exploreSearchQuery ? `No creations matching "<em>${escapeHtml(exploreSearchQuery)}</em>"` : 'Be the first creator to publish! Open any project in My Studio and select "Publish to Community".'}</p>
         </div>
@@ -1126,7 +1134,7 @@
       progressModal.update(1.0, 'Remix ready!');
       setTimeout(async () => {
         progressModal.close();
-        toast('🚀 Remix ready! You can now draw and modify every frame.');
+        toast('Remix project created. Studio canvas ready for frame-by-frame editing.');
         await openProject(createRes.data.id);
       }, 400);
 
@@ -1211,7 +1219,7 @@
       progressModal.update(1.0, 'Import complete!');
       setTimeout(async () => {
         progressModal.close();
-        toast('🎬 Video successfully imported! Ready for frame-by-frame editing.');
+        toast('Video imported successfully. Ready for frame-by-frame editing.');
         await openProject(createRes.data.id);
       }, 400);
 
