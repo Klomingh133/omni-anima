@@ -3,12 +3,21 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-  <title>OmniAnima — Cloud Animation Studio</title>
+  <title>OmniAnima | 2D Animation Studio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700;800&family=Bebas+Neue&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <script src="js/loader.js"></script>
+  <style>
+    :root {
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-body: 'Archivo', sans-serif;
+    }
+    .brand-name, .dash-title, #quickStartTitle, .section-title, .modal-title, .dialog-title, .export-title, .publish-modal-title, .shortcuts-title {
+      font-family: var(--font-display) !important;
+    }
+  </style>
 </head>
 <body>
   <!-- Top Indeterminate Progress Bar -->
@@ -22,9 +31,9 @@
         <svg class="loader-svg" viewBox="0 0 160 90" fill="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <linearGradient id="loaderStrokeGrad" x1="20" y1="45" x2="140" y2="45" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stop-color="#3978ff"/>
-              <stop offset="50%" stop-color="#f59e0b"/>
-              <stop offset="100%" stop-color="#3978ff"/>
+              <stop offset="0%" stop-color="#1f00ff"/>
+              <stop offset="50%" stop-color="#ff622b"/>
+              <stop offset="100%" stop-color="#1f00ff"/>
             </linearGradient>
           </defs>
           <!-- Background Symmetrical Guide Track -->
@@ -50,12 +59,15 @@
   <!-- Global Header Bar -->
   <header class="app-navbar">
     <div class="nav-left">
-      <div class="navbar-brand">
-        <div class="navbar-logo-frame">
-          <img class="brand-logo navbar-brand-logo" src="/logo.png" alt="OmniAnima">
-        </div>
-        <span class="brand-name">OmniAnima</span>
-      </div>
+      <a href="/" class="navbar-brand" title="OmniAnima Home">
+        <svg class="omni-logomark" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="3" y="3" width="26" height="26" rx="4" stroke="currentColor" stroke-width="2"/>
+          <path d="M22 3 L29 10" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M16 7 L21 16 L17.5 16 L17.5 24 L14.5 24 L14.5 16 L11 16 Z" fill="currentColor"/>
+          <circle cx="16" cy="12" r="1.5" fill="#ffffff"/>
+        </svg>
+        <span class="brand-name">OMNIANIMA</span>
+      </a>
       <!-- View Navigation Tabs -->
       <nav class="nav-switcher" aria-label="Main Navigation">
         <button class="nav-tab active" id="tabStudio" type="button">
@@ -65,7 +77,6 @@
         <button class="nav-tab" id="tabExplore" type="button">
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
           <span>Explore Community</span>
-          <span class="explore-badge">Live</span>
         </button>
       </nav>
     </div>
@@ -119,15 +130,11 @@
   <section id="dashboard" class="screen dashboard">
     <div class="dash-hero">
       <div class="dash-hero-text">
-        <div class="dash-badge">
-          <span class="pulse-dot"></span>
-          <span>Cloud Animation Studio</span>
-        </div>
         <h1 class="dash-title">Your animation workspace.</h1>
         <p class="dash-sub">Create frame-by-frame animations with speed and precision. Cloud-synced in real time.</p>
       </div>
       <div class="dash-hero-actions">
-        <button class="primary btn-glow" id="newProject" type="button">
+        <button class="primary btn-patch-orange" id="newProject" type="button">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
           <span>New Project</span>
         </button>
@@ -136,7 +143,6 @@
 
     <section class="quick-start" aria-labelledby="quickStartTitle">
       <div class="quick-start-copy">
-        <span class="quick-start-kicker">Quick Start</span>
         <h2 id="quickStartTitle">Choose your animation rhythm</h2>
       </div>
       <div class="quick-start-actions">
@@ -224,12 +230,8 @@
   <section id="explore" class="screen explore-screen hidden">
     <div class="explore-hero">
       <div class="explore-hero-text">
-        <div class="dash-badge">
-          <svg viewBox="0 0 24 24" aria-hidden="true" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <span>Community Showcase</span>
-        </div>
         <h1 class="dash-title">Explore Public Animations</h1>
-        <p class="dash-sub">Watch videos created by animators worldwide. Download video clips or remix & edit them directly in your Studio.</p>
+        <p class="dash-sub">Watch animations created by creators worldwide. Download video clips or remix and edit them directly in your studio.</p>
       </div>
       <div class="explore-actions">
         <div class="explore-search-wrap">
