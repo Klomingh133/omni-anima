@@ -3,12 +3,21 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OmniAnima — Sign In</title>
+  <title>OmniAnima | Sign In</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700;800&family=Bebas+Neue&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <script src="js/loader.js"></script>
+  <style>
+    :root {
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-body: 'Archivo', sans-serif;
+    }
+    .auth-brand-title {
+      font-family: var(--font-display);
+    }
+  </style>
 </head>
 <body>
   <!-- Top Indeterminate Progress Bar -->
@@ -22,16 +31,13 @@
         <svg class="loader-svg" viewBox="0 0 160 90" fill="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <linearGradient id="loaderStrokeGrad" x1="20" y1="45" x2="140" y2="45" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stop-color="#3978ff"/>
-              <stop offset="50%" stop-color="#f59e0b"/>
-              <stop offset="100%" stop-color="#3978ff"/>
+              <stop offset="0%" stop-color="#1f00ff"/>
+              <stop offset="50%" stop-color="#ff622b"/>
+              <stop offset="100%" stop-color="#1f00ff"/>
             </linearGradient>
           </defs>
-          <!-- Background Symmetrical Guide Track -->
           <path class="infinity-guide" d="M 80 45 C 64 24, 38 24, 38 45 C 38 66, 64 66, 80 45 C 96 24, 122 24, 122 45 C 122 66, 96 66, 80 45 Z"/>
-          <!-- Dynamic Animated Symmetrical Stroke -->
           <path class="infinity-draw" d="M 80 45 C 64 24, 38 24, 38 45 C 38 66, 64 66, 80 45 C 96 24, 122 24, 122 45 C 122 66, 96 66, 80 45 Z"/>
-          <!-- Stylus Nib that accurately follows the curve -->
           <g class="stylus-group">
             <circle cx="0" cy="0" r="2.5" class="pen-nib-sparkle"/>
             <path class="pen-tip" d="M 0 0 L -3.5 -2.5 L -4 -0.5 Z"/>
@@ -52,25 +58,20 @@
       if (_loader) _loader.style.display = 'none';
     }
   </script>
-  <!-- Interactive Canvas Background (MotionSites / ReactBits) -->
-  <div class="auth-canvas-bg" aria-hidden="true">
-    <canvas id="authCanvas"></canvas>
-    <div class="auth-gradient-overlay"></div>
-    <div class="auth-glow-orb orb-1"></div>
-    <div class="auth-glow-orb orb-2"></div>
-    <div class="auth-glow-orb orb-3"></div>
-  </div>
 
   <div class="auth-page">
     <div id="authCard" class="auth-card">
       <div class="logo-section">
-        <div class="auth-logo-frame">
-          <img class="auth-brand-logo" src="/logo.png" alt="OmniAnima">
-        </div>
+        <svg class="omni-logomark auth-logomark" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="3" y="3" width="26" height="26" rx="4" stroke="currentColor" stroke-width="2"/>
+          <path d="M22 3 L29 10" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M16 7 L21 16 L17.5 16 L17.5 24 L14.5 24 L14.5 16 L11 16 Z" fill="currentColor"/>
+          <circle cx="16" cy="12" r="1.5" fill="#ffffff"/>
+        </svg>
         <div class="brand-title-row">
-          <h1 class="auth-brand-title">OmniAnima</h1>
+          <h1 class="auth-brand-title">OMNIANIMA</h1>
         </div>
-        <p class="tagline">Cloud Frame-by-Frame Animation Studio</p>
+        <p class="tagline">Electric Blueprint 2D Animation Studio</p>
       </div>
 
       <div class="tabs-wrapper">
