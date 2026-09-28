@@ -28,6 +28,15 @@ export function NewProjectModal({ isOpen, onClose, onCreateProject }: NewProject
   const showLoader = useLoadingStore((s) => s.show);
   const hideLoader = useLoadingStore((s) => s.hide);
 
+  React.useEffect(() => {
+    if (isOpen && typeof window !== 'undefined') {
+      const carried = sessionStorage.getItem('omni_sketch_carryover');
+      if (carried) {
+        setProjectName('Doodle Animation');
+      }
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const handleVideoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,11 +72,16 @@ export function NewProjectModal({ isOpen, onClose, onCreateProject }: NewProject
           frames: extracted.frames,
         });
       } else {
+        const carried = typeof window !== 'undefined' ? sessionStorage.getItem('omni_sketch_carryover') : null;
+        if (carried) {
+          sessionStorage.removeItem('omni_sketch_carryover');
+        }
         showLoader('Generating new blueprint canvas...');
         await onCreateProject({
-          name: projectName.trim() || 'New Animation',
+          name: projectName.trim() || (carried ? 'Doodle Animation' : 'New Animation'),
           fps,
           frameCount,
+          frames: carried ? [carried] : undefined,
         });
       }
 

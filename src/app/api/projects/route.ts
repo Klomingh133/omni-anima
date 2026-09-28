@@ -74,7 +74,11 @@ export async function POST(req: NextRequest) {
     if (projectError) throw projectError;
 
     if (initialFrames) {
-      const frameRows = initialFrames.map((img: any, idx: number) => ({
+      const fullFrames = [...initialFrames];
+      while (fullFrames.length < frameCount) {
+        fullFrames.push(BLANK_FRAME);
+      }
+      const frameRows = fullFrames.map((img: any, idx: number) => ({
         project_id: projectId,
         frame_index: idx,
         image_data: normalizeBlankFrame(img?.image_data || img),

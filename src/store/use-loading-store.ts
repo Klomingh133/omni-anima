@@ -16,7 +16,7 @@ export const useLoadingStore = create<LoadingState>((set) => ({
     if (autoDismissTimer) clearTimeout(autoDismissTimer);
     autoDismissTimer = setTimeout(() => {
       set({ isLoading: false });
-    }, 4500);
+    }, 3500);
     set({ isLoading: true, message });
   },
   hide: () => {

@@ -50,6 +50,7 @@ export default function DashboardPage() {
   }, [hideLoader]);
 
   useEffect(() => {
+    document.title = 'STUDIO DASHBOARD // OMNIANIMA';
     initializeAuth().then((u) => {
       if (!u) {
         showLoader('Redirecting to Sign In...');
@@ -57,6 +58,9 @@ export default function DashboardPage() {
       } else {
         const storedToken = localStorage.getItem('auth_token') || '';
         fetchProjects(storedToken);
+        if (typeof window !== 'undefined' && sessionStorage.getItem('omni_sketch_carryover')) {
+          setIsNewProjectModalOpen(true);
+        }
       }
     });
   }, [fetchProjects, initializeAuth, router, showLoader]);
@@ -113,6 +117,9 @@ export default function DashboardPage() {
   };
 
   const handleOpenProject = (id: string) => {
+    if (typeof window !== 'undefined') {
+      sessionStorage.removeItem('omni_sketch_carryover');
+    }
     showLoader('Opening Canvas Editor...');
     router.push(`/editor/${id}`);
   };
@@ -130,7 +137,6 @@ export default function DashboardPage() {
         <div className="flex items-center gap-4">
           <Link
             href="/"
-            onClick={() => showLoader('Navigating to Home...')}
             className="flex items-center gap-3 text-[#1f00ff]"
           >
             <div className="w-9 h-9 border border-[#1f00ff] rounded-[5px] flex items-center justify-center bg-white">
