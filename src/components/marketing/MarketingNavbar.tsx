@@ -71,7 +71,6 @@ export function MarketingNavbar() {
             <>
               <Link
                 href="/login"
-                onClick={() => showLoader('Opening Authentication...')}
                 className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-[#1f00ff] border border-[#1f00ff] hover:bg-[#1f00ff] hover:text-white rounded-[5px] transition-colors"
               >
                 Sign In

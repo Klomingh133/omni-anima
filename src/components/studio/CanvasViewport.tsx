@@ -27,6 +27,8 @@ export function CanvasViewport({ onEngineReady, onAutosaveFrame }: CanvasViewpor
     setActiveColor,
     togglePlay,
     addFrame,
+    duplicateFrame,
+    deleteFrame,
   } = useTimelineStore();
 
   const autosaveTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -108,7 +110,7 @@ export function CanvasViewport({ onEngineReady, onAutosaveFrame }: CanvasViewpor
     }
   }, [currentFrameIndex, frames, onionSkinPrev, onionSkinNext]);
 
-  // Keyboard Shortcuts handler
+  // Keyboard Shortcuts handler with macOS Cmd and modifier support
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       // Ignore if typing in input or textarea
@@ -116,32 +118,74 @@ export function CanvasViewport({ onEngineReady, onAutosaveFrame }: CanvasViewpor
         return;
       }
 
+      const isModifier = e.ctrlKey || e.metaKey;
+
+      // Undo: Ctrl+Z / Cmd+Z (without Shift)
+      if (isModifier && !e.shiftKey && (e.key === 'z' || e.key === 'Z')) {
+        e.preventDefault();
+        if (engineRef.current) engineRef.current.undo();
+        return;
+      }
+
+      // Redo: Ctrl+Y / Cmd+Shift+Z / Ctrl+Shift+Z
+      if (isModifier && ((e.shiftKey && (e.key === 'z' || e.key === 'Z')) || e.key === 'y' || e.key === 'Y')) {
+        e.preventDefault();
+        if (engineRef.current) engineRef.current.redo();
+        return;
+      }
+
+      // Duplicate Frame: Ctrl+D / Cmd+D
+      if (isModifier && (e.key === 'd' || e.key === 'D')) {
+        e.preventDefault();
+        duplicateFrame(currentFrameIndex);
+        return;
+      }
+
+      // Delete Frame: Delete / Backspace
+      if (e.key === 'Delete' || (isModifier && e.key === 'Backspace')) {
+        e.preventDefault();
+        if (frames.length > 1) {
+          deleteFrame(currentFrameIndex);
+        }
+        return;
+      }
+
+      // Playback toggle: Space
       if (e.code === 'Space') {
         e.preventDefault();
         togglePlay();
-      } else if (e.key === 'b' || e.key === 'B') {
-        setActiveTool('pencil');
-      } else if (e.key === 'e' || e.key === 'E') {
-        setActiveTool('eraser');
-      } else if (e.key === 'g' || e.key === 'G') {
-        setActiveTool('fill');
-      } else if (e.key === 's' || e.key === 'S') {
-        setActiveTool('select');
-      } else if (e.key === 'i' || e.key === 'I') {
-        setActiveTool('eyedropper');
-      } else if (e.key === '[') {
+        return;
+      }
+
+      // Previous Frame: [ or ArrowLeft
+      if (e.key === '[' || e.key === 'ArrowLeft') {
+        e.preventDefault();
         if (currentFrameIndex > 0) setCurrentFrameIndex(currentFrameIndex - 1);
-      } else if (e.key === ']') {
+        return;
+      }
+
+      // Next Frame: ] or ArrowRight
+      if (e.key === ']' || e.key === 'ArrowRight') {
+        e.preventDefault();
         if (currentFrameIndex < frames.length - 1) setCurrentFrameIndex(currentFrameIndex + 1);
-      } else if (e.ctrlKey && (e.key === 'z' || e.key === 'Z')) {
-        e.preventDefault();
-        if (engineRef.current) engineRef.current.undo();
-      } else if (e.ctrlKey && (e.key === 'y' || e.key === 'Y')) {
-        e.preventDefault();
-        if (engineRef.current) engineRef.current.redo();
+        return;
+      }
+
+      // Single-key Tool Switching (when no modifier key is pressed)
+      if (!e.ctrlKey && !e.metaKey && !e.altKey) {
+        const k = e.key.toLowerCase();
+        if (k === 'p') setActiveTool('pencil');
+        else if (k === 'b') setActiveTool('brush');
+        else if (k === 'e') setActiveTool('eraser');
+        else if (k === 'g') setActiveTool('fill');
+        else if (k === 'l') setActiveTool('line');
+        else if (k === 'r') setActiveTool('rect');
+        else if (k === 'c') setActiveTool('ellipse');
+        else if (k === 's') setActiveTool('select');
+        else if (k === 'i') setActiveTool('eyedropper');
       }
     },
-    [currentFrameIndex, frames.length, setActiveTool, setCurrentFrameIndex, togglePlay]
+    [currentFrameIndex, deleteFrame, duplicateFrame, frames.length, setActiveTool, setCurrentFrameIndex, togglePlay]
   );
 
   useEffect(() => {
