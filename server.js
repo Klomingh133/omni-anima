@@ -50,7 +50,7 @@ app.get('/logo.svg', (req, res) => {
 });
 
 app.get('/logo.png', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'logo.svg'));
+  res.sendFile(path.join(__dirname, 'public', 'logo.png'));
 });
 
 app.use(express.static(publicDir, { index: false }));
