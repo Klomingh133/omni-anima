@@ -7,7 +7,7 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const publicDir = path.join(__dirname, 'public');
+const publicDir = path.join(__dirname, 'legacy');
 
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
@@ -30,11 +30,11 @@ app.get('/index.html', (req, res) => {
 });
 
 app.get('/app', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'app.html'));
+  res.sendFile(path.join(__dirname, 'legacy', 'app.html'));
 });
 
 app.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(__dirname, 'legacy', 'index.html'));
 });
 
 app.get('/landing.html', (req, res) => {
@@ -42,7 +42,7 @@ app.get('/landing.html', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'landing.html'));
+  res.sendFile(path.join(__dirname, 'legacy', 'landing.html'));
 });
 
 app.get('/logo.svg', (req, res) => {
