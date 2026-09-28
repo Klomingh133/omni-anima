@@ -25,8 +25,8 @@ const BLUEPRINT_PALETTE = [
   '#ff622b', // Patch Orange
   '#dc2626', // Danger Red
   '#16a34a', // Grass Green
-  '#0284c7', // Sky Blue
-  '#9333ea', // Violet
+  '#666666', // Slate Gray
+  '#d3d3d3', // Guide Grid Gray
   '#ffffff', // Pure White
 ];
 
@@ -139,7 +139,7 @@ export function ToolboxSidebar({ onClearCanvas }: ToolboxSidebarProps) {
                 key={c}
                 type="button"
                 onClick={() => setActiveColor(c)}
-                className={`h-8 rounded-[4px] border transition-transform relative ${
+                className={`h-8 rounded-[5px] border transition-transform relative ${
                   activeColor.toLowerCase() === c.toLowerCase()
                     ? 'scale-105 border-black ring-2 ring-[#1f00ff]'
                     : 'border-[#d3d3d3]'

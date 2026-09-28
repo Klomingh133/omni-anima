@@ -242,7 +242,7 @@ export default function DashboardPage() {
                   <div
                     key={proj.id}
                     onClick={() => handleOpenProject(proj.id)}
-                    className="bg-white border border-[#1f00ff] rounded-[5px] overflow-hidden flex flex-col justify-between hover:border-[#1700c2] cursor-pointer group shadow-sm transition-all"
+                    className="bg-white border border-[#1f00ff] rounded-[5px] overflow-hidden flex flex-col justify-between hover:border-[#1700c2] cursor-pointer group transition-all"
                   >
                     <div>
                       {/* Thumbnail Container */}
@@ -255,7 +255,7 @@ export default function DashboardPage() {
                             className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-200"
                           />
                         ) : (
-                          <div className="w-full h-full bg-white flex items-center justify-center text-xs font-mono text-[#999]">
+                          <div className="w-full h-full bg-white flex items-center justify-center text-xs font-mono text-[#666]">
                             BLANK CANVAS
                           </div>
                         )}

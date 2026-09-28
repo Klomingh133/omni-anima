@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { renderFramesToVideo, downloadVideoFile } from '@/engine/video-exporter';
+import { CloseIcon } from '@/components/ui/Icons';
 import { useTimelineStore } from '@/store/use-timeline-store';
 import { useAuthStore } from '@/store/use-auth-store';
 import { useLoadingStore } from '@/store/use-loading-store';
@@ -127,20 +128,20 @@ export function PublishModal({ isOpen, onClose, onPublishedSuccess }: PublishMod
           <button
             type="button"
             onClick={onClose}
-            className="w-8 h-8 rounded-[4px] border border-[#d3d3d3] hover:border-[#1f00ff] flex items-center justify-center text-sm font-bold text-[#212121]"
+            className="w-8 h-8 rounded-[5px] border border-[#d3d3d3] hover:border-[#1f00ff] flex items-center justify-center text-[#212121]"
           >
-            ✕
+            <CloseIcon size={14} />
           </button>
         </div>
 
         {errorMsg && (
-          <div className="mb-4 p-3 bg-[#fee2e2] border border-[#dc2626] rounded-[5px] text-xs font-semibold text-[#dc2626]">
+          <div className="mb-4 p-3 bg-white border border-[#dc2626] rounded-[5px] text-xs font-semibold text-[#dc2626] font-mono">
             {errorMsg}
           </div>
         )}
 
         {successMsg && (
-          <div className="mb-4 p-3 bg-[#dcfce7] border border-[#16a34a] rounded-[5px] text-xs font-semibold text-[#16a34a]">
+          <div className="mb-4 p-3 bg-white border border-[#16a34a] rounded-[5px] text-xs font-semibold text-[#16a34a] font-mono">
             {successMsg}
           </div>
         )}
@@ -152,7 +153,7 @@ export function PublishModal({ isOpen, onClose, onPublishedSuccess }: PublishMod
               <span className="font-mono text-xs uppercase tracking-widest text-[#1f00ff] font-bold block animate-pulse">
                 ENCODING WEBM BITSTREAM ({renderProgress}%)
               </span>
-              <div className="h-2 w-48 bg-[#f2f2f2] rounded-full mx-auto overflow-hidden">
+              <div className="h-2 w-48 bg-[#f2f2f2] rounded-[2px] mx-auto overflow-hidden">
                 <div
                   className="h-full bg-[#1f00ff] transition-all duration-150"
                   style={{ width: `${renderProgress}%` }}

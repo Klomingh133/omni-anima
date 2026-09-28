@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { OmniLogo, PlayIcon, PauseIcon } from '@/components/ui/Icons';
+import { OmniLogo, PlayIcon, PauseIcon, EditIcon } from '@/components/ui/Icons';
 import { useTimelineStore } from '@/store/use-timeline-store';
 import { useLoadingStore } from '@/store/use-loading-store';
 
@@ -78,7 +78,7 @@ export function TopStudioNavbar({
               onChange={(e) => setTitleInput(e.target.value)}
               onBlur={handleTitleSubmit}
               onKeyDown={(e) => e.key === 'Enter' && handleTitleSubmit()}
-              className="px-2 py-1 text-sm font-semibold border border-[#1f00ff] rounded-[4px] bg-white outline-none text-[#212121]"
+              className="px-2 py-1 text-sm font-semibold border border-[#1f00ff] rounded-[5px] bg-white outline-none text-[#212121]"
             />
           ) : (
             <button
@@ -91,14 +91,14 @@ export function TopStudioNavbar({
               title="Click to rename project"
             >
               <span>{projectName}</span>
-              <span className="text-[10px] text-[#666] font-mono">✎</span>
+              <EditIcon size={12} className="text-[#666]" />
             </button>
           )}
 
           {/* Autosave badge */}
-          <span className="font-mono text-[11px] uppercase tracking-wider px-2 py-0.5 rounded-[3px] border border-[#ececec] text-[#666]">
+          <span className="font-mono text-[11px] uppercase tracking-wider px-2 py-0.5 rounded-[5px] border border-[#ececec] text-[#666]">
             {saveStatus === 'saving' ? (
-              <span className="text-[#ff622b]">SAVING...</span>
+              <span className="text-[#1f00ff] font-bold">SAVING...</span>
             ) : (
               <span>SAVED</span>
             )}
@@ -151,7 +151,7 @@ export function TopStudioNavbar({
           <select
             value={fps}
             onChange={(e) => setFps(Number(e.target.value))}
-            className="px-2 py-1 bg-white border border-[#d3d3d3] rounded-[4px] text-xs font-mono font-bold text-[#1f00ff] outline-none"
+            className="px-2 py-1 bg-white border border-[#d3d3d3] rounded-[5px] text-xs font-mono font-bold text-[#1f00ff] outline-none"
           >
             <option value={8}>8 FPS</option>
             <option value={12}>12 FPS</option>
@@ -165,7 +165,7 @@ export function TopStudioNavbar({
           <span className="text-[#1f00ff]">
             {(currentFrameIndex + 1).toString().padStart(2, '0')}
           </span>
-          <span className="text-[#999]">/</span>
+          <span className="text-[#d3d3d3]">/</span>
           <span>{frames.length.toString().padStart(2, '0')}</span>
         </div>
       </div>
