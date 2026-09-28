@@ -22,6 +22,7 @@ export default function EditorPage() {
   const hideLoader = useLoadingStore((s) => s.hide);
 
   const {
+    projectName,
     frames,
     currentFrameIndex,
     fps,
@@ -40,6 +41,11 @@ export default function EditorPage() {
   const [canUndo, setCanUndo] = useState(false);
   const [canRedo, setCanRedo] = useState(false);
   const playbackIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Synchronize active project title with browser tab
+  useEffect(() => {
+    document.title = `${projectName ? projectName.toUpperCase() : 'CANVAS'} // OMNIANIMA STUDIO`;
+  }, [projectName]);
 
   // Check auth and load project
   const loadProject = useCallback(async (pId: string, authToken: string) => {
@@ -60,13 +66,6 @@ export default function EditorPage() {
 
       const p = json.data;
       setProject(p.id, p.name, p.fps, p.frames);
-
-      // Check if user has carried over sketch from landing page
-      const carriedSketch = sessionStorage.getItem('omni_sketch_carryover');
-      if (carriedSketch) {
-        sessionStorage.removeItem('omni_sketch_carryover');
-        useTimelineStore.getState().updateActiveFrameImage(carriedSketch);
-      }
     } catch (e) {
       hideLoader();
       console.error('Load project error:', e);

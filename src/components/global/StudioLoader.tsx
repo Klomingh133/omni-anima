@@ -1,11 +1,18 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { useLoadingStore } from '@/store/use-loading-store';
 import { OmniLogo } from '@/components/ui/Icons';
 
 export function StudioLoader() {
-  const { isLoading, message } = useLoadingStore();
+  const { isLoading, message, hide } = useLoadingStore();
+  const pathname = usePathname();
+
+  // Auto-dismiss loader whenever route transitions complete
+  useEffect(() => {
+    hide();
+  }, [pathname, hide]);
 
   if (!isLoading) return null;
 

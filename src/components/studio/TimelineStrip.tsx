@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { ChevronLeftIcon, ChevronRightIcon } from '@/components/ui/Icons';
 import { useTimelineStore } from '@/store/use-timeline-store';
 
 interface TimelineStripProps {
@@ -29,10 +30,10 @@ export function TimelineStrip({
             <div
               key={frame.id || index}
               onClick={() => setCurrentFrameIndex(index)}
-              className={`relative flex-shrink-0 w-24 h-20 rounded-[5px] border cursor-pointer group flex flex-col justify-between p-1 bg-white transition-all ${
+              className={`relative flex-shrink-0 w-24 h-20 rounded-[5px] cursor-pointer group flex flex-col justify-between p-1 bg-white transition-all ${
                 isActive
-                  ? 'border-[#1f00ff] ring-2 ring-[#1f00ff] shadow-sm'
-                  : 'border-[#d3d3d3] hover:border-[#1f00ff]'
+                  ? 'border-2 border-[#1f00ff]'
+                  : 'border border-[#d3d3d3] hover:border-[#1f00ff]'
               }`}
             >
               {/* Header inside frame card */}
@@ -40,7 +41,7 @@ export function TimelineStrip({
                 <span className={`font-bold ${isActive ? 'text-[#1f00ff]' : 'text-[#666]'}`}>
                   {(index + 1).toString().padStart(2, '0')}
                 </span>
-                {isActive && <span className="w-1.5 h-1.5 rounded-full bg-[#ff622b]" />}
+                {isActive && <span className="w-1.5 h-1.5 rounded-[2px] bg-[#1f00ff]" />}
               </div>
 
               {/* Thumbnail image */}
@@ -66,10 +67,10 @@ export function TimelineStrip({
                       e.stopPropagation();
                       onReorderFrame(index, index - 1);
                     }}
-                    className="text-[#666] hover:text-[#1f00ff] font-bold px-0.5"
+                    className="text-[#666] hover:text-[#1f00ff] p-0.5"
                     title="Move Left"
                   >
-                    ◀
+                    <ChevronLeftIcon size={10} />
                   </button>
                 ) : (
                   <span className="w-2" />
@@ -82,10 +83,10 @@ export function TimelineStrip({
                       e.stopPropagation();
                       onReorderFrame(index, index + 1);
                     }}
-                    className="text-[#666] hover:text-[#1f00ff] font-bold px-0.5"
+                    className="text-[#666] hover:text-[#1f00ff] p-0.5"
                     title="Move Right"
                   >
-                    ▶
+                    <ChevronRightIcon size={10} />
                   </button>
                 ) : (
                   <span className="w-2" />
@@ -112,7 +113,7 @@ export function TimelineStrip({
         <button
           type="button"
           onClick={() => onDuplicateFrame(currentFrameIndex)}
-          className="px-3 py-1 text-xs font-mono font-semibold uppercase tracking-wider text-[#1f00ff] border border-[#1f00ff] hover:bg-[#f2f2f2] rounded-[4px] transition-colors"
+          className="px-3 py-1 text-xs font-mono font-semibold uppercase tracking-wider text-[#1f00ff] border border-[#1f00ff] hover:bg-[#f2f2f2] rounded-[5px] transition-colors"
           title="Duplicate Current Frame"
         >
           DUPLICATE
@@ -122,7 +123,7 @@ export function TimelineStrip({
           type="button"
           disabled={frames.length <= 1}
           onClick={() => onDeleteFrame(currentFrameIndex)}
-          className="px-3 py-1 text-xs font-mono font-semibold uppercase tracking-wider text-[#dc2626] border border-[#dc2626] hover:bg-[#fee2e2] rounded-[4px] transition-colors disabled:opacity-40 disabled:hover:bg-transparent"
+          className="px-3 py-1 text-xs font-mono font-semibold uppercase tracking-wider text-[#dc2626] border border-[#dc2626] hover:bg-[#dc2626] hover:text-white rounded-[5px] transition-colors disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-[#dc2626]"
           title="Delete Current Frame"
         >
           DELETE

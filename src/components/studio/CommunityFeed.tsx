@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuthStore } from '@/store/use-auth-store';
 import { timeAgo } from '@/lib/utils';
-import { PlayIcon } from '@/components/ui/Icons';
+import { PlayIcon, EyeIcon, TriangleUpIcon, CloseIcon } from '@/components/ui/Icons';
 import { useLoadingStore } from '@/store/use-loading-store';
 
 interface PublishedAnimation {
@@ -161,7 +161,7 @@ export function CommunityFeed() {
                     )}
 
                     <div className="absolute inset-0 bg-[#1f00ff]/30 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                      <div className="w-12 h-12 rounded-full bg-white text-[#1f00ff] flex items-center justify-center shadow-lg">
+                      <div className="w-12 h-12 rounded-[5px] bg-white text-[#1f00ff] border border-[#1f00ff] flex items-center justify-center">
                         <PlayIcon size={20} />
                       </div>
                     </div>
@@ -196,13 +196,16 @@ export function CommunityFeed() {
                     <button
                       type="button"
                       onClick={() => handleLike(item)}
-                      className="flex items-center gap-1 font-bold text-[#1f00ff] hover:text-[#ff622b] transition-colors"
+                      className="flex items-center gap-1 font-bold text-[#1f00ff] hover:text-[#1700c2] transition-colors"
                       title="Like Animation"
                     >
-                      <span>▲</span>
+                      <TriangleUpIcon size={12} />
                       <span>{item.likes_count || 0}</span>
                     </button>
-                    <span className="text-[#999]">👁 {item.views_count || 0}</span>
+                    <span className="text-[#666] flex items-center gap-1">
+                      <EyeIcon size={14} className="text-[#666]" />
+                      <span>{item.views_count || 0}</span>
+                    </span>
                   </div>
 
                   {isOwner && (
@@ -232,13 +235,13 @@ export function CommunityFeed() {
               <button
                 type="button"
                 onClick={() => setActiveVideo(null)}
-                className="w-8 h-8 rounded-[4px] border border-[#d3d3d3] hover:border-[#1f00ff] flex items-center justify-center text-sm font-bold text-[#212121]"
+                className="w-8 h-8 rounded-[5px] border border-[#d3d3d3] hover:border-[#1f00ff] flex items-center justify-center text-[#212121]"
               >
-                ✕
+                <CloseIcon size={14} />
               </button>
             </div>
 
-            <div className="aspect-[16/9] w-full bg-black rounded-[4px] overflow-hidden mb-4">
+            <div className="aspect-[16/9] w-full bg-black rounded-[5px] overflow-hidden mb-4 border border-[#ececec]">
               <video
                 src={activeVideo.video_data}
                 controls

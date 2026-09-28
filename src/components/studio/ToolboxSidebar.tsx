@@ -25,12 +25,29 @@ const BLUEPRINT_PALETTE = [
   '#ff622b', // Patch Orange
   '#dc2626', // Danger Red
   '#16a34a', // Grass Green
-  '#0284c7', // Sky Blue
-  '#9333ea', // Violet
+  '#666666', // Slate Gray
+  '#d3d3d3', // Guide Grid Gray
   '#ffffff', // Pure White
 ];
 
 export function ToolboxSidebar({ onClearCanvas }: ToolboxSidebarProps) {
+  const [isConfirmingClear, setIsConfirmingClear] = React.useState(false);
+  const clearTimerRef = React.useRef<NodeJS.Timeout | null>(null);
+
+  const handleClearClick = () => {
+    if (isConfirmingClear) {
+      if (clearTimerRef.current) clearTimeout(clearTimerRef.current);
+      setIsConfirmingClear(false);
+      onClearCanvas();
+    } else {
+      setIsConfirmingClear(true);
+      if (clearTimerRef.current) clearTimeout(clearTimerRef.current);
+      clearTimerRef.current = setTimeout(() => {
+        setIsConfirmingClear(false);
+      }, 3000);
+    }
+  };
+
   const {
     activeTool,
     setActiveTool,
@@ -45,13 +62,13 @@ export function ToolboxSidebar({ onClearCanvas }: ToolboxSidebarProps) {
   } = useTimelineStore();
 
   const toolItems: Array<{ id: ToolType; label: string; icon: React.ReactNode; shortcut: string }> = [
-    { id: 'pencil', label: 'Pencil', icon: <PencilIcon size={18} />, shortcut: 'B' },
-    { id: 'brush', label: 'Brush', icon: <BrushIcon size={18} />, shortcut: '' },
+    { id: 'pencil', label: 'Pencil', icon: <PencilIcon size={18} />, shortcut: 'P' },
+    { id: 'brush', label: 'Brush', icon: <BrushIcon size={18} />, shortcut: 'B' },
     { id: 'eraser', label: 'Eraser', icon: <EraserIcon size={18} />, shortcut: 'E' },
     { id: 'fill', label: 'Fill', icon: <BucketIcon size={18} />, shortcut: 'G' },
-    { id: 'line', label: 'Line', icon: <LineShapeIcon size={18} />, shortcut: '' },
-    { id: 'rect', label: 'Rect', icon: <RectShapeIcon size={18} />, shortcut: '' },
-    { id: 'ellipse', label: 'Ellipse', icon: <CircleShapeIcon size={18} />, shortcut: '' },
+    { id: 'line', label: 'Line', icon: <LineShapeIcon size={18} />, shortcut: 'L' },
+    { id: 'rect', label: 'Rect', icon: <RectShapeIcon size={18} />, shortcut: 'R' },
+    { id: 'ellipse', label: 'Ellipse', icon: <CircleShapeIcon size={18} />, shortcut: 'C' },
     { id: 'select', label: 'Select', icon: <SelectShapeIcon size={18} />, shortcut: 'S' },
     { id: 'eyedropper', label: 'Picker', icon: <PipetteIcon size={18} />, shortcut: 'I' },
   ];
@@ -65,7 +82,7 @@ export function ToolboxSidebar({ onClearCanvas }: ToolboxSidebarProps) {
             <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#1f00ff]">
               DRAWING TOOLS
             </span>
-            <span className="text-[11px] font-mono text-[#666]">SHORTCUT</span>
+            <span className="text-xs font-mono text-[#212121] font-semibold">HOTKEYS</span>
           </div>
 
           <div className="grid grid-cols-3 gap-1.5">
@@ -74,16 +91,23 @@ export function ToolboxSidebar({ onClearCanvas }: ToolboxSidebarProps) {
                 key={item.id}
                 type="button"
                 onClick={() => setActiveTool(item.id)}
-                className={`p-2.5 rounded-[5px] border flex flex-col items-center justify-center gap-1 transition-colors ${
+                className={`relative p-2 rounded-[5px] border flex flex-col items-center justify-center gap-1 transition-colors ${
                   activeTool === item.id
                     ? 'bg-[#1f00ff] text-white border-[#1f00ff]'
                     : 'bg-[#f8f8f8] text-[#212121] border-[#d3d3d3] hover:border-[#1f00ff]'
                 }`}
-                title={`${item.label} ${item.shortcut ? `(${item.shortcut})` : ''}`}
+                title={`${item.label} [${item.shortcut}]`}
               >
+                <span
+                  className={`absolute top-1 right-1 text-[9px] font-mono font-bold leading-none ${
+                    activeTool === item.id ? 'text-white/80' : 'text-[#1f00ff]'
+                  }`}
+                >
+                  {item.shortcut}
+                </span>
                 {item.icon}
-                <span className="text-[10px] font-mono font-medium leading-none">
-                  {item.label.slice(0, 7)}
+                <span className="text-xs font-mono font-medium leading-none">
+                  {item.label}
                 </span>
               </button>
             ))}
@@ -115,7 +139,7 @@ export function ToolboxSidebar({ onClearCanvas }: ToolboxSidebarProps) {
                 key={c}
                 type="button"
                 onClick={() => setActiveColor(c)}
-                className={`h-8 rounded-[4px] border transition-transform relative ${
+                className={`h-8 rounded-[5px] border transition-transform relative ${
                   activeColor.toLowerCase() === c.toLowerCase()
                     ? 'scale-105 border-black ring-2 ring-[#1f00ff]'
                     : 'border-[#d3d3d3]'
@@ -179,10 +203,14 @@ export function ToolboxSidebar({ onClearCanvas }: ToolboxSidebarProps) {
       <div className="pt-4 border-t border-[#ececec]">
         <button
           type="button"
-          onClick={onClearCanvas}
-          className="w-full py-2 text-xs font-semibold uppercase tracking-wider text-[#dc2626] border border-[#dc2626] hover:bg-[#fee2e2] rounded-[5px] transition-colors"
+          onClick={handleClearClick}
+          className={`w-full py-2 text-xs font-semibold uppercase tracking-wider rounded-[5px] transition-colors ${
+            isConfirmingClear
+              ? 'bg-[#dc2626] text-white border border-[#dc2626] animate-pulse'
+              : 'text-[#dc2626] border border-[#dc2626] hover:bg-[#dc2626] hover:text-white'
+          }`}
         >
-          Clear Active Canvas
+          {isConfirmingClear ? 'Confirm Clear Frame?' : 'Clear Active Canvas'}
         </button>
       </div>
     </aside>

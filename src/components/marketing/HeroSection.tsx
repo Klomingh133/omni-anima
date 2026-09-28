@@ -74,24 +74,24 @@ export function HeroSection() {
                 <span className="block font-mono text-xl sm:text-2xl font-bold text-[#1f00ff]">
                   60 FPS
                 </span>
-                <span className="text-xs uppercase tracking-wider text-[#666]">
+                <span className="text-xs font-mono uppercase tracking-wider text-[#212121]">
                   Render Loop
                 </span>
               </div>
               <div>
                 <span className="block font-mono text-xl sm:text-2xl font-bold text-[#1f00ff]">
-                  0 MS
+                  &lt;16 MS
                 </span>
-                <span className="text-xs uppercase tracking-wider text-[#666]">
-                  Input Lag
+                <span className="text-xs font-mono uppercase tracking-wider text-[#212121]">
+                  Frame Budget
                 </span>
               </div>
               <div>
                 <span className="block font-mono text-xl sm:text-2xl font-bold text-[#1f00ff]">
                   960 × 540
                 </span>
-                <span className="text-xs uppercase tracking-wider text-[#666]">
-                  Virtual Raster
+                <span className="text-xs font-mono uppercase tracking-wider text-[#212121]">
+                  Drafting Grid
                 </span>
               </div>
             </div>

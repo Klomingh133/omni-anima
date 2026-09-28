@@ -1,18 +1,18 @@
 import React from 'react';
 
 const shortcuts = [
-  { key: 'SPACE', action: 'Play / Pause Animation Playback' },
-  { key: 'B', action: 'Select Pencil Tool' },
-  { key: 'E', action: 'Select Eraser Tool' },
+  { key: 'SPACE', action: 'Play / Pause Animation Loop' },
+  { key: 'P / B', action: 'Pencil & Brush Tools' },
+  { key: 'E', action: 'Eraser Tool' },
   { key: 'G', action: 'Smart Flood Fill' },
-  { key: 'I', action: 'Eyedropper Color Sampler' },
-  { key: 'S', action: 'Marquee Area Selection' },
-  { key: 'CTRL + Z', action: 'Undo Last Action' },
-  { key: 'CTRL + Y', action: 'Redo Action' },
-  { key: '[', action: 'Previous Frame' },
-  { key: ']', action: 'Next Frame' },
-  { key: 'CTRL + D', action: 'Duplicate Current Frame' },
-  { key: 'DELETE', action: 'Delete Current Frame' },
+  { key: 'L / R / C', action: 'Line, Rect & Circle Tools' },
+  { key: 'I / S', action: 'Color Picker & Area Select' },
+  { key: 'CTRL / ⌘ + Z', action: 'Undo Last Stroke' },
+  { key: 'CTRL / ⌘ + Y', action: 'Redo Stroke (⌘+Shift+Z)' },
+  { key: 'CTRL / ⌘ + D', action: 'Duplicate Current Frame' },
+  { key: 'DEL / BACKSPACE', action: 'Delete Active Frame' },
+  { key: '[  /  ←', action: 'Previous Keyframe' },
+  { key: ']  /  →', action: 'Next Keyframe' },
 ];
 
 export function KeyboardShortcuts() {

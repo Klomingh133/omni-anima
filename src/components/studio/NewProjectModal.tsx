@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { extractFramesFromVideo } from '@/engine/video-exporter';
+import { CloseIcon } from '@/components/ui/Icons';
 import { useLoadingStore } from '@/store/use-loading-store';
 
 interface NewProjectModalProps {
@@ -27,6 +28,15 @@ export function NewProjectModal({ isOpen, onClose, onCreateProject }: NewProject
 
   const showLoader = useLoadingStore((s) => s.show);
   const hideLoader = useLoadingStore((s) => s.hide);
+
+  React.useEffect(() => {
+    if (isOpen && typeof window !== 'undefined') {
+      const carried = sessionStorage.getItem('omni_sketch_carryover');
+      if (carried) {
+        setProjectName('Doodle Animation');
+      }
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -63,11 +73,16 @@ export function NewProjectModal({ isOpen, onClose, onCreateProject }: NewProject
           frames: extracted.frames,
         });
       } else {
+        const carried = typeof window !== 'undefined' ? sessionStorage.getItem('omni_sketch_carryover') : null;
+        if (carried) {
+          sessionStorage.removeItem('omni_sketch_carryover');
+        }
         showLoader('Generating new blueprint canvas...');
         await onCreateProject({
-          name: projectName.trim() || 'New Animation',
+          name: projectName.trim() || (carried ? 'Doodle Animation' : 'New Animation'),
           fps,
           frameCount,
+          frames: carried ? [carried] : undefined,
         });
       }
 
@@ -95,14 +110,14 @@ export function NewProjectModal({ isOpen, onClose, onCreateProject }: NewProject
           <button
             type="button"
             onClick={onClose}
-            className="w-8 h-8 rounded-[4px] border border-[#d3d3d3] hover:border-[#1f00ff] flex items-center justify-center text-sm font-bold text-[#212121]"
+            className="w-8 h-8 rounded-[5px] border border-[#d3d3d3] hover:border-[#1f00ff] flex items-center justify-center text-[#212121]"
           >
-            ✕
+            <CloseIcon size={14} />
           </button>
         </div>
 
         {errorMsg && (
-          <div className="mb-4 p-3 bg-[#fee2e2] border border-[#dc2626] rounded-[5px] text-xs font-semibold text-[#dc2626]">
+          <div className="mb-4 p-3 bg-white border border-[#dc2626] rounded-[5px] text-xs font-semibold text-[#dc2626] font-mono">
             {errorMsg}
           </div>
         )}
@@ -202,7 +217,7 @@ export function NewProjectModal({ isOpen, onClose, onCreateProject }: NewProject
                 <span>EXTRACTING FRAMES</span>
                 <span>{remixProgress}%</span>
               </div>
-              <div className="h-1.5 w-full bg-[#f2f2f2] rounded-full overflow-hidden">
+              <div className="h-1.5 w-full bg-[#f2f2f2] rounded-[2px] overflow-hidden">
                 <div
                   className="h-full bg-[#1f00ff] transition-all duration-150"
                   style={{ width: `${remixProgress}%` }}

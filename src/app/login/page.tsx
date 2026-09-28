@@ -26,13 +26,15 @@ export default function LoginPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
+    document.title = 'SIGN IN // OMNIANIMA';
+    hideLoader();
     initializeAuth().then((u) => {
       if (u) {
         showLoader('Redirecting to Studio...');
         router.replace('/app');
       }
     });
-  }, [initializeAuth, router, showLoader]);
+  }, [hideLoader, initializeAuth, router, showLoader]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -137,7 +139,6 @@ export default function LoginPage() {
         <div className="flex flex-col items-center mb-8">
           <Link
             href="/"
-            onClick={() => showLoader('Navigating to Home...')}
             className="flex items-center gap-3 mb-2"
           >
             <div className="w-10 h-10 border border-[#1f00ff] rounded-[5px] flex items-center justify-center bg-white text-[#1f00ff]">
@@ -306,7 +307,6 @@ export default function LoginPage() {
         <div className="text-center mt-6">
           <Link
             href="/"
-            onClick={() => showLoader('Returning to Landing Page...')}
             className="text-xs uppercase tracking-wider font-semibold text-[#1f00ff] hover:underline"
           >
             ← Return to Landing Page
