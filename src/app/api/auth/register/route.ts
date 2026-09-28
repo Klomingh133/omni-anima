@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
     if (error) throw error;
 
     const user = { id: data.id, username: data.username, email: data.email, avatar_url: data.avatar_url };
-    const secret = process.env.JWT_SECRET || 'omnianima_jwt_secret_dev_key_blueprint';
+    const secret = process.env.JWT_SECRET || 'omnianima_jwt_secret_dev_key';
     const token = jwt.sign({ id: data.id, username: data.username, email: data.email }, secret, {
       expiresIn: '7d',
     });

@@ -9,7 +9,7 @@ import { useLoadingStore } from '@/store/use-loading-store';
 
 export default function LoginPage() {
   const router = useRouter();
-  const { user, token, setToken, setUser, initializeAuth } = useAuthStore();
+  const { user, setToken, setUser, initializeAuth } = useAuthStore();
   const showLoader = useLoadingStore((s) => s.show);
   const hideLoader = useLoadingStore((s) => s.hide);
 
@@ -28,7 +28,7 @@ export default function LoginPage() {
   useEffect(() => {
     initializeAuth().then((u) => {
       if (u) {
-        showLoader('Redirecting to Studio...');
+        showLoader('Opening Studio Workspace...');
         router.replace('/app');
       }
     });
@@ -63,7 +63,7 @@ export default function LoginPage() {
       setToken(json.data.token);
       setUser(json.data.user);
 
-      showLoader('Opening Studio Dashboard...');
+      showLoader('Opening Studio Workspace...');
       router.push('/app');
     } catch {
       hideLoader();
@@ -128,44 +128,42 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8f8f8] flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      {/* Background blueprint grid subtle lines */}
-      <div className="absolute inset-0 bg-blueprint-grid opacity-50 pointer-events-none" />
+    <div className="min-h-screen bg-[#f8fafc] flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      {/* Soft Ambient Radial Background */}
+      <div className="absolute inset-0 pointer-events-none bg-landing-ambient opacity-70" />
 
-      <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10 px-4">
-        {/* Brand Header */}
-        <div className="flex flex-col items-center mb-8">
-          <Link
-            href="/"
-            onClick={() => showLoader('Navigating to Home...')}
-            className="flex items-center gap-3 mb-2"
-          >
-            <div className="w-10 h-10 border border-[#1f00ff] rounded-[5px] flex items-center justify-center bg-white text-[#1f00ff]">
-              <OmniLogo size={24} />
-            </div>
-            <span className="font-display text-3xl font-bold tracking-wider text-[#1f00ff] uppercase">
-              OMNIANIMA
-            </span>
-          </Link>
-          <p className="font-mono text-xs uppercase tracking-wider text-[#666]">
-            STUDIO AUTHENTICATION PORTAL
-          </p>
-        </div>
+      <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10">
+        {/* Card */}
+        <div className="bg-white border border-[#e2e8f0] rounded-2xl p-8 sm:p-10 shadow-[0_18px_50px_rgba(36,50,71,0.08)]">
+          {/* Logo Section */}
+          <div className="text-center mb-8">
+            <Link
+              href="/"
+              onClick={() => showLoader('Returning to Landing Page...')}
+              className="inline-flex items-center gap-3 mb-2"
+            >
+              <OmniLogo size={36} className="rounded-xl shadow-sm" />
+              <span className="font-extrabold text-2xl tracking-tight text-[#0f172a]">
+                OmniAnima
+              </span>
+            </Link>
+            <p className="text-xs text-[#64748b] font-medium">
+              Cloud Frame-by-Frame Animation Studio
+            </p>
+          </div>
 
-        {/* Blueprint Card Container */}
-        <div className="bg-white border border-[#1f00ff] rounded-[5px] p-6 sm:p-8 shadow-blueprint-hard">
-          {/* Tabs */}
-          <div className="flex border border-[#1f00ff] rounded-[5px] p-0.5 mb-6 bg-[#f2f2f2]">
+          {/* Pill Tabs */}
+          <div className="flex bg-[#f1f5f9] p-1 rounded-xl mb-6 border border-[#e2e8f0]">
             <button
               type="button"
               onClick={() => {
                 setActiveTab('login');
                 setErrorMsg('');
               }}
-              className={`flex-1 py-2 text-xs font-semibold uppercase tracking-wider rounded-[3px] transition-colors ${
+              className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all ${
                 activeTab === 'login'
-                  ? 'bg-[#1f00ff] text-white'
-                  : 'text-[#212121] hover:text-[#1f00ff]'
+                  ? 'bg-white text-[#0f172a] shadow-sm'
+                  : 'text-[#64748b] hover:text-[#0f172a]'
               }`}
             >
               Sign In
@@ -176,19 +174,19 @@ export default function LoginPage() {
                 setActiveTab('register');
                 setErrorMsg('');
               }}
-              className={`flex-1 py-2 text-xs font-semibold uppercase tracking-wider rounded-[3px] transition-colors ${
+              className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all ${
                 activeTab === 'register'
-                  ? 'bg-[#1f00ff] text-white'
-                  : 'text-[#212121] hover:text-[#1f00ff]'
+                  ? 'bg-white text-[#0f172a] shadow-sm'
+                  : 'text-[#64748b] hover:text-[#0f172a]'
               }`}
             >
-              Register
+              Create Account
             </button>
           </div>
 
-          {/* Error message alert */}
+          {/* Error Message */}
           {errorMsg && (
-            <div className="mb-5 p-3 border border-[#dc2626] bg-[#fee2e2] text-[#dc2626] rounded-[5px] text-xs font-medium">
+            <div className="mb-5 p-3.5 bg-[#fef2f2] border border-[#fecaca] text-[#dc2626] rounded-xl text-xs font-medium">
               {errorMsg}
             </div>
           )}
@@ -197,37 +195,53 @@ export default function LoginPage() {
           {activeTab === 'login' ? (
             <form onSubmit={handleLogin} className="space-y-4">
               <div>
-                <label className="block text-xs uppercase tracking-wider font-semibold text-[#212121] mb-1.5">
+                <label className="block text-xs font-semibold text-[#334155] mb-1.5">
                   Username or Email
                 </label>
-                <input
-                  type="text"
-                  required
-                  value={loginIdentifier}
-                  onChange={(e) => setLoginIdentifier(e.target.value)}
-                  placeholder="name@domain.com or username"
-                  className="w-full px-3.5 py-2.5 bg-white border border-[#d3d3d3] focus:border-[#1f00ff] focus:outline-none rounded-[5px] text-sm text-[#212121] font-body"
-                />
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#94a3b8]">
+                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="8" r="4" />
+                      <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
+                    </svg>
+                  </div>
+                  <input
+                    type="text"
+                    required
+                    value={loginIdentifier}
+                    onChange={(e) => setLoginIdentifier(e.target.value)}
+                    placeholder="name@email.com or username"
+                    className="w-full pl-10 pr-3.5 py-2.5 bg-white border border-[#e2e8f0] focus:border-[#4f46e5] focus:ring-2 focus:ring-[#eef2ff] focus:outline-none rounded-xl text-sm text-[#0f172a]"
+                  />
+                </div>
               </div>
 
               <div>
-                <label className="block text-xs uppercase tracking-wider font-semibold text-[#212121] mb-1.5">
+                <label className="block text-xs font-semibold text-[#334155] mb-1.5">
                   Password
                 </label>
-                <input
-                  type="password"
-                  required
-                  value={loginPassword}
-                  onChange={(e) => setLoginPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full px-3.5 py-2.5 bg-white border border-[#d3d3d3] focus:border-[#1f00ff] focus:outline-none rounded-[5px] text-sm text-[#212121] font-body"
-                />
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#94a3b8]">
+                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                    </svg>
+                  </div>
+                  <input
+                    type="password"
+                    required
+                    value={loginPassword}
+                    onChange={(e) => setLoginPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className="w-full pl-10 pr-3.5 py-2.5 bg-white border border-[#e2e8f0] focus:border-[#4f46e5] focus:ring-2 focus:ring-[#eef2ff] focus:outline-none rounded-xl text-sm text-[#0f172a]"
+                  />
+                </div>
               </div>
 
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full mt-2 py-3 text-sm font-semibold uppercase tracking-wider text-white bg-[#ff622b] hover:bg-[#e54f1f] rounded-[5px] transition-colors disabled:opacity-60"
+                className="w-full mt-2 py-3 bg-[#4f46e5] hover:bg-[#4338ca] text-white rounded-xl text-sm font-semibold shadow-[0_4px_12px_rgba(79,70,229,0.25)] transition-all disabled:opacity-50"
               >
                 Sign In to Studio
               </button>
@@ -236,7 +250,7 @@ export default function LoginPage() {
             /* Register Form */
             <form onSubmit={handleRegister} className="space-y-4">
               <div>
-                <label className="block text-xs uppercase tracking-wider font-semibold text-[#212121] mb-1.5">
+                <label className="block text-xs font-semibold text-[#334155] mb-1.5">
                   Username
                 </label>
                 <input
@@ -245,12 +259,12 @@ export default function LoginPage() {
                   value={regUsername}
                   onChange={(e) => setRegUsername(e.target.value)}
                   placeholder="animator123"
-                  className="w-full px-3.5 py-2.5 bg-white border border-[#d3d3d3] focus:border-[#1f00ff] focus:outline-none rounded-[5px] text-sm text-[#212121] font-body"
+                  className="w-full px-3.5 py-2.5 bg-white border border-[#e2e8f0] focus:border-[#4f46e5] focus:ring-2 focus:ring-[#eef2ff] focus:outline-none rounded-xl text-sm text-[#0f172a]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs uppercase tracking-wider font-semibold text-[#212121] mb-1.5">
+                <label className="block text-xs font-semibold text-[#334155] mb-1.5">
                   Email Address
                 </label>
                 <input
@@ -258,13 +272,13 @@ export default function LoginPage() {
                   required
                   value={regEmail}
                   onChange={(e) => setRegEmail(e.target.value)}
-                  placeholder="name@domain.com"
-                  className="w-full px-3.5 py-2.5 bg-white border border-[#d3d3d3] focus:border-[#1f00ff] focus:outline-none rounded-[5px] text-sm text-[#212121] font-body"
+                  placeholder="name@email.com"
+                  className="w-full px-3.5 py-2.5 bg-white border border-[#e2e8f0] focus:border-[#4f46e5] focus:ring-2 focus:ring-[#eef2ff] focus:outline-none rounded-xl text-sm text-[#0f172a]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs uppercase tracking-wider font-semibold text-[#212121] mb-1.5">
+                <label className="block text-xs font-semibold text-[#334155] mb-1.5">
                   Password
                 </label>
                 <input
@@ -273,12 +287,12 @@ export default function LoginPage() {
                   value={regPassword}
                   onChange={(e) => setRegPassword(e.target.value)}
                   placeholder="Min 6 characters"
-                  className="w-full px-3.5 py-2.5 bg-white border border-[#d3d3d3] focus:border-[#1f00ff] focus:outline-none rounded-[5px] text-sm text-[#212121] font-body"
+                  className="w-full px-3.5 py-2.5 bg-white border border-[#e2e8f0] focus:border-[#4f46e5] focus:ring-2 focus:ring-[#eef2ff] focus:outline-none rounded-xl text-sm text-[#0f172a]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs uppercase tracking-wider font-semibold text-[#212121] mb-1.5">
+                <label className="block text-xs font-semibold text-[#334155] mb-1.5">
                   Confirm Password
                 </label>
                 <input
@@ -287,30 +301,30 @@ export default function LoginPage() {
                   value={regConfirmPassword}
                   onChange={(e) => setRegConfirmPassword(e.target.value)}
                   placeholder="Repeat your password"
-                  className="w-full px-3.5 py-2.5 bg-white border border-[#d3d3d3] focus:border-[#1f00ff] focus:outline-none rounded-[5px] text-sm text-[#212121] font-body"
+                  className="w-full px-3.5 py-2.5 bg-white border border-[#e2e8f0] focus:border-[#4f46e5] focus:ring-2 focus:ring-[#eef2ff] focus:outline-none rounded-xl text-sm text-[#0f172a]"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full mt-2 py-3 text-sm font-semibold uppercase tracking-wider text-white bg-[#ff622b] hover:bg-[#e54f1f] rounded-[5px] transition-colors disabled:opacity-60"
+                className="w-full mt-2 py-3 bg-[#4f46e5] hover:bg-[#4338ca] text-white rounded-xl text-sm font-semibold shadow-[0_4px_12px_rgba(79,70,229,0.25)] transition-all disabled:opacity-50"
               >
-                Create Studio Account
+                Create Account
               </button>
             </form>
           )}
-        </div>
 
-        {/* Back Link */}
-        <div className="text-center mt-6">
-          <Link
-            href="/"
-            onClick={() => showLoader('Returning to Landing Page...')}
-            className="text-xs uppercase tracking-wider font-semibold text-[#1f00ff] hover:underline"
-          >
-            ← Return to Landing Page
-          </Link>
+          {/* Footer Back Link */}
+          <div className="mt-6 pt-5 border-t border-[#f1f5f9] text-center">
+            <Link
+              href="/"
+              onClick={() => showLoader('Returning to Landing Page...')}
+              className="text-xs font-semibold text-[#4f46e5] hover:text-[#4338ca] transition-colors"
+            >
+              ← Return to Landing Page
+            </Link>
+          </div>
         </div>
       </div>
     </div>

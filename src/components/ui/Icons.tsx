@@ -7,19 +7,14 @@ interface IconProps extends React.SVGProps<SVGSVGElement> {
 
 export function OmniLogo({ size = 28, className = '' }: IconProps) {
   return (
-    <svg
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src="/logo.png"
+      alt="OmniAnima"
       width={size}
       height={size}
-      viewBox="0 0 32 32"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-    >
-      <rect x="3" y="3" width="26" height="26" rx="4" stroke="currentColor" strokeWidth="2" />
-      <path d="M22 3 L29 10" stroke="currentColor" strokeWidth="1.5" />
-      <path d="M16 7 L21 16 L17.5 16 L17.5 24 L14.5 24 L14.5 16 L11 16 Z" fill="currentColor" />
-      <circle cx="16" cy="12" r="1.5" fill="#ffffff" />
-    </svg>
+      className={`rounded-lg object-contain ${className}`}
+    />
   );
 }
 
@@ -73,7 +68,7 @@ export function LineShapeIcon({ size = 18, className = '' }: IconProps) {
 export function RectShapeIcon({ size = 18, className = '' }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-      <rect x="4" y="4" width="16" height="16" rx="1" />
+      <rect x="4" y="4" width="16" height="16" rx="2" />
     </svg>
   );
 }
@@ -89,7 +84,7 @@ export function CircleShapeIcon({ size = 18, className = '' }: IconProps) {
 export function SelectShapeIcon({ size = 18, className = '' }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeDasharray="3 3" strokeLinecap="round" strokeLinejoin="round" className={className}>
-      <rect x="4" y="4" width="16" height="16" rx="1" />
+      <rect x="4" y="4" width="16" height="16" rx="2" />
     </svg>
   );
 }
@@ -116,8 +111,8 @@ export function PlayIcon({ size = 18, className = '' }: IconProps) {
 export function PauseIcon({ size = 18, className = '' }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className}>
-      <rect x="6" y="4" width="4" height="16" />
-      <rect x="14" y="4" width="4" height="16" />
+      <rect x="6" y="4" width="4" height="16" rx="1" />
+      <rect x="14" y="4" width="4" height="16" rx="1" />
     </svg>
   );
 }

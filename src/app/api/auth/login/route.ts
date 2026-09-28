@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
       avatar_url: userRecord.avatar_url,
     };
 
-    const secret = process.env.JWT_SECRET || 'omnianima_jwt_secret_dev_key_blueprint';
+    const secret = process.env.JWT_SECRET || 'omnianima_jwt_secret_dev_key';
     const token = jwt.sign(
       { id: userRecord.id, username: userRecord.username, email: userRecord.email },
       secret,

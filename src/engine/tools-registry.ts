@@ -307,7 +307,7 @@ export class SelectTool extends BaseTool {
     } else if (this.start && this.snapshot) {
       this.ctx.putImageData(this.snapshot, 0, 0);
       this.ctx.save();
-      this.ctx.strokeStyle = '#1f00ff';
+      this.ctx.strokeStyle = '#4f46e5';
       this.ctx.lineWidth = 1;
       this.ctx.setLineDash([4, 4]);
       this.ctx.strokeRect(this.start.x, this.start.y, p.x - this.start.x, p.y - this.start.y);

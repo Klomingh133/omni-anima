@@ -11,7 +11,7 @@ let autoDismissTimer: any = null;
 
 export const useLoadingStore = create<LoadingState>((set) => ({
   isLoading: false,
-  message: 'Loading Blueprint...',
+  message: 'Loading Studio...',
   show: (message = 'Loading Studio...') => {
     if (autoDismissTimer) clearTimeout(autoDismissTimer);
     autoDismissTimer = setTimeout(() => {

@@ -23,7 +23,7 @@ export function verifyAuthToken(req: NextRequest): AuthUser | null {
   if (!token) return null;
 
   try {
-    const secret = process.env.JWT_SECRET || 'omnianima_jwt_secret_dev_key_blueprint';
+    const secret = process.env.JWT_SECRET || 'omnianima_jwt_secret_dev_key';
     const decoded = jwt.verify(token, secret) as AuthUser;
     return decoded;
   } catch {

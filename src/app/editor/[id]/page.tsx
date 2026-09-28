@@ -44,7 +44,7 @@ export default function EditorPage() {
   // Check auth and load project
   const loadProject = useCallback(async (pId: string, authToken: string) => {
     try {
-      showLoader('Loading project frames and blueprint...');
+      showLoader('Loading animation project...');
       const res = await fetch(`/api/projects/${pId}`, {
         headers: { Authorization: `Bearer ${authToken}` },
       });

@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { useLoadingStore } from '@/store/use-loading-store';
-import { OmniLogo } from '@/components/ui/Icons';
 
 export function StudioLoader() {
   const { isLoading, message } = useLoadingStore();
@@ -11,40 +10,47 @@ export function StudioLoader() {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white/95 backdrop-blur-none transition-opacity duration-200"
+      className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#f8fafc]/90 backdrop-blur-md transition-opacity duration-300"
       style={{ cursor: 'wait' }}
     >
-      {/* Top progress line */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-[#f2f2f2] overflow-hidden">
-        <div className="h-full bg-[#1f00ff] animate-pulse w-full origin-left" />
-      </div>
+      {/* Rainbow Indeterminate Top Progress Bar */}
+      <div className="top-progress-bar" />
 
-      {/* Blueprint loading box */}
-      <div className="p-8 border border-[#1f00ff] rounded-[5px] bg-white max-w-sm w-full mx-4 flex flex-col items-center shadow-blueprint-hard">
-        <div className="relative mb-6">
-          <div className="w-14 h-14 rounded-[5px] border border-[#1f00ff] flex items-center justify-center text-[#1f00ff] animate-spin">
-            <OmniLogo size={32} />
-          </div>
-        </div>
-
-        <div className="text-center">
-          <span className="font-display text-2xl font-bold tracking-wider text-[#1f00ff] uppercase block mb-1">
-            OMNIANIMA
-          </span>
-          <p className="text-xs uppercase tracking-widest text-[#212121] font-medium animate-pulse">
-            {message}
-          </p>
-        </div>
-
-        {/* Technical progress ticks */}
-        <div className="flex gap-1.5 mt-6 w-full justify-center">
-          {[0, 1, 2, 3, 4, 5].map((idx) => (
-            <div
-              key={idx}
-              className="h-1 flex-1 bg-[#1f00ff] rounded-[1px] animate-pulse"
-              style={{ animationDelay: `${idx * 120}ms` }}
+      {/* Infinity Loop Stylus Drawing Animation */}
+      <div className="flex flex-col items-center justify-center gap-4">
+        <div className="infinity-stage">
+          <svg className="loader-svg" viewBox="0 0 160 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="loaderStrokeGrad" x1="20" y1="45" x2="140" y2="45" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stopColor="#4f46e5" />
+                <stop offset="50%" stopColor="#f59e0b" />
+                <stop offset="100%" stopColor="#10b981" />
+              </linearGradient>
+            </defs>
+            <path
+              className="infinity-guide"
+              d="M 80 45 C 64 24, 38 24, 38 45 C 38 66, 64 66, 80 45 C 96 24, 122 24, 122 45 C 122 66, 96 66, 80 45 Z"
             />
-          ))}
+            <path
+              className="infinity-draw"
+              d="M 80 45 C 64 24, 38 24, 38 45 C 38 66, 64 66, 80 45 C 96 24, 122 24, 122 45 C 122 66, 96 66, 80 45 Z"
+            />
+            <g className="stylus-group">
+              <circle cx="0" cy="0" r="2.5" fill="#4f46e5" />
+              <path d="M 0 0 L -3.5 -2.5 L -4 -0.5 Z" fill="#0f172a" />
+              <path d="M -3.5 -2.5 L -15 -10.5 L -17 -8 L -4 -0.5 Z" fill="#4f46e5" />
+              <path d="M -9.5 -6.8 L -12.5 -8.8 L -14 -7 L -11 -5 Z" fill="#f59e0b" />
+            </g>
+          </svg>
+        </div>
+
+        <div className="flex items-center gap-1 text-sm font-semibold text-[#334155]">
+          <span>{message || 'Opening Studio Workspace'}</span>
+          <span className="dots-shimmer text-[#4f46e5] font-bold">
+            <span>.</span>
+            <span>.</span>
+            <span>.</span>
+          </span>
         </div>
       </div>
     </div>

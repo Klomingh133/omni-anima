@@ -251,7 +251,7 @@ export class CanvasEngine {
       prevImg.onload = () => {
         this.onionCtx.save();
         this.onionCtx.globalAlpha = 0.25;
-        // Blueprint monochrome indigo tint
+        // Onion skin ghosting
         this.onionCtx.drawImage(prevImg, 0, 0, this.width, this.height);
         this.onionCtx.restore();
       };

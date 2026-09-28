@@ -19,14 +19,14 @@ interface ToolboxSidebarProps {
   onClearCanvas: () => void;
 }
 
-const BLUEPRINT_PALETTE = [
-  '#212121', // Ink
-  '#1f00ff', // Electric Indigo
-  '#ff622b', // Patch Orange
-  '#dc2626', // Danger Red
-  '#16a34a', // Grass Green
-  '#0284c7', // Sky Blue
-  '#9333ea', // Violet
+const STUDIO_PALETTE = [
+  '#0f172a', // Slate Dark
+  '#4f46e5', // Vibrant Indigo
+  '#f59e0b', // Studio Amber
+  '#ef4444', // Coral Red
+  '#10b981', // Emerald Green
+  '#06b6d4', // Cyan
+  '#8b5cf6', // Violet
   '#ffffff', // Pure White
 ];
 
@@ -45,60 +45,63 @@ export function ToolboxSidebar({ onClearCanvas }: ToolboxSidebarProps) {
   } = useTimelineStore();
 
   const toolItems: Array<{ id: ToolType; label: string; icon: React.ReactNode; shortcut: string }> = [
-    { id: 'pencil', label: 'Pencil', icon: <PencilIcon size={18} />, shortcut: 'B' },
-    { id: 'brush', label: 'Brush', icon: <BrushIcon size={18} />, shortcut: '' },
-    { id: 'eraser', label: 'Eraser', icon: <EraserIcon size={18} />, shortcut: 'E' },
-    { id: 'fill', label: 'Fill', icon: <BucketIcon size={18} />, shortcut: 'G' },
-    { id: 'line', label: 'Line', icon: <LineShapeIcon size={18} />, shortcut: '' },
-    { id: 'rect', label: 'Rect', icon: <RectShapeIcon size={18} />, shortcut: '' },
-    { id: 'ellipse', label: 'Ellipse', icon: <CircleShapeIcon size={18} />, shortcut: '' },
-    { id: 'select', label: 'Select', icon: <SelectShapeIcon size={18} />, shortcut: 'S' },
-    { id: 'eyedropper', label: 'Picker', icon: <PipetteIcon size={18} />, shortcut: 'I' },
+    { id: 'pencil', label: 'Pencil', icon: <PencilIcon size={17} />, shortcut: 'B' },
+    { id: 'brush', label: 'Brush', icon: <BrushIcon size={17} />, shortcut: '' },
+    { id: 'eraser', label: 'Eraser', icon: <EraserIcon size={17} />, shortcut: 'E' },
+    { id: 'fill', label: 'Fill', icon: <BucketIcon size={17} />, shortcut: 'G' },
+    { id: 'line', label: 'Line', icon: <LineShapeIcon size={17} />, shortcut: '' },
+    { id: 'rect', label: 'Rect', icon: <RectShapeIcon size={17} />, shortcut: '' },
+    { id: 'ellipse', label: 'Oval', icon: <CircleShapeIcon size={17} />, shortcut: '' },
+    { id: 'select', label: 'Select', icon: <SelectShapeIcon size={17} />, shortcut: 'V' },
+    { id: 'eyedropper', label: 'Picker', icon: <PipetteIcon size={17} />, shortcut: 'I' },
   ];
 
   return (
-    <aside className="w-64 bg-white border-r border-[#1f00ff] flex flex-col justify-between p-4 select-none overflow-y-auto">
+    <aside className="w-60 bg-white border-r border-slate-200 flex flex-col justify-between p-4 select-none overflow-y-auto">
       <div className="space-y-6">
         {/* Tools Section */}
         <div>
-          <div className="flex items-center justify-between mb-3">
-            <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#1f00ff]">
-              DRAWING TOOLS
+          <div className="flex items-center justify-between mb-2.5">
+            <span className="text-[11px] font-bold tracking-wider uppercase text-slate-400">
+              Drawing Tools
             </span>
-            <span className="text-[11px] font-mono text-[#666]">SHORTCUT</span>
+            <span className="text-[10px] font-mono text-slate-400">Key</span>
           </div>
 
           <div className="grid grid-cols-3 gap-1.5">
-            {toolItems.map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                onClick={() => setActiveTool(item.id)}
-                className={`p-2.5 rounded-[5px] border flex flex-col items-center justify-center gap-1 transition-colors ${
-                  activeTool === item.id
-                    ? 'bg-[#1f00ff] text-white border-[#1f00ff]'
-                    : 'bg-[#f8f8f8] text-[#212121] border-[#d3d3d3] hover:border-[#1f00ff]'
-                }`}
-                title={`${item.label} ${item.shortcut ? `(${item.shortcut})` : ''}`}
-              >
-                {item.icon}
-                <span className="text-[10px] font-mono font-medium leading-none">
-                  {item.label.slice(0, 7)}
-                </span>
-              </button>
-            ))}
+            {toolItems.map((item) => {
+              const isActive = activeTool === item.id;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => setActiveTool(item.id)}
+                  className={`p-2 rounded-xl border flex flex-col items-center justify-center gap-1 transition-all ${
+                    isActive
+                      ? 'bg-indigo-50 border-indigo-200 text-indigo-600 shadow-2xs font-bold'
+                      : 'bg-slate-50/50 text-slate-700 border-slate-200 hover:border-slate-300 hover:bg-slate-100'
+                  }`}
+                  title={`${item.label} ${item.shortcut ? `(${item.shortcut})` : ''}`}
+                >
+                  {item.icon}
+                  <span className="text-[10px] font-medium leading-none">
+                    {item.label}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
         {/* Color Palette */}
         <div>
-          <div className="flex items-center justify-between mb-3">
-            <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#1f00ff]">
-              COLOR PALETTE
+          <div className="flex items-center justify-between mb-2.5">
+            <span className="text-[11px] font-bold tracking-wider uppercase text-slate-400">
+              Color Palette
             </span>
-            <div className="flex items-center gap-1">
-              <span className="text-[10px] font-mono text-[#666] uppercase">{activeColor}</span>
-              <label className="w-5 h-5 rounded-[3px] border border-[#d3d3d3] cursor-pointer overflow-hidden block">
+            <div className="flex items-center gap-1.5">
+              <span className="text-[10px] font-mono text-slate-500 uppercase">{activeColor}</span>
+              <label className="w-5 h-5 rounded-full border border-slate-300 cursor-pointer overflow-hidden block shadow-2xs">
                 <input
                   type="color"
                   value={activeColor}
@@ -110,31 +113,34 @@ export function ToolboxSidebar({ onClearCanvas }: ToolboxSidebarProps) {
           </div>
 
           <div className="grid grid-cols-4 gap-2">
-            {BLUEPRINT_PALETTE.map((c) => (
-              <button
-                key={c}
-                type="button"
-                onClick={() => setActiveColor(c)}
-                className={`h-8 rounded-[4px] border transition-transform relative ${
-                  activeColor.toLowerCase() === c.toLowerCase()
-                    ? 'scale-105 border-black ring-2 ring-[#1f00ff]'
-                    : 'border-[#d3d3d3]'
-                }`}
-                style={{ backgroundColor: c }}
-                title={c}
-              />
-            ))}
+            {STUDIO_PALETTE.map((c) => {
+              const isSelected = activeColor.toLowerCase() === c.toLowerCase();
+              return (
+                <button
+                  key={c}
+                  type="button"
+                  onClick={() => setActiveColor(c)}
+                  className={`h-7 rounded-full border transition-all ${
+                    isSelected
+                      ? 'ring-2 ring-indigo-500 ring-offset-2 scale-110 shadow-xs'
+                      : 'border-slate-200 hover:scale-105'
+                  }`}
+                  style={{ backgroundColor: c }}
+                  title={c}
+                />
+              );
+            })}
           </div>
         </div>
 
         {/* Stroke Width Slider */}
         <div>
           <div className="flex items-center justify-between mb-2">
-            <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#1f00ff]">
-              STROKE WIDTH
+            <span className="text-[11px] font-bold tracking-wider uppercase text-slate-400">
+              Stroke Width
             </span>
-            <span className="font-mono text-xs font-bold text-[#212121]">
-              {activeStrokeWidth}PX
+            <span className="font-mono text-xs font-bold text-slate-700">
+              {activeStrokeWidth}px
             </span>
           </div>
           <input
@@ -143,32 +149,32 @@ export function ToolboxSidebar({ onClearCanvas }: ToolboxSidebarProps) {
             max={40}
             value={activeStrokeWidth}
             onChange={(e) => setActiveStrokeWidth(Number(e.target.value))}
-            className="w-full accent-[#1f00ff] cursor-pointer"
+            className="w-full accent-indigo-600 cursor-pointer"
           />
         </div>
 
         {/* Onion Skinning Controls */}
         <div>
-          <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#1f00ff] block mb-2">
-            ONION SKIN GHOSTING
+          <span className="text-[11px] font-bold tracking-wider uppercase text-slate-400 block mb-2">
+            Onion Skinning
           </span>
-          <div className="space-y-2">
-            <label className="flex items-center justify-between p-2 rounded-[5px] border border-[#d3d3d3] bg-[#f8f8f8] cursor-pointer text-xs font-semibold">
-              <span>PREVIOUS FRAME</span>
+          <div className="space-y-1.5">
+            <label className="flex items-center justify-between p-2.5 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 cursor-pointer text-xs font-medium text-slate-700 transition-colors">
+              <span>Previous Frame</span>
               <input
                 type="checkbox"
                 checked={onionSkinPrev}
                 onChange={(e) => setOnionSkinPrev(e.target.checked)}
-                className="w-4 h-4 accent-[#1f00ff]"
+                className="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 accent-indigo-600"
               />
             </label>
-            <label className="flex items-center justify-between p-2 rounded-[5px] border border-[#d3d3d3] bg-[#f8f8f8] cursor-pointer text-xs font-semibold">
-              <span>NEXT FRAME</span>
+            <label className="flex items-center justify-between p-2.5 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 cursor-pointer text-xs font-medium text-slate-700 transition-colors">
+              <span>Next Frame</span>
               <input
                 type="checkbox"
                 checked={onionSkinNext}
                 onChange={(e) => setOnionSkinNext(e.target.checked)}
-                className="w-4 h-4 accent-[#1f00ff]"
+                className="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 accent-indigo-600"
               />
             </label>
           </div>
@@ -176,13 +182,13 @@ export function ToolboxSidebar({ onClearCanvas }: ToolboxSidebarProps) {
       </div>
 
       {/* Clear Canvas Action */}
-      <div className="pt-4 border-t border-[#ececec]">
+      <div className="pt-4 border-t border-slate-100">
         <button
           type="button"
           onClick={onClearCanvas}
-          className="w-full py-2 text-xs font-semibold uppercase tracking-wider text-[#dc2626] border border-[#dc2626] hover:bg-[#fee2e2] rounded-[5px] transition-colors"
+          className="w-full py-2 text-xs font-semibold text-red-600 border border-red-200 hover:bg-red-50 rounded-xl transition-colors"
         >
-          Clear Active Canvas
+          Clear Canvas
         </button>
       </div>
     </aside>

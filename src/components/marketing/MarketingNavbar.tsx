@@ -17,7 +17,7 @@ export function MarketingNavbar() {
   }, [initializeAuth]);
 
   const handleStudioClick = () => {
-    showLoader('Opening Studio Dashboard...');
+    showLoader('Opening Studio Workspace...');
     if (token || user) {
       router.push('/app');
     } else {
@@ -26,67 +26,67 @@ export function MarketingNavbar() {
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-white/95 border-b border-[#1f00ff]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        {/* Logo and Brand */}
-        <Link
-          href="/"
-          className="flex items-center gap-3 group text-[#1f00ff]"
-        >
-          <div className="w-9 h-9 border border-[#1f00ff] rounded-[5px] flex items-center justify-center bg-white group-hover:bg-[#1f00ff] group-hover:text-white transition-colors">
-            <OmniLogo size={22} />
-          </div>
-          <span className="font-display text-2xl font-bold tracking-wider uppercase text-[#1f00ff]">
-            OMNIANIMA
+    <div className="sticky top-4 z-50 px-4 flex justify-center w-full">
+      <nav className="w-full max-w-5xl h-16 bg-white/90 backdrop-blur-md border border-[#e2e8f0] hover:border-[#cbd5e1] rounded-full px-6 flex items-center justify-between shadow-[0_4px_20px_rgba(15,23,42,0.05)] transition-all duration-200">
+        {/* Brand */}
+        <Link href="/" className="flex items-center gap-3">
+          <OmniLogo size={32} className="rounded-lg shadow-sm" />
+          <span className="font-bold text-xl tracking-tight text-[#0f172a]">
+            OmniAnima
           </span>
         </Link>
 
-        {/* Navigation Links */}
-        <nav className="hidden md:flex items-center gap-8 text-xs font-semibold uppercase tracking-wider text-[#212121]">
-          <a href="#features" className="hover:text-[#1f00ff] transition-colors">
-            Features
-          </a>
-          <a href="#workflow" className="hover:text-[#1f00ff] transition-colors">
-            Workflow
-          </a>
-          <a href="#shortcuts" className="hover:text-[#1f00ff] transition-colors">
-            Shortcuts
-          </a>
-          <a href="#community" className="hover:text-[#1f00ff] transition-colors">
-            Community
-          </a>
-        </nav>
+        {/* Links */}
+        <ul className="hidden md:flex items-center gap-8 list-none text-sm font-semibold text-[#64748b]">
+          <li>
+            <a href="#playground" className="hover:text-[#0f172a] transition-colors">
+              Playground
+            </a>
+          </li>
+          <li>
+            <a href="#features" className="hover:text-[#0f172a] transition-colors">
+              Features
+            </a>
+          </li>
+          <li>
+            <a href="#shortcuts" className="hover:text-[#0f172a] transition-colors">
+              Shortcuts
+            </a>
+          </li>
+        </ul>
 
         {/* Actions */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
           {user ? (
             <button
               type="button"
               onClick={handleStudioClick}
-              className="px-5 py-2 text-xs font-semibold uppercase tracking-wider text-white bg-[#ff622b] hover:bg-[#e54f1f] rounded-[5px] transition-colors"
+              className="bg-[#4f46e5] hover:bg-[#4338ca] text-white px-5 py-2 rounded-full text-sm font-semibold inline-flex items-center gap-1.5 shadow-[0_4px_12px_rgba(79,70,229,0.25)] transition-all duration-200"
             >
-              Enter Studio
+              <span>Open Studio</span>
+              <span>→</span>
             </button>
           ) : (
             <>
               <Link
                 href="/login"
-                onClick={() => showLoader('Opening Authentication...')}
-                className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-[#1f00ff] border border-[#1f00ff] hover:bg-[#1f00ff] hover:text-white rounded-[5px] transition-colors"
+                onClick={() => showLoader('Connecting to OmniAnima...')}
+                className="bg-white hover:bg-[#f1f5f9] text-[#334155] border border-[#e2e8f0] px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200"
               >
                 Sign In
               </Link>
               <button
                 type="button"
                 onClick={handleStudioClick}
-                className="px-5 py-2 text-xs font-semibold uppercase tracking-wider text-white bg-[#ff622b] hover:bg-[#e54f1f] rounded-[5px] transition-colors"
+                className="bg-[#4f46e5] hover:bg-[#4338ca] text-white px-5 py-2 rounded-full text-sm font-semibold inline-flex items-center gap-1.5 shadow-[0_4px_12px_rgba(79,70,229,0.25)] transition-all duration-200"
               >
-                Start Animating
+                <span>Open Studio</span>
+                <span>→</span>
               </button>
             </>
           )}
         </div>
-      </div>
-    </header>
+      </nav>
+    </div>
   );
 }

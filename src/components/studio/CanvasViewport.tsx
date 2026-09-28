@@ -26,7 +26,6 @@ export function CanvasViewport({ onEngineReady, onAutosaveFrame }: CanvasViewpor
     setActiveTool,
     setActiveColor,
     togglePlay,
-    addFrame,
   } = useTimelineStore();
 
   const autosaveTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -111,7 +110,6 @@ export function CanvasViewport({ onEngineReady, onAutosaveFrame }: CanvasViewpor
   // Keyboard Shortcuts handler
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      // Ignore if typing in input or textarea
       if (['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement)?.tagName)) {
         return;
       }
@@ -125,7 +123,7 @@ export function CanvasViewport({ onEngineReady, onAutosaveFrame }: CanvasViewpor
         setActiveTool('eraser');
       } else if (e.key === 'g' || e.key === 'G') {
         setActiveTool('fill');
-      } else if (e.key === 's' || e.key === 'S') {
+      } else if (e.key === 'v' || e.key === 'V' || e.key === 's' || e.key === 'S') {
         setActiveTool('select');
       } else if (e.key === 'i' || e.key === 'I') {
         setActiveTool('eyedropper');
@@ -150,19 +148,21 @@ export function CanvasViewport({ onEngineReady, onAutosaveFrame }: CanvasViewpor
   }, [handleKeyDown]);
 
   return (
-    <div className="flex-1 bg-[#f2f2f2] flex flex-col items-center justify-center p-6 relative overflow-hidden">
-      {/* Blueprint grid background */}
-      <div className="absolute inset-0 bg-blueprint-grid opacity-60 pointer-events-none" />
+    <div className="flex-1 bg-slate-100/70 flex flex-col items-center justify-center p-6 relative overflow-hidden">
+      {/* Subtle ambient stage backdrop */}
+      <div className="absolute inset-0 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:20px_20px] opacity-40 pointer-events-none" />
 
-      {/* Drafting frame container */}
-      <div className="relative z-10 w-full max-w-4xl aspect-[16/9] bg-white border border-[#1f00ff] rounded-[5px] shadow-blueprint-hard overflow-hidden">
+      {/* Canvas container */}
+      <div className="relative z-10 w-full max-w-4xl aspect-[16/9] bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden">
         <div ref={containerRef} className="w-full h-full relative" />
       </div>
 
-      {/* Blueprint Canvas Info Readout */}
-      <div className="relative z-10 mt-3 flex items-center justify-between w-full max-w-4xl px-2 text-[11px] font-mono text-[#666]">
-        <span>CANVAS: 960 × 540 PX (16:9 DRAFTING SURFACE)</span>
-        <span>TOOL: {activeTool.toUpperCase()} // COLOR: {activeColor.toUpperCase()}</span>
+      {/* Canvas Info Readout */}
+      <div className="relative z-10 mt-3 flex items-center justify-between w-full max-w-4xl px-2 text-[11px] font-mono text-slate-400">
+        <span>Canvas: 960 × 540 px (16:9)</span>
+        <span>
+          Tool: {activeTool.toUpperCase()} · Color: {activeColor.toUpperCase()}
+        </span>
       </div>
     </div>
   );

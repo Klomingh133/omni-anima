@@ -1,98 +1,170 @@
 @import "tailwindcss";
 
-
 @theme {
-  --color-primary: #1f00ff;
-  --color-primary-hover: #1700c2;
-  --color-accent-orange: #ff622b;
-  --color-accent-orange-hover: #e54f1f;
-  --color-neutral-canvas: #ffffff;
-  --color-neutral-card-bone: #f8f8f8;
-  --color-neutral-card-fog: #f2f2f2;
-  --color-neutral-mist: #ececec;
-  --color-neutral-gridline: #d3d3d3;
-  --color-neutral-ink: #212121;
-  --color-semantic-danger: #dc2626;
-  --color-semantic-success: #16a34a;
+  --color-primary: #4f46e5;
+  --color-primary-hover: #4338ca;
+  --color-primary-surface: #eef2ff;
+  --color-primary-border: #c7d2fe;
+  
+  --color-surface: #ffffff;
+  --color-surface-alt: #f1f5f9;
+  --color-bg: #f8fafc;
+  
+  --color-border: #e2e8f0;
+  --color-border-hover: #cbd5e1;
+  
+  --color-ink: #0f172a;
+  --color-ink-secondary: #334155;
+  --color-muted: #64748b;
+  --color-dim: #94a3b8;
+  
+  --color-emerald: #10b981;
+  --color-amber: #f59e0b;
+  --color-blue: #2563eb;
+  --color-red: #ef4444;
 
-  --font-display: 'Bebas Neue', sans-serif;
-  --font-body: 'Archivo', system-ui, -apple-system, sans-serif;
+  --font-main: 'Work Sans', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 }
 
 :root {
-  --primary: #1f00ff;
-  --primary-hover: #1700c2;
-  --accent-orange: #ff622b;
-  --accent-orange-hover: #e54f1f;
-  --radius: 5px;
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --border: #e2e8f0;
+  --ink: #0f172a;
+  --muted: #64748b;
 }
 
 * {
   box-sizing: border-box;
 }
 
+html, body {
+  min-height: 100%;
+}
+
 body {
   margin: 0;
   padding: 0;
-  font-family: var(--font-body);
-  color: #212121;
-  background-color: #ffffff;
+  font-family: 'Work Sans', system-ui, -apple-system, sans-serif;
+  color: #0f172a;
+  background-color: #f8fafc;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Blueprint Grid Background Pattern */
-.bg-blueprint-grid {
-  background-size: 32px 32px;
+/* Ambient subtle background for modern bright landing page */
+.bg-landing-ambient {
+  background-color: #f8fafc;
   background-image: 
-    linear-gradient(to right, rgba(31, 0, 255, 0.08) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(31, 0, 255, 0.08) 1px, transparent 1px);
+    radial-gradient(circle at 50% 0%, #ede9fe 0%, #f8fafc 45%, #ffffff 100%),
+    radial-gradient(ellipse 60% 30% at 85% 25%, rgba(99, 102, 241, 0.06), transparent),
+    radial-gradient(ellipse 60% 30% at 15% 55%, rgba(37, 99, 235, 0.05), transparent);
+  background-repeat: no-repeat;
 }
 
-.bg-blueprint-grid-blue {
-  background-size: 32px 32px;
-  background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.12) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+/* Top Indeterminate Progress Bar */
+.top-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3.5px;
+  width: 100%;
+  background: linear-gradient(90deg, #3978ff 0%, #f59e0b 50%, #10b981 100%);
+  box-shadow: 0 0 12px rgba(57, 120, 255, 0.8), 0 0 6px rgba(245, 158, 11, 0.6);
+  z-index: 10000;
+  animation: progress-indeterminate 1.5s infinite linear;
+  transform-origin: 0% 50%;
 }
 
-/* Drafting hairline border standards */
-.border-blueprint {
-  border-width: 1px;
-  border-color: #1f00ff;
+@keyframes progress-indeterminate {
+  0% { transform: translateX(0) scaleX(0); }
+  40% { transform: translateX(0) scaleX(0.4); }
+  100% { transform: translateX(100%) scaleX(0.5); }
 }
 
-.border-blueprint-white {
-  border-width: 1px;
-  border-color: #ffffff;
+/* Infinity Loop Loader */
+.infinity-stage {
+  width: 150px;
+  height: 84px;
+  display: grid;
+  place-items: center;
+  filter: drop-shadow(0 4px 18px rgba(57, 120, 255, 0.25));
 }
 
-.border-gridline {
-  border-width: 1px;
-  border-color: #d3d3d3;
+.loader-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
 }
 
-/* Custom crisp scrollbar for studio timeline */
+.infinity-guide {
+  fill: none;
+  stroke: #e4ecf7;
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.infinity-draw {
+  fill: none;
+  stroke: url(#loaderStrokeGrad);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 228;
+  stroke-dashoffset: 228;
+  filter: drop-shadow(0 0 3px rgba(57, 120, 255, 0.35));
+  animation: loader-draw-loop 2.4s linear infinite;
+}
+
+@keyframes loader-draw-loop {
+  0% { stroke-dashoffset: 228; }
+  50% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -228; }
+}
+
+.stylus-group {
+  offset-path: path('M 80 45 C 64 24, 38 24, 38 45 C 38 66, 64 66, 80 45 C 96 24, 122 24, 122 45 C 122 66, 96 66, 80 45 Z');
+  offset-rotate: auto;
+  animation: loader-follow-path 2.4s linear infinite;
+}
+
+@keyframes loader-follow-path {
+  0% { offset-distance: 0%; }
+  100% { offset-distance: 100%; }
+}
+
+.dots-shimmer span {
+  animation: dot-pulse 1.4s infinite ease-in-out both;
+  display: inline-block;
+}
+.dots-shimmer span:nth-child(1) { animation-delay: -0.32s; }
+.dots-shimmer span:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes dot-pulse {
+  0%, 80%, 100% { opacity: 0.2; transform: translateY(0); }
+  40% { opacity: 1; transform: translateY(-2px); }
+}
+
+/* Custom modern scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f2f2f2;
+  background: #f1f5f9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1f00ff;
-  border-radius: 3px;
+  background: #cbd5e1;
+  border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #1700c2;
-}
-
-/* Strict zero blur hard shadow for active overlays if needed */
-.shadow-blueprint-hard {
-  box-shadow: 4px 4px 0px #1f00ff;
+  background: #94a3b8;
 }
